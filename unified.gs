@@ -174,7 +174,7 @@ function handleLT(data) {
   var values = dataRange.getValues();
   var rowIndex = -1;
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0].toString() === week.toString()) {
+    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
       rowIndex = i + 1;
       break;
     }
@@ -188,7 +188,7 @@ function handleLT(data) {
   }
   
   var fromToDateValue = values[rowIndex - 1][1];
-  var hasData = fromToDateValue && fromToDateValue.toString().trim() !== '';
+  var hasData = fromToDateValue != null && fromToDateValue.toString().trim() !== '';
   
   var currentRow = values[rowIndex - 1];
   var formData = {
@@ -294,7 +294,7 @@ function handleLPHT(data) {
   var values = dataRange.getValues();
   var rowIndex = -1;
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0].toString() === week.toString()) {
+    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
       rowIndex = i + 1;
       break;
     }
@@ -308,7 +308,7 @@ function handleLPHT(data) {
   }
   
   var fromToDateValue = values[rowIndex - 1][1];
-  var hasData = fromToDateValue && fromToDateValue.toString().trim() !== '';
+  var hasData = fromToDateValue != null && fromToDateValue.toString().trim() !== '';
   
   var currentRow = values[rowIndex - 1];
   var formData = {
@@ -414,7 +414,7 @@ function handleLPLD(data) {
   var values = dataRange.getValues();
   var rowIndex = -1;
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0].toString() === week.toString()) {
+    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
       rowIndex = i + 1;
       break;
     }
@@ -428,7 +428,7 @@ function handleLPLD(data) {
   }
   
   var fromToDateValue = values[rowIndex - 1][1];
-  var hasData = fromToDateValue && fromToDateValue.toString().trim() !== '';
+  var hasData = fromToDateValue != null && fromToDateValue.toString().trim() !== '';
   
   var currentRow = values[rowIndex - 1];
   var formData = {
@@ -564,7 +564,7 @@ function handleLPTT(data) {
   var values = dataRange.getValues();
   var rowIndex = -1;
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0].toString() === week.toString()) {
+    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
       rowIndex = i + 1;
       break;
     }
@@ -578,7 +578,7 @@ function handleLPTT(data) {
   }
   
   var fromToDateValue = values[rowIndex - 1][1];
-  var hasData = fromToDateValue && fromToDateValue.toString().trim() !== '';
+  var hasData = fromToDateValue != null && fromToDateValue.toString().trim() !== '';
   
   var currentRow = values[rowIndex - 1];
   var formData = {
@@ -684,7 +684,7 @@ function handleLPPT(data) {
   var values = dataRange.getValues();
   var rowIndex = -1;
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0].toString() === week.toString()) {
+    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
       rowIndex = i + 1;
       break;
     }
@@ -698,7 +698,7 @@ function handleLPPT(data) {
   }
   
   var fromToDateValue = values[rowIndex - 1][1];
-  var hasData = fromToDateValue && fromToDateValue.toString().trim() !== '';
+  var hasData = fromToDateValue != null && fromToDateValue.toString().trim() !== '';
   
   var currentRow = values[rowIndex - 1];
   var formData = {
@@ -997,7 +997,7 @@ function handleThuQuy(data) {
   var values = dataRange.getValues();
   var rowIndex = -1;
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0] && values[i][0].toString() === week.toString()) {
+    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
       rowIndex = i + 1;
       break;
     }

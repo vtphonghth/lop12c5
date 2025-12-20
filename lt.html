@@ -309,8 +309,22 @@
                     body: formData
                 });
 
-                const data = await response.json();
-                if (response.ok && data.success) {
+                if (!response.ok) {
+                    alert('Lỗi kết nối. Vui lòng thử lại.');
+                    return false;
+                }
+                
+                const text = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(text);
+                } catch (e) {
+                    console.error('Invalid JSON response:', text);
+                    alert('Lỗi xử lý dữ liệu. Vui lòng thử lại.');
+                    return false;
+                }
+                
+                if (data && data.success) {
                     return true;
                 }
 
@@ -318,6 +332,7 @@
                 alert(errorMessage);
                 return false;
             } catch (error) {
+                console.error('Verify password error:', error);
                 alert('Không thể xác thực. Vui lòng thử lại.');
                 return false;
             }
