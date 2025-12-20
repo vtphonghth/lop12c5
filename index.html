@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lớp 12C5 Năm học 2024-2025</title>
+    <title>Lớp 12C1 - 2024-2025</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -1343,7 +1342,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Lớp 12C5 - 2024-2025</h1>
+            <h1>Lớp 12C1 - 2024-2025</h1>
             <div class="gvcn-info">
                 <i class="fas fa-chalkboard-teacher"></i>
                 <span>GVCN: Võ Thanh Phong</span>
@@ -1732,7 +1731,7 @@
         <section class="memories-section">
             <div class="memory-card"
                 style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                <div class="memory-title" style="margin:0;"><i class="fas fa-images"></i> Kỷ niệm lớp 12C5</div>
+                <div class="memory-title" style="margin:0;"><i class="fas fa-images"></i> Kỷ niệm lớp 12C1</div>
                 <a class="memory-btn" href="https://photos.app.goo.gl/RXmdLwygHYZsgWzs8" target="_blank"
                     rel="noopener">Xem album</a>
             </div>
@@ -1794,14 +1793,12 @@
         </div>
     </div>
 
+    <script src="config.js"></script>
     <script>
         // Cấu hình hệ thống
         const maxAttempts = 5;
         const lockoutTime = 15 * 60 * 1000;
         const sessionDuration = 60 * 60 * 1000;
-
-        // API endpoint cho xác thực (Vercel Serverless Function)
-        const AUTH_API_URL = '/api/verify-password';
 
         let targetLink = '';
         let errorCount = 0;
@@ -1843,7 +1840,7 @@
             return false;
         }
 
-        // Xác thực đầu vào qua Vercel API
+        // Xác thực đầu vào qua Google Apps Script
         async function validateInput() {
             const input = document.getElementById('passwordInput').value.trim();
 
@@ -1854,13 +1851,14 @@
             }
 
             try {
-                // Gọi API Vercel để xác thực
-                const response = await fetch(AUTH_API_URL, {
+                // Gọi Google Apps Script để xác thực
+                const formData = new FormData();
+                formData.append('action', 'verify');
+                formData.append('password', input);
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ password: input })
+                    body: formData
                 });
 
                 const data = await response.json();

@@ -301,10 +301,14 @@
 
         async function verifyPassword(input) {
             try {
-                const response = await fetch('/api/verify-password', {
+                const formData = new FormData();
+                formData.append('action', 'verify');
+                formData.append('password', input);
+                formData.append('page', 'lpht');
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password: input, page: 'lpht' })
+                    body: formData
                 });
 
                 const data = await response.json();

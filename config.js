@@ -11,4 +11,3 @@ const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbySWy1m5NZSth
 // ID này được sử dụng trong unified.gs
 const SPREADSHEET_ID = '1YKNvKQoaYR2-OV1k6JvZlmPF63GdMPacuw602LKPtx8';
 
-

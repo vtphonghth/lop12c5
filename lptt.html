@@ -299,10 +299,14 @@
 
         async function verifyPassword(input) {
             try {
-                const response = await fetch('/api/verify-password', {
+                const formData = new FormData();
+                formData.append('action', 'verify');
+                formData.append('password', input);
+                formData.append('page', 'lptt');
+                
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password: input, page: 'lptt' })
+                    body: formData
                 });
 
                 const data = await response.json();

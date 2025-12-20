@@ -12,8 +12,8 @@ var PASSWORDS = {
   'LT': 'loptruong',
   'LPHT': 'lopphohoctap',
   'LPLD': 'loppholaodong',
-  'LPTT': 'lopphottrattu',
-  'LPPT': 'lopphongphongtrao',
+  'LPTT': 'lopphotrattu',
+  'LPPT': 'lopphophongtrao',
   'TT1': 'totruong1',
   'TT2': 'totruong2',
   'TT3': 'totruong3',
@@ -82,6 +82,11 @@ function doPost(e) {
   try {
     var data = e.parameter;
     Logger.log('doPost called with data: ' + JSON.stringify(data));
+    
+    // Xử lý yêu cầu xác thực password
+    if (data.action === 'verify') {
+      return handlePasswordVerify(data);
+    }
     
     // Xác định loại form dựa trên dữ liệu nhận được
     var formType = determineFormType(data);
@@ -1217,5 +1222,77 @@ function appendData(existing, newData) {
   if (!newData) return existing;
   if (!existing) return newData;
   return existing + ', ' + newData;
+}
+
+// ============================================
+// Xử lý xác thực password
+// ============================================
+function handlePasswordVerify(data) {
+  try {
+    var password = data.password;
+    var page = data.page ? data.page.toLowerCase() : null;
+    
+    if (!password) {
+      return ContentService.createTextOutput(
+        JSON.stringify({ success: false, error: 'Password is required' })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    // Map page key to form type
+    var pageToFormType = {
+      'lt': 'LT',
+      'lpht': 'LPHT',
+      'lpld': 'LPLD',
+      'lptt': 'LPTT',
+      'lppt': 'LPPT',
+      'tt1': 'TT1',
+      'tt2': 'TT2',
+      'tt3': 'TT3',
+      'tt4': 'TT4',
+      'thuquy': 'ThuQuy'
+    };
+    
+    var formType = page ? pageToFormType[page] : null;
+    
+    // Nếu có page, kiểm tra password tương ứng với page đó
+    if (formType && PASSWORDS[formType]) {
+      if (password === PASSWORDS[formType]) {
+        return ContentService.createTextOutput(
+          JSON.stringify({ 
+            success: true, 
+            message: 'Authentication successful' 
+          })
+        ).setMimeType(ContentService.MimeType.JSON);
+      }
+    } else {
+      // Nếu không có page, thử tìm password trong tất cả các form
+      for (var key in PASSWORDS) {
+        if (PASSWORDS[key] === password) {
+          return ContentService.createTextOutput(
+            JSON.stringify({ 
+              success: true, 
+              message: 'Authentication successful' 
+            })
+          ).setMimeType(ContentService.MimeType.JSON);
+        }
+      }
+    }
+    
+    return ContentService.createTextOutput(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Invalid password' 
+      })
+    ).setMimeType(ContentService.MimeType.JSON);
+    
+  } catch (error) {
+    Logger.log('Error in handlePasswordVerify: ' + error.message);
+    return ContentService.createTextOutput(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Internal server error' 
+      })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
 }
 
