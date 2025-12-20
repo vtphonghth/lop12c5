@@ -1801,6 +1801,7 @@
         const sessionDuration = 60 * 60 * 1000;
 
         let targetLink = '';
+        let targetPage = '';
         let errorCount = 0;
         let blockTime = 0;
 
@@ -1855,6 +1856,9 @@
                 const formData = new FormData();
                 formData.append('action', 'verify');
                 formData.append('password', input);
+                if (targetPage) {
+                    formData.append('page', targetPage);
+                }
                 
                 const response = await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
@@ -1920,6 +1924,7 @@
             document.getElementById('passwordError').style.display = 'none';
             document.getElementById('passwordInput').disabled = false;
             targetLink = '';
+            targetPage = '';
         }
 
         // Đóng modal khi click bên ngoài
@@ -2063,6 +2068,14 @@
                 }
 
                 targetLink = this.getAttribute('data-url');
+                // Xác định page dựa trên class của link
+                if (this.classList.contains('link-11')) {
+                    targetPage = 'dl'; // Dữ liệu lớp
+                } else if (this.classList.contains('link-10')) {
+                    targetPage = ''; // Tổng kết lớp - không có password riêng
+                } else {
+                    targetPage = '';
+                }
                 document.getElementById('passwordModal').classList.add('active');
                 document.getElementById('passwordInput').value = '';
                 document.getElementById('passwordInput').focus();
