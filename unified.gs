@@ -161,6 +161,13 @@ function handleLT(data) {
   var action = data.action;
   var week = data.week;
   
+  // Validate week
+  if (!week || week === '' || week === null || week === undefined) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: 'error', message: 'Tuần không được để trống' })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+  
   var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('LT');
   
   if (data.password !== PASSWORDS['LT']) {
@@ -173,10 +180,14 @@ function handleLT(data) {
   var dataRange = sheet.getDataRange();
   var values = dataRange.getValues();
   var rowIndex = -1;
+  var weekStr = String(week);
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
-      rowIndex = i + 1;
-      break;
+    if (values[i][0] != null) {
+      var cellValue = String(values[i][0]);
+      if (cellValue === weekStr) {
+        rowIndex = i + 1;
+        break;
+      }
     }
   }
   
@@ -187,8 +198,8 @@ function handleLT(data) {
     ).setMimeType(ContentService.MimeType.JSON);
   }
   
-  var fromToDateValue = values[rowIndex - 1][1];
-  var hasData = fromToDateValue != null && fromToDateValue.toString().trim() !== '';
+  var fromToDateValue = values[rowIndex - 1] && values[rowIndex - 1][1];
+  var hasData = fromToDateValue != null && String(fromToDateValue).trim() !== '';
   
   var currentRow = values[rowIndex - 1];
   var formData = {
@@ -281,6 +292,13 @@ function handleLPHT(data) {
   var action = data.action;
   var week = data.week;
   
+  // Validate week
+  if (!week || week === '' || week === null || week === undefined) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: 'error', message: 'Tuần không được để trống' })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+  
   var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('LPHT');
   
   if (data.password !== PASSWORDS['LPHT']) {
@@ -293,10 +311,14 @@ function handleLPHT(data) {
   var dataRange = sheet.getDataRange();
   var values = dataRange.getValues();
   var rowIndex = -1;
+  var weekStr = String(week);
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
-      rowIndex = i + 1;
-      break;
+    if (values[i][0] != null) {
+      var cellValue = String(values[i][0]);
+      if (cellValue === weekStr) {
+        rowIndex = i + 1;
+        break;
+      }
     }
   }
   
@@ -307,8 +329,8 @@ function handleLPHT(data) {
     ).setMimeType(ContentService.MimeType.JSON);
   }
   
-  var fromToDateValue = values[rowIndex - 1][1];
-  var hasData = fromToDateValue != null && fromToDateValue.toString().trim() !== '';
+  var fromToDateValue = values[rowIndex - 1] && values[rowIndex - 1][1];
+  var hasData = fromToDateValue != null && String(fromToDateValue).trim() !== '';
   
   var currentRow = values[rowIndex - 1];
   var formData = {
@@ -401,6 +423,13 @@ function handleLPLD(data) {
   var action = data.action;
   var week = data.week;
   
+  // Validate week
+  if (!week || week === '' || week === null || week === undefined) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: 'error', message: 'Tuần không được để trống' })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+  
   var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('LPLD');
   
   if (data.password !== PASSWORDS['LPLD']) {
@@ -413,10 +442,14 @@ function handleLPLD(data) {
   var dataRange = sheet.getDataRange();
   var values = dataRange.getValues();
   var rowIndex = -1;
+  var weekStr = String(week);
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
-      rowIndex = i + 1;
-      break;
+    if (values[i][0] != null) {
+      var cellValue = String(values[i][0]);
+      if (cellValue === weekStr) {
+        rowIndex = i + 1;
+        break;
+      }
     }
   }
   
@@ -427,8 +460,8 @@ function handleLPLD(data) {
     ).setMimeType(ContentService.MimeType.JSON);
   }
   
-  var fromToDateValue = values[rowIndex - 1][1];
-  var hasData = fromToDateValue != null && fromToDateValue.toString().trim() !== '';
+  var fromToDateValue = values[rowIndex - 1] && values[rowIndex - 1][1];
+  var hasData = fromToDateValue != null && String(fromToDateValue).trim() !== '';
   
   var currentRow = values[rowIndex - 1];
   var formData = {
@@ -551,6 +584,13 @@ function handleLPTT(data) {
   var action = data.action;
   var week = data.week;
   
+  // Validate week
+  if (!week || week === '' || week === null || week === undefined) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: 'error', message: 'Tuần không được để trống' })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+  
   var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('LPTT');
   
   if (data.password !== PASSWORDS['LPTT']) {
@@ -563,10 +603,14 @@ function handleLPTT(data) {
   var dataRange = sheet.getDataRange();
   var values = dataRange.getValues();
   var rowIndex = -1;
+  var weekStr = String(week);
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
-      rowIndex = i + 1;
-      break;
+    if (values[i][0] != null) {
+      var cellValue = String(values[i][0]);
+      if (cellValue === weekStr) {
+        rowIndex = i + 1;
+        break;
+      }
     }
   }
   
@@ -577,8 +621,8 @@ function handleLPTT(data) {
     ).setMimeType(ContentService.MimeType.JSON);
   }
   
-  var fromToDateValue = values[rowIndex - 1][1];
-  var hasData = fromToDateValue != null && fromToDateValue.toString().trim() !== '';
+  var fromToDateValue = values[rowIndex - 1] && values[rowIndex - 1][1];
+  var hasData = fromToDateValue != null && String(fromToDateValue).trim() !== '';
   
   var currentRow = values[rowIndex - 1];
   var formData = {
@@ -671,6 +715,13 @@ function handleLPPT(data) {
   var action = data.action;
   var week = data.week;
   
+  // Validate week
+  if (!week || week === '' || week === null || week === undefined) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: 'error', message: 'Tuần không được để trống' })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+  
   var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('LPPT');
   
   if (data.password !== PASSWORDS['LPPT']) {
@@ -683,10 +734,14 @@ function handleLPPT(data) {
   var dataRange = sheet.getDataRange();
   var values = dataRange.getValues();
   var rowIndex = -1;
+  var weekStr = String(week);
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
-      rowIndex = i + 1;
-      break;
+    if (values[i][0] != null) {
+      var cellValue = String(values[i][0]);
+      if (cellValue === weekStr) {
+        rowIndex = i + 1;
+        break;
+      }
     }
   }
   
@@ -697,8 +752,8 @@ function handleLPPT(data) {
     ).setMimeType(ContentService.MimeType.JSON);
   }
   
-  var fromToDateValue = values[rowIndex - 1][1];
-  var hasData = fromToDateValue != null && fromToDateValue.toString().trim() !== '';
+  var fromToDateValue = values[rowIndex - 1] && values[rowIndex - 1][1];
+  var hasData = fromToDateValue != null && String(fromToDateValue).trim() !== '';
   
   var currentRow = values[rowIndex - 1];
   var formData = {
@@ -816,6 +871,14 @@ function handleTT(data) {
   var participation_names = data.participation_names;
   var participation_count = data.participation_count;
   
+  // Validate week
+  if (!week || week === '' || week === null || week === undefined) {
+    return ContentService.createTextOutput(JSON.stringify({
+      result: 'error',
+      message: 'Tuần không được để trống'
+    })).setMimeType(ContentService.MimeType.JSON);
+  }
+  
   // Kiểm tra mật khẩu theo tổ
   if (!team || !PASSWORDS[team] || password !== PASSWORDS[team]) {
     return ContentService.createTextOutput(JSON.stringify({
@@ -836,8 +899,9 @@ function handleTT(data) {
   if (action === 'add') {
     // Kiểm tra tuần đã tồn tại
     var dataValues = sheet.getDataRange().getValues();
+    var weekStr = String(week);
     for (var i = 1; i < dataValues.length; i++) {
-      if (dataValues[i][0] == week) {
+      if (dataValues[i][0] != null && String(dataValues[i][0]) === weekStr) {
         return ContentService.createTextOutput(JSON.stringify({
           result: 'error',
           message: 'Tuần này đã được ghi. Vui lòng chọn "Chỉnh sửa" hoặc "Bổ sung".'
@@ -871,8 +935,9 @@ function handleTT(data) {
     // Bổ sung dữ liệu
     var dataValues = sheet.getDataRange().getValues();
     var rowIndex = -1;
+    var weekStr = String(week);
     for (var i = 1; i < dataValues.length; i++) {
-      if (dataValues[i][0] == week) {
+      if (dataValues[i][0] != null && String(dataValues[i][0]) === weekStr) {
         rowIndex = i + 1;
         break;
       }
@@ -911,8 +976,9 @@ function handleTT(data) {
     // Chỉnh sửa dữ liệu
     var dataValues = sheet.getDataRange().getValues();
     var rowIndex = -1;
+    var weekStr = String(week);
     for (var i = 1; i < dataValues.length; i++) {
-      if (dataValues[i][0] == week) {
+      if (dataValues[i][0] != null && String(dataValues[i][0]) === weekStr) {
         rowIndex = i + 1;
         break;
       }
@@ -960,6 +1026,13 @@ function handleThuQuy(data) {
   var action = data.action;
   var week = data.week;
   
+  // Validate week
+  if (!week || week === '' || week === null || week === undefined) {
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: 'error', message: 'Tuần không được để trống' })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+  
   var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('ThuQuy');
   
   if (data.password !== PASSWORDS['ThuQuy']) {
@@ -996,10 +1069,14 @@ function handleThuQuy(data) {
   var dataRange = sheet.getDataRange();
   var values = dataRange.getValues();
   var rowIndex = -1;
+  var weekStr = String(week);
   for (var i = 0; i < values.length; i++) {
-    if (values[i][0] != null && week != null && values[i][0].toString() === week.toString()) {
-      rowIndex = i + 1;
-      break;
+    if (values[i][0] != null) {
+      var cellValue = String(values[i][0]);
+      if (cellValue === weekStr) {
+        rowIndex = i + 1;
+        break;
+      }
     }
   }
   
