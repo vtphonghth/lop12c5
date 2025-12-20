@@ -8,9 +8,9 @@
 // THÔNG TIN LỚP
 // ============================================
 const CLASS_INFO = {
-    className: '12C1',
+    className: '12C5',
     schoolYear: '2024-2025',
-    fullName: 'Lớp 12C1 - 2024-2025'
+    fullName: 'Lớp 12C5 - 2024-2025'
 };
 
 // ============================================
@@ -179,6 +179,53 @@ const EXAM_INFO = {
     hk1Date: '29/12/2025', // Ngày thi học kỳ 1
     hk1DateFull: '2025-12-29', // Format đầy đủ cho countdown
     hk1Title: 'Thi học kỳ 1'
+};
+
+// ============================================
+// TẤT CẢ CÁC LINK TRONG ỨNG DỤNG
+// ============================================
+const LINKS = {
+    // Links tư vấn hướng nghiệp
+    career: {
+        chatgpt: 'https://chatgpt.com/g/g-678f082a9d9881919d4898ebe84b9061-ai-huong-nghiep/c/68b907f1-72d8-8329-8471-7af0473f6c55',
+        registerForm: 'https://forms.gle/kexLsyinrctLgZBZ8'
+    },
+    
+    // Links học tập
+    learning: {
+        khanAcademy: 'https://vi.khanacademy.org/',
+        roboki: 'https://roboki.vn/g/681d6f075a561b1d5e71e835',
+        smsEdu: 'https://smsedu.smas.edu.vn/User/Login?ReturnUrl=%2f',
+        toanmath: 'https://toanmath.com/'
+    },
+    
+    // Links hình ảnh/kỷ niệm
+    photos: {
+        album: 'https://photos.app.goo.gl/RXmdLwygHYZsgWzs8'
+    },
+    
+    // Links báo cáo SYLL
+    syll: {
+        soyeulylichlop: 'https://soyeulylichlop.vercel.app/'
+    },
+    
+    // Links báo cáo Ban Cán Sự
+    reports: {
+        lt: 'lt.html',
+        lpht: 'lpht.html',
+        lpld: 'lpld.html',
+        lppt: 'lppt.html',
+        lptt: 'lptt.html',
+        tt: 'tt_form.html',
+        thuquy: 'thuquy.html'
+    },
+    
+    // Links giáo viên chủ nhiệm (protected links)
+    gvcn: {
+        tongketLop: 'https://docs.google.com/spreadsheets/d/1GS3QKu5Bbeoef0rQhkitX_dawnwqlRPdeUaCNKV8cJk/edit?usp=sharing',
+        dulieuLop: 'https://docs.google.com/spreadsheets/d/12XA3VExQ0HSV_1eIoWmJ6j7lQ7pVN3j7IWFvlNxXXRE/edit?usp=sharing',
+        lienhePhuHuynh: 'http://lienheph.vercel.app/'
+    }
 };
 
 // ============================================
