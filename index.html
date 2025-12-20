@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lớp 12C1 - 2024-2025</title>
+    <title data-text="class.fullName"></title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -1342,10 +1342,10 @@
 <body>
     <div class="container">
         <header>
-            <h1>Lớp 12C1 - 2024-2025</h1>
+            <h1 data-text="class.fullName">Lớp 12C1 - 2024-2025</h1>
             <div class="gvcn-info">
                 <i class="fas fa-chalkboard-teacher"></i>
-                <span>GVCN: Võ Thanh Phong</span>
+                <span data-text="gvcn.display">GVCN: Võ Thanh Phong</span>
             </div>
             <div class="career-section">
                 <a href="#" data-link="career.chatgpt"
@@ -1473,16 +1473,16 @@
                         <td rowspan="2" class="subject-hdtn" style="vertical-align: middle;"
                             data-tooltip="Phạm Thị Minh Châu">HĐTN</td>
                         <td class="subject-anh" data-tooltip="Nguyễn Thanh Tuyền">Anh</td>
-                        <td class="subject-toan" data-tooltip="Võ Thanh Phong">Toán</td>
-                        <td class="subject-toan" data-tooltip="Võ Thanh Phong">Toán</td>
+                        <td class="subject-toan" data-tooltip="Võ Thanh Phong" data-tooltip-gvcn>Toán</td>
+                        <td class="subject-toan" data-tooltip="Võ Thanh Phong" data-tooltip-gvcn>Toán</td>
                         <td class="subject-anh" data-tooltip="Nguyễn Thanh Tuyền">Anh</td>
                         <td>-</td>
                     </tr>
                     <tr>
                         <td>2</td>
                         <td class="subject-anh" data-tooltip="Nguyễn Thanh Tuyền">Anh</td>
-                        <td class="subject-toan" data-tooltip="Võ Thanh Phong">Toán</td>
-                        <td class="subject-toan" data-tooltip="Võ Thanh Phong">Toán</td>
+                        <td class="subject-toan" data-tooltip="Võ Thanh Phong" data-tooltip-gvcn>Toán</td>
+                        <td class="subject-toan" data-tooltip="Võ Thanh Phong" data-tooltip-gvcn>Toán</td>
                         <td class="subject-van" data-tooltip="Nguyễn Văn Thị">Văn</td>
                         <td>-</td>
                     </tr>
@@ -1510,7 +1510,7 @@
                         <td class="subject-van" data-tooltip="Nguyễn Văn Thị">Văn</td>
                         <td class="subject-cn" data-tooltip="Trần Lâm Tùng">CN(CN)</td>
                         <td class="subject-gdktpl" data-tooltip="Nguyễn Thị Cước">GDKT&PL</td>
-                        <td class="subject-shcn" data-tooltip="Võ Thanh Phong">SHCN</td>
+                        <td class="subject-shcn" data-tooltip="Võ Thanh Phong" data-tooltip-gvcn>SHCN</td>
                         <td>-</td>
                     </tr>
                 </tbody>
@@ -1535,7 +1535,7 @@
                         <td>-</td>
                         <td class="subject-su" data-tooltip="Bùi Văn Lới">Sử</td>
                         <td class="subject-van" data-tooltip="Nguyễn Văn Thị">Văn</td>
-                        <td class="subject-toan" data-tooltip="Võ Thanh Phong">Toán</td>
+                        <td class="subject-toan" data-tooltip="Võ Thanh Phong" data-tooltip-gvcn>Toán</td>
                         <td class="subject-gdtc" data-tooltip="Trương Hoàng Em">GDTC</td>
                         <td>-</td>
                     </tr>
@@ -1544,7 +1544,7 @@
                         <td>-</td>
                         <td class="subject-su" data-tooltip="Bùi Văn Lới">Sử</td>
                         <td class="subject-van" data-tooltip="Nguyễn Văn Thị">Văn</td>
-                        <td class="subject-toan" data-tooltip="Võ Thanh Phong">Toán</td>
+                        <td class="subject-toan" data-tooltip="Võ Thanh Phong" data-tooltip-gvcn>Toán</td>
                         <td class="subject-gdtc" data-tooltip="Trương Hoàng Em">GDTC</td>
                         <td>-</td>
                     </tr>
@@ -1731,7 +1731,7 @@
         <section class="memories-section">
             <div class="memory-card"
                 style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
-                <div class="memory-title" style="margin:0;"><i class="fas fa-images"></i> Kỷ niệm lớp 12C1</div>
+                <div class="memory-title" style="margin:0;"><i class="fas fa-images"></i> Kỷ niệm lớp <span data-text="class.className">12C1</span></div>
                 <a class="memory-btn" href="#" data-link="photos.album" target="_blank"
                     rel="noopener">Xem album</a>
             </div>
@@ -1796,6 +1796,11 @@
     <script src="config.js"></script>
     <script src="data.js"></script>
     <script>
+        // Cập nhật title ngay khi data.js load xong (trước khi DOM ready)
+        if (typeof CLASS_INFO !== 'undefined') {
+            document.title = CLASS_INFO.fullName;
+        }
+        
         // ============================================
         // CẬP NHẬT TẤT CẢ CÁC LINK TỪ data.js
         // ============================================
@@ -1831,11 +1836,54 @@
             });
         }
         
+        // ============================================
+        // CẬP NHẬT TẤT CẢ CÁC TEXT TỪ data.js
+        // ============================================
+        function updateAllTexts() {
+            // Hàm helper để lấy giá trị từ object theo path string
+            function getValueByPath(obj, path) {
+                return path.split('.').reduce((current, key) => current && current[key], obj);
+            }
+            
+            // Mapping các data-text attribute với đường dẫn trong data.js
+            const textMappings = {
+                'class.fullName': CLASS_INFO.fullName,
+                'class.className': CLASS_INFO.className,
+                'class.schoolYear': CLASS_INFO.schoolYear,
+                'gvcn.name': GVCN_INFO.name,
+                'gvcn.display': `GVCN: ${GVCN_INFO.displayName}`
+            };
+            
+            // Cập nhật tất cả các element có data-text attribute
+            document.querySelectorAll('[data-text]').forEach(element => {
+                const textPath = element.getAttribute('data-text');
+                const textValue = textMappings[textPath];
+                if (textValue) {
+                    element.textContent = textValue;
+                }
+            });
+            
+            // Cập nhật title
+            const titleElement = document.querySelector('title[data-text]');
+            if (titleElement) {
+                titleElement.textContent = CLASS_INFO.fullName;
+            }
+            
+            // Cập nhật các tooltip có data-tooltip-gvcn
+            document.querySelectorAll('[data-tooltip-gvcn]').forEach(element => {
+                element.setAttribute('data-tooltip', GVCN_INFO.name);
+            });
+        }
+        
         // Chạy khi DOM đã load xong
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', updateAllLinks);
+            document.addEventListener('DOMContentLoaded', function() {
+                updateAllLinks();
+                updateAllTexts();
+            });
         } else {
             updateAllLinks();
+            updateAllTexts();
         }
         
         // Cấu hình hệ thống
