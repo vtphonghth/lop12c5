@@ -40,7 +40,9 @@ var SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE';
 ## Cấu Trúc File
 
 - `config.js` - File cấu hình chứa URL script và Spreadsheet ID
+- `data.js` - File chứa tất cả dữ liệu có thể tùy chỉnh (tên lớp, năm học, GVCN, links, thời khóa biểu, v.v.)
 - `unified.gs` - Script Google Apps Script chính (cần deploy)
+- `index.html` - Trang chủ (tự động lấy dữ liệu từ `data.js`)
 - Các file HTML (`lt.html`, `lpht.html`, `lpld.html`, `lptt.html`, `lppt.html`, `tt_form.html`, `thuquy.html`) - Các form đã được cấu hình để sử dụng `config.js`
 
 ## Lưu Ý
@@ -48,6 +50,7 @@ var SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE';
 - Tất cả các form sẽ tự động sử dụng URL từ `config.js`
 - Chỉ cần thay đổi URL một lần trong `config.js` là tất cả form sẽ được cập nhật
 - Đảm bảo file `config.js` được load trước khi các script khác chạy (đã được thêm vào `<head>`)
+- File `data.js` chứa tất cả thông tin có thể tùy chỉnh (tên lớp, năm học, GVCN, links). Xem `DATA_README.md` để biết chi tiết
 
 ## Troubleshooting
 

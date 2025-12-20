@@ -89,7 +89,59 @@ const EXAM_INFO = {
 };
 ```
 
-### 6. OTHER_INFO - Thông Tin Khác
+### 6. LINKS - Tất Cả Các Link Trong Ứng Dụng
+```javascript
+const LINKS = {
+    // Links tư vấn hướng nghiệp
+    career: {
+        chatgpt: 'https://chatgpt.com/g/...',
+        registerForm: 'https://forms.gle/...'
+    },
+    
+    // Links học tập
+    learning: {
+        khanAcademy: 'https://vi.khanacademy.org/',
+        roboki: 'https://roboki.vn/g/...',
+        smsEdu: 'https://smsedu.smas.edu.vn/...',
+        toanmath: 'https://toanmath.com/'
+    },
+    
+    // Links hình ảnh/kỷ niệm
+    photos: {
+        album: 'https://photos.app.goo.gl/...'
+    },
+    
+    // Links báo cáo SYLL
+    syll: {
+        soyeulylichlop: 'https://soyeulylichlop.vercel.app/'
+    },
+    
+    // Links báo cáo Ban Cán Sự
+    reports: {
+        lt: 'lt.html',
+        lpht: 'lpht.html',
+        lpld: 'lpld.html',
+        lppt: 'lppt.html',
+        lptt: 'lptt.html',
+        tt: 'tt_form.html',
+        thuquy: 'thuquy.html'
+    },
+    
+    // Links giáo viên chủ nhiệm (protected links)
+    gvcn: {
+        tongketLop: 'https://docs.google.com/spreadsheets/d/...',
+        dulieuLop: 'https://docs.google.com/spreadsheets/d/...',
+        lienhePhuHuynh: 'http://lienheph.vercel.app/'
+    }
+};
+```
+
+**Lưu ý:** 
+- Tất cả các link trong ứng dụng đã được chuyển vào object `LINKS`
+- Chỉ cần thay đổi link trong `data.js`, không cần sửa HTML
+- Links sẽ tự động được cập nhật khi trang load
+
+### 7. OTHER_INFO - Thông Tin Khác
 ```javascript
 const OTHER_INFO = {
     soyeulilich: {
@@ -127,13 +179,35 @@ const OTHER_INFO = {
 1. Tìm `EXAM_INFO`
 2. Cập nhật `hk1Date`, `hk1DateFull`, `hk1Title`
 
+### Thay Đổi Các Link
+1. Tìm `LINKS`
+2. Cập nhật các URL trong các object con:
+   - `career`: Links tư vấn hướng nghiệp
+   - `learning`: Links học tập
+   - `photos`: Link album ảnh
+   - `syll`: Link sơ yếu lý lịch
+   - `reports`: Links các form báo cáo (file HTML)
+   - `gvcn`: Links Google Sheets và liên hệ phụ huynh
+
+## Tự Động Cập Nhật
+
+Khi bạn thay đổi dữ liệu trong `data.js`, các phần sau sẽ **tự động cập nhật** trong `index.html`:
+
+✅ **Title của trang** - Từ `CLASS_INFO.fullName`  
+✅ **Tên lớp và năm học** - Từ `CLASS_INFO.fullName`  
+✅ **Tên GVCN** - Từ `GVCN_INFO.displayName`  
+✅ **Tất cả các link** - Từ object `LINKS`  
+✅ **Tooltip giáo viên** - Từ `GVCN_INFO.name`  
+✅ **Link điện thoại và Zalo** - Tự động tạo từ `GVCN_INFO.phone` và `GVCN_INFO.zalo`
+
 ## Lưu Ý
 
 - **Không xóa** các biến `const` hoặc thay đổi tên biến
 - **Giữ nguyên** cấu trúc object và mảng
 - **Đảm bảo** format dữ liệu đúng (số cho `birthDay`, `birthMonth`, `period`)
 - **Kiểm tra** chính tả tên môn học và giáo viên
-- Sau khi thay đổi, **refresh** trang web để xem kết quả
+- **Kiểm tra** các URL trong `LINKS` có đúng không
+- Sau khi thay đổi, **refresh** trang web để xem kết quả (Ctrl+F5 để clear cache)
 
 ## Ví Dụ Thay Đổi
 
@@ -158,6 +232,17 @@ const STUDENTS = [
 ```javascript
 // Thay đổi môn Toán tiết 1 thứ 2 thành môn Lý
 { period: 1, day: 'hai', subject: 'Lý', teacher: 'Nguyễn Văn B', class: 'subject-ly' }
+```
+
+### Thay đổi link:
+```javascript
+// Thay đổi link Khan Academy
+const LINKS = {
+    learning: {
+        khanAcademy: 'https://new-link.com',  // Thay đổi URL
+        // ...
+    }
+};
 ```
 
 ## Troubleshooting
