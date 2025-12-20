@@ -222,7 +222,7 @@ const LINKS = {
     
     // Links giáo viên chủ nhiệm (protected links)
     gvcn: {
-        tongketLop: 'https://docs.google.com/spreadsheets/d/1GS3QKu5Bbeoef0rQhkitX_dawnwqlRPdeUaCNKV8cJk/edit?usp=sharing',
+        tongketLop: 'https://docs.google.com/spreadsheets/d/1YKNvKQoaYR2-OV1k6JvZlmPF63GdMPacuw602LKPtx8/edit?usp=sharing',
         dulieuLop: 'https://docs.google.com/spreadsheets/d/12XA3VExQ0HSV_1eIoWmJ6j7lQ7pVN3j7IWFvlNxXXRE/edit?usp=sharing',
         lienhePhuHuynh: 'http://lienheph.vercel.app/'
     }
@@ -248,4 +248,5 @@ const OTHER_INFO = {
 // ============================================
 // Nếu cần sử dụng trong môi trường module:
 // export { CLASS_INFO, GVCN_INFO, STUDENTS, TIMETABLE, EXAM_INFO, OTHER_INFO };
+
 
