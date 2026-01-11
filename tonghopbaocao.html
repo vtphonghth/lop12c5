@@ -1,0 +1,1989 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Tổng Hợp Báo Cáo - Ban Cán Sự Lớp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="data.js"></script>
+    <script src="config.js"></script>
+    <style>
+        html {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+            position: relative;
+        }
+
+        /* Tối ưu animation cho mobile - giảm hiệu ứng để tránh lag */
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+                /* Giảm animation trên mobile */
+                animation: none !important;
+                background-position: 0% 50%;
+                /* Tối ưu rendering trên mobile */
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                /* Safe area cho iPhone X và mới hơn */
+                padding-bottom: env(safe-area-inset-bottom);
+                padding-left: max(5px, env(safe-area-inset-left));
+                padding-right: max(5px, env(safe-area-inset-right));
+                /* Đảm bảo không có horizontal scroll */
+                overflow-x: hidden;
+                width: 100%;
+                max-width: 100vw;
+            }
+
+            .container {
+                /* Safe area cho container */
+                margin-bottom: env(safe-area-inset-bottom);
+                margin-left: 0;
+                margin-right: 0;
+                padding-left: max(10px, env(safe-area-inset-left));
+                padding-right: max(10px, env(safe-area-inset-right));
+                border-radius: 0;
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .back-home a {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            max-width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .back-home a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+        }
+
+        h1 {
+            font-size: 2.2em;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            margin: 0 0 20px 0;
+            letter-spacing: 0.5px;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin: 0 0 25px 0;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .week-selector {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #9c27b0;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        .week-selector label {
+            display: block;
+            color: #7b1fa2;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .week-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .week-controls button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+            flex-shrink: 0;
+            /* Touch-friendly - minimum 44x44px for mobile */
+            min-height: 44px;
+            min-width: 44px;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+            touch-action: manipulation;
+        }
+
+        #prevWeekBtn {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
+        }
+
+        #prevWeekBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(46, 125, 50, 0.4);
+        }
+
+        #nextWeekBtn {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3);
+        }
+
+        #nextWeekBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(25, 118, 210, 0.4);
+        }
+
+        #week {
+            flex: 1;
+            min-width: 80px;
+            min-height: 44px;
+            padding: 12px;
+            border: 2px solid #9c27b0;
+            border-radius: 10px;
+            background: white;
+            font-weight: 600;
+            font-size: 1.1em;
+            text-align: center;
+            box-sizing: border-box;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+            touch-action: manipulation;
+        }
+
+        /* Ẩn nút tăng/giảm của input number trên mobile */
+        #week::-webkit-inner-spin-button,
+        #week::-webkit-outer-spin-button {
+            appearance: none;
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        #week_date_range {
+            text-align: center;
+            margin-top: 10px;
+            color: #7b1fa2;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        .report-card {
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .report-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .report-card h3 {
+            margin: 0 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+            color: #333;
+            font-size: 1.2em;
+            font-weight: 600;
+            line-height: 1.3;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+            word-break: break-word;
+        }
+
+        .report-content {
+            min-height: 100px;
+            color: #555;
+            line-height: 1.8;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            text-align: left;
+            white-space: pre-wrap;
+            font-size: 0.95em;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            word-break: break-word;
+            hyphens: auto;
+        }
+
+        /* Khi nội dung là HTML (có thẻ <br> và <strong>), dùng normal white-space */
+        .report-content.html-content {
+            white-space: normal;
+        }
+
+        .report-content.empty {
+            color: #999;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .report-content strong {
+            font-weight: 700;
+            color: #333;
+        }
+
+        .report-card.lt { border-left: 4px solid #c62828; }
+        .report-card.lpht { border-left: 4px solid #4facfe; }
+        .report-card.lptt { border-left: 4px solid #f5576c; }
+        .report-card.lppt { border-left: 4px solid #fa709a; }
+        .report-card.lpld { border-left: 4px solid #f5f7fa; }
+        .report-card.tt1 { border-left: 4px solid #4caf50; }
+        .report-card.tt2 { border-left: 4px solid #2196f3; }
+        .report-card.tt3 { border-left: 4px solid #ff9800; }
+        .report-card.tt4 { border-left: 4px solid #9c27b0; }
+        .report-card.thuquy { border-left: 4px solid #667eea; }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+
+            .container {
+                padding: 15px;
+                border-radius: 10px;
+                margin: 0;
+                max-width: 100%;
+            }
+
+            .back-home {
+                margin-bottom: 10px;
+            }
+
+            .back-home a {
+                padding: 8px 12px;
+                font-size: 0.9em;
+            }
+
+            h1 {
+                font-size: 1.5em;
+                margin: 0 0 10px 0;
+                line-height: 1.2;
+            }
+
+            h2 {
+                font-size: 1.2em;
+                margin: 0 0 15px 0;
+            }
+
+            .week-selector {
+                padding: 12px;
+                margin-bottom: 15px;
+                border-radius: 8px;
+                width: 100%;
+                max-width: 100%;
+                box-sizing: border-box;
+            }
+
+            .week-selector label {
+                font-size: 0.95em;
+                margin-bottom: 8px;
+            }
+
+            .week-controls {
+                flex-wrap: nowrap !important;
+                gap: 6px;
+                width: 100%;
+                max-width: 100%;
+            }
+
+            #prevWeekBtn {
+                padding: 10px 12px !important;
+                min-width: 45px;
+                font-size: 0 !important;
+                position: relative;
+            }
+
+            #prevWeekBtn::before {
+                content: '◀';
+                font-size: 18px !important;
+                display: inline-block;
+                line-height: 1;
+            }
+
+            #nextWeekBtn {
+                padding: 10px 12px !important;
+                min-width: 45px;
+                font-size: 0 !important;
+                position: relative;
+            }
+
+            #nextWeekBtn::after {
+                content: '▶';
+                font-size: 18px !important;
+                display: inline-block;
+                line-height: 1;
+            }
+
+            #week {
+                min-width: 70px !important;
+                font-size: 0.95em !important;
+                flex: 1 1 auto;
+                padding: 10px !important;
+            }
+
+            #week_date_range {
+                font-size: 0.9em;
+                margin-top: 8px;
+            }
+
+            .reports-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+                margin-top: 15px;
+                width: 100%;
+                max-width: 100%;
+                padding: 0;
+                margin-left: 0;
+                margin-right: 0;
+            }
+
+            .report-card {
+                padding: 12px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+                box-sizing: border-box;
+                overflow-x: hidden;
+            }
+
+            .report-card:hover {
+                transform: none;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .report-card h3 {
+                font-size: 0.95em;
+                margin: 0 0 10px 0;
+                padding-bottom: 6px;
+                line-height: 1.2;
+                width: 100%;
+                max-width: 100%;
+                overflow-wrap: break-word;
+                word-wrap: break-word;
+                word-break: break-word;
+            }
+
+            .report-content {
+                min-height: 70px;
+                font-size: 0.85em;
+                line-height: 1.5;
+                width: 100%;
+                max-width: 100%;
+                overflow-x: hidden;
+                word-break: break-word;
+                overflow-wrap: break-word;
+            }
+
+            .report-content strong {
+                font-size: 0.9em;
+                word-break: break-word;
+            }
+
+            .report-content.empty {
+                font-size: 0.8em;
+            }
+
+            .loading {
+                padding: 12px;
+                font-size: 0.85em;
+            }
+        }
+
+        /* Mobile nhỏ hơn (iPhone SE, etc.) */
+        @media (max-width: 375px) {
+            body {
+                padding: 0;
+            }
+
+            .container {
+                padding: 10px;
+                border-radius: 0;
+            }
+
+            h1 {
+                font-size: 1.25em;
+                margin: 0 0 8px 0;
+            }
+
+            h2 {
+                font-size: 1em;
+                margin: 0 0 12px 0;
+            }
+
+            .week-selector {
+                padding: 10px;
+                margin-bottom: 15px;
+            }
+
+            .week-selector label {
+                font-size: 0.9em;
+            }
+
+            .week-controls {
+                gap: 5px;
+            }
+
+            #prevWeekBtn,
+            #nextWeekBtn {
+                padding: 8px 10px !important;
+                min-width: 40px;
+            }
+
+            #week {
+                min-width: 60px !important;
+                font-size: 0.9em !important;
+                padding: 8px !important;
+            }
+
+            .reports-grid {
+                gap: 10px;
+                margin-top: 12px;
+            }
+
+            .report-card {
+                padding: 10px;
+                border-radius: 6px;
+            }
+
+            .report-card h3 {
+                font-size: 0.9em;
+                margin: 0 0 8px 0;
+                padding-bottom: 5px;
+            }
+
+            .report-content {
+                font-size: 0.8em;
+                line-height: 1.4;
+                min-height: 60px;
+            }
+
+            .report-content strong {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="back-home">
+            <a href="index.html">← Trở về trang chủ</a>
+        </div>
+        <h1>📊 TỔNG HỢP BÁO CÁO</h1>
+        <h2>Ban Cán Sự Lớp</h2>
+
+        <div class="week-selector">
+            <label for="week">📅 TUẦN THỨ</label>
+            <div class="week-controls">
+                <button type="button" id="prevWeekBtn" onclick="viewPreviousWeek()">◀ Tuần trước</button>
+                <input type="number" id="week" name="week" min="1" max="35" required oninput="updateWeekDateRange(); loadAllReports();">
+                <button type="button" id="nextWeekBtn" onclick="viewNextWeek()">Tuần sau ▶</button>
+            </div>
+            <div id="week_date_range"></div>
+        </div>
+
+        <div class="reports-grid" id="reportsContainer">
+            <div class="report-card lt">
+                <h3>👑 Lớp Trưởng (LT)</h3>
+                <div class="report-content loading" id="report-lt">Đang tải...</div>
+            </div>
+            <div class="report-card lpht">
+                <h3>📚 Lớp Phó Học Tập (LPHT)</h3>
+                <div class="report-content loading" id="report-lpht">Đang tải...</div>
+            </div>
+            <div class="report-card lptt">
+                <h3>⚖️ Lớp Phó Trật Tự (LPTT)</h3>
+                <div class="report-content loading" id="report-lptt">Đang tải...</div>
+            </div>
+            <div class="report-card lppt">
+                <h3>🎵 Lớp Phó Phong Trào (LPPT)</h3>
+                <div class="report-content loading" id="report-lppt">Đang tải...</div>
+            </div>
+            <div class="report-card lpld">
+                <h3>🧹 Lớp Phó Lao Động (LPLD)</h3>
+                <div class="report-content loading" id="report-lpld">Đang tải...</div>
+            </div>
+            <div class="report-card tt1">
+                <h3>👤 Tổ Trưởng 1 (TT1)</h3>
+                <div class="report-content loading" id="report-tt1">Đang tải...</div>
+            </div>
+            <div class="report-card tt2">
+                <h3>👤 Tổ Trưởng 2 (TT2)</h3>
+                <div class="report-content loading" id="report-tt2">Đang tải...</div>
+            </div>
+            <div class="report-card tt3">
+                <h3>👤 Tổ Trưởng 3 (TT3)</h3>
+                <div class="report-content loading" id="report-tt3">Đang tải...</div>
+            </div>
+            <div class="report-card tt4">
+                <h3>👤 Tổ Trưởng 4 (TT4)</h3>
+                <div class="report-content loading" id="report-tt4">Đang tải...</div>
+            </div>
+            <div class="report-card thuquy">
+                <h3>💰 Thủ Quỹ</h3>
+                <div class="report-content loading" id="report-thuquy">Đang tải...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Helper function để lấy week range string
+        function getWeekRangeString(weekNumber) {
+            if (typeof SCHOOL_WEEKS_CONFIG === 'undefined' || !SCHOOL_WEEKS_CONFIG) {
+                return '';
+            }
+            if (weekNumber < 1 || weekNumber > SCHOOL_WEEKS_CONFIG.length) {
+                return '';
+            }
+            const weekConfig = SCHOOL_WEEKS_CONFIG[weekNumber - 1];
+            if (!weekConfig) return '';
+            return `từ ngày ${weekConfig.from} đến ${weekConfig.to}`;
+        }
+
+        function updateWeekDateRange() {
+            const weekInput = document.getElementById('week');
+            if (!weekInput) return;
+            
+            const weekValue = parseInt(weekInput.value) || 0;
+            const weekDateRange = document.getElementById('week_date_range');
+            
+            if (!weekDateRange) return;
+            
+            if (weekValue >= 1 && weekValue <= 35) {
+                const rangeString = getWeekRangeString(weekValue);
+                if (rangeString) {
+                    weekDateRange.textContent = rangeString;
+                } else {
+                    if (typeof SCHOOL_WEEKS_CONFIG === 'undefined') {
+                        setTimeout(updateWeekDateRange, 200);
+                    } else {
+                        weekDateRange.textContent = 'Không tìm thấy thông tin tuần ' + weekValue;
+                    }
+                }
+            } else {
+                weekDateRange.textContent = '';
+            }
+        }
+
+        function viewPreviousWeek() {
+            const currentWeek = parseInt(document.getElementById('week').value) || 1;
+            if (currentWeek > 1) {
+                document.getElementById('week').value = currentWeek - 1;
+                updateWeekDateRange();
+                loadAllReports();
+            } else {
+                alert('Đây là tuần đầu tiên!');
+            }
+        }
+
+        function viewNextWeek() {
+            const currentWeek = parseInt(document.getElementById('week').value) || 1;
+            const maxWeek = typeof SCHOOL_WEEKS_CONFIG !== 'undefined' && SCHOOL_WEEKS_CONFIG ? SCHOOL_WEEKS_CONFIG.length : 35;
+            if (currentWeek < maxWeek) {
+                document.getElementById('week').value = currentWeek + 1;
+                updateWeekDateRange();
+                loadAllReports();
+            } else {
+                alert('Đây là tuần cuối cùng!');
+            }
+        }
+
+        // Tính tuần hiện tại dựa trên ngày tháng
+        function getCurrentWeek() {
+            if (typeof getCurrentWeekNumber === 'function' && typeof SCHOOL_WEEKS_CONFIG !== 'undefined') {
+                return getCurrentWeekNumber();
+            }
+            
+            if (typeof SCHOOL_WEEKS_CONFIG === 'undefined' || !SCHOOL_WEEKS_CONFIG || SCHOOL_WEEKS_CONFIG.length === 0) {
+                return 1;
+            }
+            
+            const today = new Date();
+            // Normalize to midnight local time để tránh lỗi timezone
+            const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            currentDate.setHours(0, 0, 0, 0);
+            
+            for (let i = 0; i < SCHOOL_WEEKS_CONFIG.length; i++) {
+                const weekConfig = SCHOOL_WEEKS_CONFIG[i];
+                if (!weekConfig || !weekConfig.from || !weekConfig.to) continue;
+                
+                const [fromDay, fromMonth, fromYear] = weekConfig.from.split('/').map(Number);
+                const [toDay, toMonth, toYear] = weekConfig.to.split('/').map(Number);
+                
+                // Kiểm tra dữ liệu hợp lệ
+                if (isNaN(fromDay) || isNaN(fromMonth) || isNaN(fromYear) || 
+                    isNaN(toDay) || isNaN(toMonth) || isNaN(toYear)) {
+                    continue;
+                }
+                
+                const startDate = new Date(fromYear, fromMonth - 1, fromDay);
+                startDate.setHours(0, 0, 0, 0);
+                const endDate = new Date(toYear, toMonth - 1, toDay);
+                endDate.setHours(23, 59, 59, 999); // Bao gồm cả ngày cuối
+                
+                if (currentDate >= startDate && currentDate <= endDate) {
+                    return weekConfig.week;
+                }
+            }
+            
+            // Nếu không tìm thấy tuần chứa ngày hiện tại, tìm tuần gần nhất trong quá khứ
+            // (Vì Chủ nhật không được liệt kê trong tuần học, nên nếu hôm nay là Chủ nhật
+            // hoặc nằm giữa các tuần, ta sẽ trả về tuần vừa qua)
+            for (let i = SCHOOL_WEEKS_CONFIG.length - 1; i >= 0; i--) {
+                const weekConfig = SCHOOL_WEEKS_CONFIG[i];
+                if (!weekConfig || !weekConfig.from) continue;
+                
+                const [fromDay, fromMonth, fromYear] = weekConfig.from.split('/').map(Number);
+                if (isNaN(fromDay) || isNaN(fromMonth) || isNaN(fromYear)) continue;
+                
+                const startDate = new Date(fromYear, fromMonth - 1, fromDay);
+                startDate.setHours(0, 0, 0, 0);
+                
+                // Nếu tuần này bắt đầu trước hoặc bằng ngày hiện tại, đây là tuần gần nhất trong quá khứ
+                if (startDate <= currentDate) {
+                    return weekConfig.week;
+                }
+            }
+            
+            return 1;
+        }
+
+        // Parse CSV text thành mảng dữ liệu
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            const data = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                const values = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        values.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim());
+                
+                data.push(values);
+            }
+            
+            return data;
+        }
+
+        // Hàm parse báo cáo Lớp Trưởng theo cấu trúc cột từ CSV
+        function parseLTReport(csvData, week) {
+            const weekStr = String(week);
+            
+            // Tìm dòng có tuần khớp
+            for (let i = 1; i < csvData.length; i++) {
+                const row = csvData[i];
+                if (!row || row.length === 0) continue;
+                
+                const firstCell = row[0] ? String(row[0]).trim() : '';
+                if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                    // Cột C (index 2): Thông báo bên đoàn
+                    const noticeGuild = row[2] ? String(row[2]).trim() : '';
+                    
+                    // Cột D (index 3): Học sinh vắng
+                    const absentStudent = row[3] ? String(row[3]).trim() : '';
+                    
+                    // Cột E (index 4): Học sinh trễ
+                    const lateStudent = row[4] ? String(row[4]).trim() : '';
+                    
+                    // Cột F (index 5): Vi phạm bên đoàn
+                    const violationGuild = row[5] ? String(row[5]).trim() : '';
+                    
+                    // Cột G (index 6): Phương hướng tuần sau
+                    const futurePlan = row[6] ? String(row[6]).trim() : '';
+                    
+                    // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                    let reportText = '';
+                    reportText += `📢 <strong>Thông báo bên đoàn:</strong> ${noticeGuild || 'không có'}<br>`;
+                    reportText += `👤 <strong>Học sinh vắng:</strong> ${absentStudent || 'không có'}<br>`;
+                    reportText += `⏰ <strong>Học sinh trễ:</strong> ${lateStudent || 'không có'}<br>`;
+                    reportText += `⚠️ <strong>Vi phạm bên đoàn:</strong> ${violationGuild || 'không có'}<br>`;
+                    reportText += `📋 <strong>Phương hướng tuần sau:</strong> ${futurePlan || 'không có'}`;
+                    
+                    return { success: true, content: reportText, isHTML: true };
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Lớp Trưởng từ HTML table
+        function parseLTReportFromHTML(doc, week) {
+            const weekStr = String(week);
+            const tables = doc.querySelectorAll('table');
+
+            if (tables.length === 0) {
+                return { empty: true, message: 'Không tìm thấy bảng dữ liệu' };
+            }
+
+            for (let table of tables) {
+                const rows = table.querySelectorAll('tr');
+                
+                for (let row of rows) {
+                    const cells = row.querySelectorAll('td, th');
+                    if (cells.length === 0) continue;
+
+                    const firstCell = cells[0].textContent.trim();
+                    if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                        // Cột C (index 2): Thông báo bên đoàn
+                        const noticeGuild = cells[2] ? cells[2].textContent.trim() : '';
+                        
+                        // Cột D (index 3): Học sinh vắng
+                        const absentStudent = cells[3] ? cells[3].textContent.trim() : '';
+                        
+                        // Cột E (index 4): Học sinh trễ
+                        const lateStudent = cells[4] ? cells[4].textContent.trim() : '';
+                        
+                        // Cột F (index 5): Vi phạm bên đoàn
+                        const violationGuild = cells[5] ? cells[5].textContent.trim() : '';
+                        
+                        // Cột G (index 6): Phương hướng tuần sau
+                        const futurePlan = cells[6] ? cells[6].textContent.trim() : '';
+                        
+                        // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                        let reportText = '';
+                        reportText += `📢 <strong>Thông báo bên đoàn:</strong> ${noticeGuild || 'không có'}<br>`;
+                        reportText += `👤 <strong>Học sinh vắng:</strong> ${absentStudent || 'không có'}<br>`;
+                        reportText += `⏰ <strong>Học sinh trễ:</strong> ${lateStudent || 'không có'}<br>`;
+                        reportText += `⚠️ <strong>Vi phạm bên đoàn:</strong> ${violationGuild || 'không có'}<br>`;
+                        reportText += `📋 <strong>Phương hướng tuần sau:</strong> ${futurePlan || 'không có'}`;
+                        
+                        return { success: true, content: reportText, isHTML: true };
+                    }
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Lớp Phó Học Tập theo cấu trúc cột từ CSV
+        function parseLPHTReport(csvData, week) {
+            const weekStr = String(week);
+            
+            // Tìm dòng có tuần khớp
+            for (let i = 1; i < csvData.length; i++) {
+                const row = csvData[i];
+                if (!row || row.length === 0) continue;
+                
+                const firstCell = row[0] ? String(row[0]).trim() : '';
+                if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                    // Cột C (index 2): Số điểm tốt
+                    const goodPoints = row[2] ? String(row[2]).trim() : '';
+                    
+                    // Cột D (index 3): Số lượt phát biểu
+                    const participationCount = row[3] ? String(row[3]).trim() : '';
+                    
+                    // Cột E (index 4): Môn học bị giáo viên nhắc nhở
+                    const warnedSubject = row[4] ? String(row[4]).trim() : '';
+                    
+                    // Cột F (index 5): Phương hướng tuần sau
+                    const futurePlan = row[5] ? String(row[5]).trim() : '';
+                    
+                    // Cột G (index 6): Ý kiến đề xuất
+                    const suggestion = row[6] ? String(row[6]).trim() : '';
+                    
+                    // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                    let reportText = '';
+                    reportText += `⭐ <strong>Số điểm tốt:</strong> ${goodPoints || 'không có'}<br>`;
+                    reportText += `✋ <strong>Số lượt phát biểu:</strong> ${participationCount || 'không có'}<br>`;
+                    reportText += `⚠️ <strong>Môn học bị giáo viên nhắc nhở:</strong> ${warnedSubject || 'không có'}<br>`;
+                    reportText += `📋 <strong>Phương hướng tuần sau:</strong> ${futurePlan || 'không có'}<br>`;
+                    reportText += `💡 <strong>Ý kiến đề xuất:</strong> ${suggestion || 'không có'}`;
+                    
+                    return { success: true, content: reportText, isHTML: true };
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Lớp Phó Học Tập từ HTML table
+        function parseLPHTReportFromHTML(doc, week) {
+            const weekStr = String(week);
+            const tables = doc.querySelectorAll('table');
+
+            if (tables.length === 0) {
+                return { empty: true, message: 'Không tìm thấy bảng dữ liệu' };
+            }
+
+            for (let table of tables) {
+                const rows = table.querySelectorAll('tr');
+                
+                for (let row of rows) {
+                    const cells = row.querySelectorAll('td, th');
+                    if (cells.length === 0) continue;
+
+                    const firstCell = cells[0].textContent.trim();
+                    if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                        // Cột C (index 2): Số điểm tốt
+                        const goodPoints = cells[2] ? cells[2].textContent.trim() : '';
+                        
+                        // Cột D (index 3): Số lượt phát biểu
+                        const participationCount = cells[3] ? cells[3].textContent.trim() : '';
+                        
+                        // Cột E (index 4): Môn học bị giáo viên nhắc nhở
+                        const warnedSubject = cells[4] ? cells[4].textContent.trim() : '';
+                        
+                        // Cột F (index 5): Phương hướng tuần sau
+                        const futurePlan = cells[5] ? cells[5].textContent.trim() : '';
+                        
+                        // Cột G (index 6): Ý kiến đề xuất
+                        const suggestion = cells[6] ? cells[6].textContent.trim() : '';
+                        
+                        // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                        let reportText = '';
+                        reportText += `⭐ <strong>Số điểm tốt:</strong> ${goodPoints || 'không có'}<br>`;
+                        reportText += `✋ <strong>Số lượt phát biểu:</strong> ${participationCount || 'không có'}<br>`;
+                        reportText += `⚠️ <strong>Môn học bị giáo viên nhắc nhở:</strong> ${warnedSubject || 'không có'}<br>`;
+                        reportText += `📋 <strong>Phương hướng tuần sau:</strong> ${futurePlan || 'không có'}<br>`;
+                        reportText += `💡 <strong>Ý kiến đề xuất:</strong> ${suggestion || 'không có'}`;
+                        
+                        return { success: true, content: reportText, isHTML: true };
+                    }
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Lớp Phó Trật Tự theo cấu trúc cột từ CSV
+        function parseLPTTReport(csvData, week) {
+            const weekStr = String(week);
+            
+            // Tìm dòng có tuần khớp
+            for (let i = 1; i < csvData.length; i++) {
+                const row = csvData[i];
+                if (!row || row.length === 0) continue;
+                
+                const firstCell = row[0] ? String(row[0]).trim() : '';
+                if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                    // Cột C (index 2): Học Sinh MTT (Mất Trật Tự)
+                    const disorderStudents = row[2] ? String(row[2]).trim() : '';
+                    
+                    // Cột D (index 3): Số lượt (cùng dòng với Cột C)
+                    const disorderCount = row[3] ? String(row[3]).trim() : '';
+                    
+                    // Cột E (index 4): MTT(SDB) - Mất Trật Tự đã bị ghi SDB
+                    const disorderSDB = row[4] ? String(row[4]).trim() : '';
+                    
+                    // Cột F (index 5): Số lượt (cùng dòng với Cột E)
+                    const disorderSDBCount = row[5] ? String(row[5]).trim() : '';
+                    
+                    // Cột G (index 6): Theo dõi giáo viên nhắc
+                    const teacherWarning = row[6] ? String(row[6]).trim() : '';
+                    
+                    // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                    let reportText = '';
+                    reportText += `👤 <strong>Học Sinh MTT:</strong> ${disorderStudents || 'không có'} <strong>Số lượt:</strong> ${disorderCount || 'không có'}<br>`;
+                    reportText += `⚠️ <strong>MTT(SDB):</strong> ${disorderSDB || 'không có'} <strong>Số lượt:</strong> ${disorderSDBCount || 'không có'}<br>`;
+                    reportText += `📢 <strong>Theo dõi giáo viên nhắc:</strong> ${teacherWarning || 'không có'}`;
+                    
+                    return { success: true, content: reportText, isHTML: true };
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Lớp Phó Trật Tự từ HTML table
+        function parseLPTTReportFromHTML(doc, week) {
+            const weekStr = String(week);
+            const tables = doc.querySelectorAll('table');
+
+            if (tables.length === 0) {
+                return { empty: true, message: 'Không tìm thấy bảng dữ liệu' };
+            }
+
+            for (let table of tables) {
+                const rows = table.querySelectorAll('tr');
+                
+                for (let row of rows) {
+                    const cells = row.querySelectorAll('td, th');
+                    if (cells.length === 0) continue;
+
+                    const firstCell = cells[0].textContent.trim();
+                    if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                        // Cột C (index 2): Học Sinh MTT (Mất Trật Tự)
+                        const disorderStudents = cells[2] ? cells[2].textContent.trim() : '';
+                        
+                        // Cột D (index 3): Số lượt (cùng dòng với Cột C)
+                        const disorderCount = cells[3] ? cells[3].textContent.trim() : '';
+                        
+                        // Cột E (index 4): MTT(SDB) - Mất Trật Tự đã bị ghi SDB
+                        const disorderSDB = cells[4] ? cells[4].textContent.trim() : '';
+                        
+                        // Cột F (index 5): Số lượt (cùng dòng với Cột E)
+                        const disorderSDBCount = cells[5] ? cells[5].textContent.trim() : '';
+                        
+                        // Cột G (index 6): Theo dõi giáo viên nhắc
+                        const teacherWarning = cells[6] ? cells[6].textContent.trim() : '';
+                        
+                        // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                        let reportText = '';
+                        reportText += `👤 <strong>Học Sinh MTT:</strong> ${disorderStudents || 'không có'} <strong>Số lượt:</strong> ${disorderCount || 'không có'}<br>`;
+                        reportText += `⚠️ <strong>MTT(SDB):</strong> ${disorderSDB || 'không có'} <strong>Số lượt:</strong> ${disorderSDBCount || 'không có'}<br>`;
+                        reportText += `📢 <strong>Theo dõi giáo viên nhắc:</strong> ${teacherWarning || 'không có'}`;
+                        
+                        return { success: true, content: reportText, isHTML: true };
+                    }
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Lớp Phó Phong Trào theo cấu trúc cột từ CSV
+        function parseLPPTReport(csvData, week) {
+            const weekStr = String(week);
+            
+            // Tìm dòng có tuần khớp
+            for (let i = 1; i < csvData.length; i++) {
+                const row = csvData[i];
+                if (!row || row.length === 0) continue;
+                
+                const firstCell = row[0] ? String(row[0]).trim() : '';
+                if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                    // Cột C (index 2): Tên phong trào
+                    const campaignName = row[2] ? String(row[2]).trim() : '';
+                    
+                    // Cột D (index 3): Thời gian thực hiện
+                    const implementationTime = row[3] ? String(row[3]).trim() : '';
+                    
+                    // Cột E (index 4): Tiến độ thực hiện
+                    const progress = row[4] ? String(row[4]).trim() : '';
+                    
+                    // Cột F (index 5): Phân công
+                    const assignedStudents = row[5] ? String(row[5]).trim() : '';
+                    
+                    // Cột G (index 6): Ngày thi
+                    const competitionDate = row[6] ? String(row[6]).trim() : '';
+                    
+                    // Cột H (index 7): Dự kiến kinh phí
+                    const estimatedCost = row[7] ? String(row[7]).trim() : '';
+                    
+                    // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                    let reportText = '';
+                    reportText += `🎯 <strong>Tên phong trào:</strong> ${campaignName || 'không có'}<br>`;
+                    reportText += `⏰ <strong>Thời gian thực hiện:</strong> ${implementationTime || 'không có'}<br>`;
+                    reportText += `📊 <strong>Tiến độ thực hiện:</strong> ${progress || 'không có'}<br>`;
+                    reportText += `👥 <strong>Phân công:</strong> ${assignedStudents || 'không có'}<br>`;
+                    reportText += `📅 <strong>Ngày thi:</strong> ${competitionDate || 'không có'}<br>`;
+                    reportText += `💰 <strong>Dự kiến kinh phí:</strong> ${estimatedCost || 'không có'}`;
+                    
+                    return { success: true, content: reportText, isHTML: true };
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Lớp Phó Phong Trào từ HTML table
+        function parseLPPTReportFromHTML(doc, week) {
+            const weekStr = String(week);
+            const tables = doc.querySelectorAll('table');
+
+            if (tables.length === 0) {
+                return { empty: true, message: 'Không tìm thấy bảng dữ liệu' };
+            }
+
+            for (let table of tables) {
+                const rows = table.querySelectorAll('tr');
+                
+                for (let row of rows) {
+                    const cells = row.querySelectorAll('td, th');
+                    if (cells.length === 0) continue;
+
+                    const firstCell = cells[0].textContent.trim();
+                    if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                        // Cột C (index 2): Tên phong trào
+                        const campaignName = cells[2] ? cells[2].textContent.trim() : '';
+                        
+                        // Cột D (index 3): Thời gian thực hiện
+                        const implementationTime = cells[3] ? cells[3].textContent.trim() : '';
+                        
+                        // Cột E (index 4): Tiến độ thực hiện
+                        const progress = cells[4] ? cells[4].textContent.trim() : '';
+                        
+                        // Cột F (index 5): Phân công
+                        const assignedStudents = cells[5] ? cells[5].textContent.trim() : '';
+                        
+                        // Cột G (index 6): Ngày thi
+                        const competitionDate = cells[6] ? cells[6].textContent.trim() : '';
+                        
+                        // Cột H (index 7): Dự kiến kinh phí
+                        const estimatedCost = cells[7] ? cells[7].textContent.trim() : '';
+                        
+                        // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                        let reportText = '';
+                        reportText += `🎯 <strong>Tên phong trào:</strong> ${campaignName || 'không có'}<br>`;
+                        reportText += `⏰ <strong>Thời gian thực hiện:</strong> ${implementationTime || 'không có'}<br>`;
+                        reportText += `📊 <strong>Tiến độ thực hiện:</strong> ${progress || 'không có'}<br>`;
+                        reportText += `👥 <strong>Phân công:</strong> ${assignedStudents || 'không có'}<br>`;
+                        reportText += `📅 <strong>Ngày thi:</strong> ${competitionDate || 'không có'}<br>`;
+                        reportText += `💰 <strong>Dự kiến kinh phí:</strong> ${estimatedCost || 'không có'}`;
+                        
+                        return { success: true, content: reportText, isHTML: true };
+                    }
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Lớp Phó Lao Động theo cấu trúc cột từ CSV
+        function parseLPLDReport(csvData, week) {
+            const weekStr = String(week);
+            
+            // Tìm dòng có tuần khớp
+            for (let i = 1; i < csvData.length; i++) {
+                const row = csvData[i];
+                if (!row || row.length === 0) continue;
+                
+                const firstCell = row[0] ? String(row[0]).trim() : '';
+                if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                    // Cột C (index 2): Tổ trực
+                    const cleaningTeam = row[2] ? String(row[2]).trim() : '';
+                    
+                    // Cột D (index 3): Mang ghế ra sân
+                    const chairTeam = row[3] ? String(row[3]).trim() : '';
+                    
+                    // Cột E (index 4): Thứ 2
+                    const monday = row[4] ? String(row[4]).trim() : '';
+                    
+                    // Cột F (index 5): Thứ 3
+                    const tuesday = row[5] ? String(row[5]).trim() : '';
+                    
+                    // Cột G (index 6): Thứ 4
+                    const wednesday = row[6] ? String(row[6]).trim() : '';
+                    
+                    // Cột H (index 7): Thứ 5
+                    const thursday = row[7] ? String(row[7]).trim() : '';
+                    
+                    // Cột I (index 8): Thứ 6
+                    const friday = row[8] ? String(row[8]).trim() : '';
+                    
+                    // Cột J (index 9): Thứ 7
+                    const saturday = row[9] ? String(row[9]).trim() : '';
+                    
+                    // Cột K (index 10): Trực trễ
+                    const lateDuty = row[10] ? String(row[10]).trim() : '';
+                    
+                    // Cột L (index 11): Ý kiến
+                    const feedback = row[11] ? String(row[11]).trim() : '';
+                    
+                    // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                    let reportText = '';
+                    reportText += `🧹 <strong>Tổ trực:</strong> ${cleaningTeam || 'không có'}<br>`;
+                    reportText += `🪑 <strong>Mang ghế ra sân:</strong> ${chairTeam || 'không có'}<br>`;
+                    reportText += `📅 <strong>Thứ 2:</strong> ${monday || 'không có'}<br>`;
+                    reportText += `📅 <strong>Thứ 3:</strong> ${tuesday || 'không có'}<br>`;
+                    reportText += `📅 <strong>Thứ 4:</strong> ${wednesday || 'không có'}<br>`;
+                    reportText += `📅 <strong>Thứ 5:</strong> ${thursday || 'không có'}<br>`;
+                    reportText += `📅 <strong>Thứ 6:</strong> ${friday || 'không có'}<br>`;
+                    reportText += `📅 <strong>Thứ 7:</strong> ${saturday || 'không có'}<br>`;
+                    reportText += `⏰ <strong>Trực trễ:</strong> ${lateDuty || 'không có'}<br>`;
+                    reportText += `💬 <strong>Ý kiến:</strong> ${feedback || 'không có'}`;
+                    
+                    return { success: true, content: reportText, isHTML: true };
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Lớp Phó Lao Động từ HTML table
+        function parseLPLDReportFromHTML(doc, week) {
+            const weekStr = String(week);
+            const tables = doc.querySelectorAll('table');
+
+            if (tables.length === 0) {
+                return { empty: true, message: 'Không tìm thấy bảng dữ liệu' };
+            }
+
+            for (let table of tables) {
+                const rows = table.querySelectorAll('tr');
+                
+                for (let row of rows) {
+                    const cells = row.querySelectorAll('td, th');
+                    if (cells.length === 0) continue;
+
+                    const firstCell = cells[0].textContent.trim();
+                    if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                        // Cột C (index 2): Tổ trực
+                        const cleaningTeam = cells[2] ? cells[2].textContent.trim() : '';
+                        
+                        // Cột D (index 3): Mang ghế ra sân
+                        const chairTeam = cells[3] ? cells[3].textContent.trim() : '';
+                        
+                        // Cột E (index 4): Thứ 2
+                        const monday = cells[4] ? cells[4].textContent.trim() : '';
+                        
+                        // Cột F (index 5): Thứ 3
+                        const tuesday = cells[5] ? cells[5].textContent.trim() : '';
+                        
+                        // Cột G (index 6): Thứ 4
+                        const wednesday = cells[6] ? cells[6].textContent.trim() : '';
+                        
+                        // Cột H (index 7): Thứ 5
+                        const thursday = cells[7] ? cells[7].textContent.trim() : '';
+                        
+                        // Cột I (index 8): Thứ 6
+                        const friday = cells[8] ? cells[8].textContent.trim() : '';
+                        
+                        // Cột J (index 9): Thứ 7
+                        const saturday = cells[9] ? cells[9].textContent.trim() : '';
+                        
+                        // Cột K (index 10): Trực trễ
+                        const lateDuty = cells[10] ? cells[10].textContent.trim() : '';
+                        
+                        // Cột L (index 11): Ý kiến
+                        const feedback = cells[11] ? cells[11].textContent.trim() : '';
+                        
+                        // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                        let reportText = '';
+                        reportText += `🧹 <strong>Tổ trực:</strong> ${cleaningTeam || 'không có'}<br>`;
+                        reportText += `🪑 <strong>Mang ghế ra sân:</strong> ${chairTeam || 'không có'}<br>`;
+                        reportText += `📅 <strong>Thứ 2:</strong> ${monday || 'không có'}<br>`;
+                        reportText += `📅 <strong>Thứ 3:</strong> ${tuesday || 'không có'}<br>`;
+                        reportText += `📅 <strong>Thứ 4:</strong> ${wednesday || 'không có'}<br>`;
+                        reportText += `📅 <strong>Thứ 5:</strong> ${thursday || 'không có'}<br>`;
+                        reportText += `📅 <strong>Thứ 6:</strong> ${friday || 'không có'}<br>`;
+                        reportText += `📅 <strong>Thứ 7:</strong> ${saturday || 'không có'}<br>`;
+                        reportText += `⏰ <strong>Trực trễ:</strong> ${lateDuty || 'không có'}<br>`;
+                        reportText += `💬 <strong>Ý kiến:</strong> ${feedback || 'không có'}`;
+                        
+                        return { success: true, content: reportText, isHTML: true };
+                    }
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Thủ Quỹ theo cấu trúc cột từ CSV
+        function parseThuQuyReport(csvData, week) {
+            const weekStr = String(week);
+            
+            // Tìm dòng có tuần khớp
+            for (let i = 1; i < csvData.length; i++) {
+                const row = csvData[i];
+                if (!row || row.length === 0) continue;
+                
+                const firstCell = row[0] ? String(row[0]).trim() : '';
+                if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                    // Cột C (index 2): Tiền Thu /1HS
+                    const feePerStudent = row[2] ? String(row[2]).trim() : '';
+                    
+                    // Cột D (index 3): số lượng (cùng dòng với Cột C)
+                    const quantityPaid = row[3] ? String(row[3]).trim() : '';
+                    
+                    // Cột E (index 4): Học sinh thiếu
+                    const missingStudents = row[4] ? String(row[4]).trim() : '';
+                    
+                    // Cột F (index 5): số lượng (cùng dòng với Cột E)
+                    const quantityMissing = row[5] ? String(row[5]).trim() : '';
+                    
+                    // Cột G (index 6): Chi 1
+                    const expenseName1 = row[6] ? String(row[6]).trim() : '';
+                    
+                    // Cột H (index 7): Số tiền (cùng dòng với Chi 1)
+                    const expenseAmount1 = row[7] ? String(row[7]).trim() : '';
+                    
+                    // Cột I (index 8): Chi 2
+                    const expenseName2 = row[8] ? String(row[8]).trim() : '';
+                    
+                    // Cột J (index 9): Số tiền (cùng dòng với Chi 2)
+                    const expenseAmount2 = row[9] ? String(row[9]).trim() : '';
+                    
+                    // Cột K (index 10): Chi 3
+                    const expenseName3 = row[10] ? String(row[10]).trim() : '';
+                    
+                    // Cột L (index 11): Số tiền (cùng dòng với Chi 3)
+                    const expenseAmount3 = row[11] ? String(row[11]).trim() : '';
+                    
+                    // Cột M (index 12): Chi 4
+                    const expenseName4 = row[12] ? String(row[12]).trim() : '';
+                    
+                    // Cột N (index 13): Số tiền (cùng dòng với Chi 4)
+                    const expenseAmount4 = row[13] ? String(row[13]).trim() : '';
+                    
+                    // Cột S (index 18): Tổng thu
+                    const totalIncome = row[18] ? String(row[18]).trim() : '';
+                    
+                    // Cột T (index 19): Tổng chi
+                    const totalExpense = row[19] ? String(row[19]).trim() : '';
+                    
+                    // Cột U (index 20): số tiền còn lại
+                    const totalRemaining = row[20] ? String(row[20]).trim() : '';
+                    
+                    // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                    let reportText = '';
+                    reportText += `💰 <strong>Tiền Thu /1HS:</strong> ${feePerStudent || 'không có'} <strong>Số lượng:</strong> ${quantityPaid || 'không có'}<br>`;
+                    reportText += `👤 <strong>Học sinh thiếu:</strong> ${missingStudents || 'không có'} <strong>Số lượng:</strong> ${quantityMissing || 'không có'}<br>`;
+                    
+                    // Hiển thị các khoản chi (chỉ hiển thị nếu có tên chi)
+                    if (expenseName1 || expenseAmount1) {
+                        reportText += `💸 <strong>Chi 1:</strong> ${expenseName1 || 'không có'} <strong>Số tiền:</strong> ${expenseAmount1 || 'không có'}<br>`;
+                    }
+                    if (expenseName2 || expenseAmount2) {
+                        reportText += `💸 <strong>Chi 2:</strong> ${expenseName2 || 'không có'} <strong>Số tiền:</strong> ${expenseAmount2 || 'không có'}<br>`;
+                    }
+                    if (expenseName3 || expenseAmount3) {
+                        reportText += `💸 <strong>Chi 3:</strong> ${expenseName3 || 'không có'} <strong>Số tiền:</strong> ${expenseAmount3 || 'không có'}<br>`;
+                    }
+                    if (expenseName4 || expenseAmount4) {
+                        reportText += `💸 <strong>Chi 4:</strong> ${expenseName4 || 'không có'} <strong>Số tiền:</strong> ${expenseAmount4 || 'không có'}<br>`;
+                    }
+                    
+                    reportText += `<br>`;
+                    reportText += `📊 <strong>Tổng thu:</strong> ${totalIncome || 'không có'}<br>`;
+                    reportText += `📊 <strong>Tổng chi:</strong> ${totalExpense || 'không có'}<br>`;
+                    reportText += `💵 <strong>Số tiền còn lại:</strong> ${totalRemaining || 'không có'}`;
+                    
+                    return { success: true, content: reportText, isHTML: true };
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Thủ Quỹ từ HTML table
+        function parseThuQuyReportFromHTML(doc, week) {
+            const weekStr = String(week);
+            const tables = doc.querySelectorAll('table');
+
+            if (tables.length === 0) {
+                return { empty: true, message: 'Không tìm thấy bảng dữ liệu' };
+            }
+
+            for (let table of tables) {
+                const rows = table.querySelectorAll('tr');
+                
+                for (let row of rows) {
+                    const cells = row.querySelectorAll('td, th');
+                    if (cells.length === 0) continue;
+
+                    const firstCell = cells[0].textContent.trim();
+                    if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                        // Cột C (index 2): Tiền Thu /1HS
+                        const feePerStudent = cells[2] ? cells[2].textContent.trim() : '';
+                        
+                        // Cột D (index 3): số lượng (cùng dòng với Cột C)
+                        const quantityPaid = cells[3] ? cells[3].textContent.trim() : '';
+                        
+                        // Cột E (index 4): Học sinh thiếu
+                        const missingStudents = cells[4] ? cells[4].textContent.trim() : '';
+                        
+                        // Cột F (index 5): số lượng (cùng dòng với Cột E)
+                        const quantityMissing = cells[5] ? cells[5].textContent.trim() : '';
+                        
+                        // Cột G (index 6): Chi 1
+                        const expenseName1 = cells[6] ? cells[6].textContent.trim() : '';
+                        
+                        // Cột H (index 7): Số tiền (cùng dòng với Chi 1)
+                        const expenseAmount1 = cells[7] ? cells[7].textContent.trim() : '';
+                        
+                        // Cột I (index 8): Chi 2
+                        const expenseName2 = cells[8] ? cells[8].textContent.trim() : '';
+                        
+                        // Cột J (index 9): Số tiền (cùng dòng với Chi 2)
+                        const expenseAmount2 = cells[9] ? cells[9].textContent.trim() : '';
+                        
+                        // Cột K (index 10): Chi 3
+                        const expenseName3 = cells[10] ? cells[10].textContent.trim() : '';
+                        
+                        // Cột L (index 11): Số tiền (cùng dòng với Chi 3)
+                        const expenseAmount3 = cells[11] ? cells[11].textContent.trim() : '';
+                        
+                        // Cột M (index 12): Chi 4
+                        const expenseName4 = cells[12] ? cells[12].textContent.trim() : '';
+                        
+                        // Cột N (index 13): Số tiền (cùng dòng với Chi 4)
+                        const expenseAmount4 = cells[13] ? cells[13].textContent.trim() : '';
+                        
+                        // Cột S (index 18): Tổng thu
+                        const totalIncome = cells[18] ? cells[18].textContent.trim() : '';
+                        
+                        // Cột T (index 19): Tổng chi
+                        const totalExpense = cells[19] ? cells[19].textContent.trim() : '';
+                        
+                        // Cột U (index 20): số tiền còn lại
+                        const totalRemaining = cells[20] ? cells[20].textContent.trim() : '';
+                        
+                        // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                        let reportText = '';
+                        reportText += `💰 <strong>Tiền Thu /1HS:</strong> ${feePerStudent || 'không có'} <strong>Số lượng:</strong> ${quantityPaid || 'không có'}<br>`;
+                        reportText += `👤 <strong>Học sinh thiếu:</strong> ${missingStudents || 'không có'} <strong>Số lượng:</strong> ${quantityMissing || 'không có'}<br>`;
+                        
+                        // Hiển thị các khoản chi (chỉ hiển thị nếu có tên chi)
+                        if (expenseName1 || expenseAmount1) {
+                            reportText += `💸 <strong>Chi 1:</strong> ${expenseName1 || 'không có'} <strong>Số tiền:</strong> ${expenseAmount1 || 'không có'}<br>`;
+                        }
+                        if (expenseName2 || expenseAmount2) {
+                            reportText += `💸 <strong>Chi 2:</strong> ${expenseName2 || 'không có'} <strong>Số tiền:</strong> ${expenseAmount2 || 'không có'}<br>`;
+                        }
+                        if (expenseName3 || expenseAmount3) {
+                            reportText += `💸 <strong>Chi 3:</strong> ${expenseName3 || 'không có'} <strong>Số tiền:</strong> ${expenseAmount3 || 'không có'}<br>`;
+                        }
+                        if (expenseName4 || expenseAmount4) {
+                            reportText += `💸 <strong>Chi 4:</strong> ${expenseName4 || 'không có'} <strong>Số tiền:</strong> ${expenseAmount4 || 'không có'}<br>`;
+                        }
+                        
+                        reportText += `<br>`;
+                        reportText += `📊 <strong>Tổng thu:</strong> ${totalIncome || 'không có'}<br>`;
+                        reportText += `📊 <strong>Tổng chi:</strong> ${totalExpense || 'không có'}<br>`;
+                        reportText += `💵 <strong>Số tiền còn lại:</strong> ${totalRemaining || 'không có'}`;
+                        
+                        return { success: true, content: reportText, isHTML: true };
+                    }
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Tổ Trưởng (dùng chung cho TT1, TT2, TT3, TT4) theo cấu trúc cột từ CSV
+        function parseTTReport(csvData, week) {
+            const weekStr = String(week);
+            
+            // Tìm dòng có tuần khớp
+            for (let i = 1; i < csvData.length; i++) {
+                const row = csvData[i];
+                if (!row || row.length === 0) continue;
+                
+                const firstCell = row[0] ? String(row[0]).trim() : '';
+                if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                    // Cột C (index 2): Không thuộc bài
+                    const notMemorized = row[2] ? String(row[2]).trim() : '';
+                    
+                    // Cột D (index 3): số lượt (cùng dòng với Cột C)
+                    const notMemorizedCount = row[3] ? String(row[3]).trim() : '';
+                    
+                    // Cột E (index 4): Không làm bài tập
+                    const noHomework = row[4] ? String(row[4]).trim() : '';
+                    
+                    // Cột F (index 5): số lượt (cùng dòng với Cột E)
+                    const noHomeworkCount = row[5] ? String(row[5]).trim() : '';
+                    
+                    // Cột G (index 6): Mất trật tự
+                    const disorder = row[6] ? String(row[6]).trim() : '';
+                    
+                    // Cột H (index 7): số lượt (cùng dòng với Cột G)
+                    const disorderCount = row[7] ? String(row[7]).trim() : '';
+                    
+                    // Cột I (index 8): Đi trễ
+                    const late = row[8] ? String(row[8]).trim() : '';
+                    
+                    // Cột J (index 9): số lượt (cùng dòng với Cột I)
+                    const lateCount = row[9] ? String(row[9]).trim() : '';
+                    
+                    // Cột K (index 10): Vi phạm đoàn
+                    const violation = row[10] ? String(row[10]).trim() : '';
+                    
+                    // Cột L (index 11): số lượt (cùng dòng với Cột K)
+                    const violationCount = row[11] ? String(row[11]).trim() : '';
+                    
+                    // Cột M (index 12): vắng
+                    const absent = row[12] ? String(row[12]).trim() : '';
+                    
+                    // Cột N (index 13): số lượt (cùng dòng với Cột M)
+                    const absentCount = row[13] ? String(row[13]).trim() : '';
+                    
+                    // Cột O (index 14): Điểm tốt
+                    const goodPoints = row[14] ? String(row[14]).trim() : '';
+                    
+                    // Cột P (index 15): số lượt (cùng dòng với Cột O)
+                    const goodPointsCount = row[15] ? String(row[15]).trim() : '';
+                    
+                    // Cột Q (index 16): Phát biểu
+                    const participation = row[16] ? String(row[16]).trim() : '';
+                    
+                    // Cột R (index 17): số lượt (cùng dòng với Cột Q)
+                    const participationCount = row[17] ? String(row[17]).trim() : '';
+                    
+                    // Cột S (index 18): số điểm
+                    const totalPoints = row[18] ? String(row[18]).trim() : '';
+                    
+                    // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                    let reportText = '';
+                    reportText += `📚 <strong>Không thuộc bài:</strong> ${notMemorized || 'không có'} <strong>Số lượt:</strong> ${notMemorizedCount || 'không có'}<br>`;
+                    reportText += `📝 <strong>Không làm bài tập:</strong> ${noHomework || 'không có'} <strong>Số lượt:</strong> ${noHomeworkCount || 'không có'}<br>`;
+                    reportText += `⚠️ <strong>Mất trật tự:</strong> ${disorder || 'không có'} <strong>Số lượt:</strong> ${disorderCount || 'không có'}<br>`;
+                    reportText += `⏰ <strong>Đi trễ:</strong> ${late || 'không có'} <strong>Số lượt:</strong> ${lateCount || 'không có'}<br>`;
+                    reportText += `🚫 <strong>Vi phạm đoàn:</strong> ${violation || 'không có'} <strong>Số lượt:</strong> ${violationCount || 'không có'}<br>`;
+                    reportText += `👤 <strong>Vắng:</strong> ${absent || 'không có'} <strong>Số lượt:</strong> ${absentCount || 'không có'}<br>`;
+                    reportText += `⭐ <strong>Điểm tốt:</strong> ${goodPoints || 'không có'} <strong>Số lượt:</strong> ${goodPointsCount || 'không có'}<br>`;
+                    reportText += `✋ <strong>Phát biểu:</strong> ${participation || 'không có'} <strong>Số lượt:</strong> ${participationCount || 'không có'}<br>`;
+                    reportText += `📊 <strong>Số điểm:</strong> ${totalPoints || 'không có'}`;
+                    
+                    return { success: true, content: reportText, isHTML: true };
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm parse báo cáo Tổ Trưởng từ HTML table
+        function parseTTReportFromHTML(doc, week) {
+            const weekStr = String(week);
+            const tables = doc.querySelectorAll('table');
+
+            if (tables.length === 0) {
+                return { empty: true, message: 'Không tìm thấy bảng dữ liệu' };
+            }
+
+            for (let table of tables) {
+                const rows = table.querySelectorAll('tr');
+                
+                for (let row of rows) {
+                    const cells = row.querySelectorAll('td, th');
+                    if (cells.length === 0) continue;
+
+                    const firstCell = cells[0].textContent.trim();
+                    if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                        // Cột C (index 2): Không thuộc bài
+                        const notMemorized = cells[2] ? cells[2].textContent.trim() : '';
+                        
+                        // Cột D (index 3): số lượt (cùng dòng với Cột C)
+                        const notMemorizedCount = cells[3] ? cells[3].textContent.trim() : '';
+                        
+                        // Cột E (index 4): Không làm bài tập
+                        const noHomework = cells[4] ? cells[4].textContent.trim() : '';
+                        
+                        // Cột F (index 5): số lượt (cùng dòng với Cột E)
+                        const noHomeworkCount = cells[5] ? cells[5].textContent.trim() : '';
+                        
+                        // Cột G (index 6): Mất trật tự
+                        const disorder = cells[6] ? cells[6].textContent.trim() : '';
+                        
+                        // Cột H (index 7): số lượt (cùng dòng với Cột G)
+                        const disorderCount = cells[7] ? cells[7].textContent.trim() : '';
+                        
+                        // Cột I (index 8): Đi trễ
+                        const late = cells[8] ? cells[8].textContent.trim() : '';
+                        
+                        // Cột J (index 9): số lượt (cùng dòng với Cột I)
+                        const lateCount = cells[9] ? cells[9].textContent.trim() : '';
+                        
+                        // Cột K (index 10): Vi phạm đoàn
+                        const violation = cells[10] ? cells[10].textContent.trim() : '';
+                        
+                        // Cột L (index 11): số lượt (cùng dòng với Cột K)
+                        const violationCount = cells[11] ? cells[11].textContent.trim() : '';
+                        
+                        // Cột M (index 12): vắng
+                        const absent = cells[12] ? cells[12].textContent.trim() : '';
+                        
+                        // Cột N (index 13): số lượt (cùng dòng với Cột M)
+                        const absentCount = cells[13] ? cells[13].textContent.trim() : '';
+                        
+                        // Cột O (index 14): Điểm tốt
+                        const goodPoints = cells[14] ? cells[14].textContent.trim() : '';
+                        
+                        // Cột P (index 15): số lượt (cùng dòng với Cột O)
+                        const goodPointsCount = cells[15] ? cells[15].textContent.trim() : '';
+                        
+                        // Cột Q (index 16): Phát biểu
+                        const participation = cells[16] ? cells[16].textContent.trim() : '';
+                        
+                        // Cột R (index 17): số lượt (cùng dòng với Cột Q)
+                        const participationCount = cells[17] ? cells[17].textContent.trim() : '';
+                        
+                        // Cột S (index 18): số điểm
+                        const totalPoints = cells[18] ? cells[18].textContent.trim() : '';
+                        
+                        // Tạo report text với format có nhãn và HTML để tiêu đề in đậm
+                        let reportText = '';
+                        reportText += `📚 <strong>Không thuộc bài:</strong> ${notMemorized || 'không có'} <strong>Số lượt:</strong> ${notMemorizedCount || 'không có'}<br>`;
+                        reportText += `📝 <strong>Không làm bài tập:</strong> ${noHomework || 'không có'} <strong>Số lượt:</strong> ${noHomeworkCount || 'không có'}<br>`;
+                        reportText += `⚠️ <strong>Mất trật tự:</strong> ${disorder || 'không có'} <strong>Số lượt:</strong> ${disorderCount || 'không có'}<br>`;
+                        reportText += `⏰ <strong>Đi trễ:</strong> ${late || 'không có'} <strong>Số lượt:</strong> ${lateCount || 'không có'}<br>`;
+                        reportText += `🚫 <strong>Vi phạm đoàn:</strong> ${violation || 'không có'} <strong>Số lượt:</strong> ${violationCount || 'không có'}<br>`;
+                        reportText += `👤 <strong>Vắng:</strong> ${absent || 'không có'} <strong>Số lượt:</strong> ${absentCount || 'không có'}<br>`;
+                        reportText += `⭐ <strong>Điểm tốt:</strong> ${goodPoints || 'không có'} <strong>Số lượt:</strong> ${goodPointsCount || 'không có'}<br>`;
+                        reportText += `✋ <strong>Phát biểu:</strong> ${participation || 'không có'} <strong>Số lượt:</strong> ${participationCount || 'không có'}<br>`;
+                        reportText += `📊 <strong>Số điểm:</strong> ${totalPoints || 'không có'}`;
+                        
+                        return { success: true, content: reportText, isHTML: true };
+                    }
+                }
+            }
+            
+            return { empty: true, message: 'Không có báo cáo cho tuần này' };
+        }
+
+        // Hàm đọc dữ liệu từ Google Sheet CSV
+        async function fetchReportFromSheet(reportId, gid) {
+            try {
+                if (!gid || !PUBLISHED_SPREADSHEET_URL) {
+                    return { error: 'GID hoặc PUBLISHED_SPREADSHEET_URL không được cấu hình' };
+                }
+
+                const week = parseInt(document.getElementById('week').value) || 1;
+                
+                // Tạo URL CSV từ PUBLISHED_SPREADSHEET_URL và GID
+                const csvUrl = `${PUBLISHED_SPREADSHEET_URL}/pub?gid=${gid}&single=true&output=csv`;
+                
+                // Thử đọc CSV trực tiếp
+                let csvText = null;
+                try {
+                    const response = await fetch(csvUrl, {
+                        method: 'GET',
+                        mode: 'cors',
+                        cache: 'no-cache'
+                    });
+                    
+                    if (response.ok) {
+                        csvText = await response.text();
+                    }
+                } catch (directError) {
+                    console.log(`Direct fetch failed for ${reportId}, trying proxy...`);
+                }
+
+                // Nếu direct fetch thất bại, thử dùng proxy
+                if (!csvText) {
+                    try {
+                        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(csvUrl)}`;
+                        const proxyResponse = await fetch(proxyUrl);
+                        
+                        if (proxyResponse.ok) {
+                            const proxyData = await proxyResponse.json();
+                            if (proxyData.contents) {
+                                csvText = proxyData.contents;
+                            }
+                        }
+                    } catch (proxyError) {
+                        console.error(`Proxy fetch failed for ${reportId}:`, proxyError);
+                    }
+                }
+
+                if (!csvText) {
+                    // Nếu CSV không được, thử đọc từ HTML
+                    return await fetchReportFromSheetHTML(reportId, gid);
+                }
+
+                // Parse CSV
+                const csvData = parseCSV(csvText);
+                if (csvData.length < 2) {
+                    return { empty: true, message: 'Không tìm thấy dữ liệu trong sheet' };
+                }
+
+                // Xử lý đặc biệt cho Lớp Trưởng (LT)
+                if (reportId === 'LT') {
+                    return parseLTReport(csvData, week);
+                }
+
+                // Xử lý đặc biệt cho Lớp Phó Học Tập (LPHT)
+                if (reportId === 'LPHT') {
+                    return parseLPHTReport(csvData, week);
+                }
+
+                // Xử lý đặc biệt cho Lớp Phó Trật Tự (LPTT)
+                if (reportId === 'LPTT') {
+                    return parseLPTTReport(csvData, week);
+                }
+
+                // Xử lý đặc biệt cho Lớp Phó Phong Trào (LPPT)
+                if (reportId === 'LPPT') {
+                    return parseLPPTReport(csvData, week);
+                }
+
+                // Xử lý đặc biệt cho Lớp Phó Lao Động (LPLD)
+                if (reportId === 'LPLD') {
+                    return parseLPLDReport(csvData, week);
+                }
+
+                // Xử lý đặc biệt cho Thủ Quỹ (ThuQuy)
+                if (reportId === 'ThuQuy') {
+                    return parseThuQuyReport(csvData, week);
+                }
+
+                // Xử lý đặc biệt cho Tổ Trưởng (TT1, TT2, TT3, TT4) - dùng chung hàm parse
+                if (reportId === 'TT1' || reportId === 'TT2' || reportId === 'TT3' || reportId === 'TT4') {
+                    return parseTTReport(csvData, week);
+                }
+
+                // Tìm dòng có tuần khớp (cột đầu tiên thường là số tuần)
+                const weekStr = String(week);
+                let reportText = '';
+                
+                for (let i = 1; i < csvData.length; i++) {
+                    const row = csvData[i];
+                    if (!row || row.length === 0) continue;
+                    
+                    const firstCell = row[0] ? String(row[0]).trim() : '';
+                    if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                        // Lấy tất cả các cột có dữ liệu (bỏ qua cột đầu tiên là số tuần)
+                        for (let j = 1; j < row.length; j++) {
+                            const cellText = row[j] ? String(row[j]).trim() : '';
+                            if (cellText && cellText !== '-' && cellText !== '' && cellText !== '0') {
+                                if (reportText) reportText += '\n';
+                                reportText += cellText;
+                            }
+                        }
+                        break;
+                    }
+                }
+
+                if (!reportText) {
+                    return { empty: true, message: 'Không có báo cáo cho tuần này' };
+                }
+
+                return { success: true, content: reportText.trim() };
+            } catch (error) {
+                console.error(`Error loading report ${reportId}:`, error);
+                return { error: error.message || 'Lỗi khi tải dữ liệu' };
+            }
+        }
+
+        // Hàm đọc dữ liệu từ Google Sheet HTML (fallback)
+        async function fetchReportFromSheetHTML(reportId, gid) {
+            try {
+                if (!gid || !PUBLISHED_SPREADSHEET_URL) {
+                    return { error: 'GID hoặc PUBLISHED_SPREADSHEET_URL không được cấu hình' };
+                }
+
+                const htmlUrl = `${PUBLISHED_SPREADSHEET_URL}/pubhtml?gid=${gid}&single=true`;
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(htmlUrl)}`;
+                
+                const response = await fetch(proxyUrl);
+                if (!response.ok) {
+                    throw new Error('Không thể tải dữ liệu từ sheet');
+                }
+
+                const data = await response.json();
+                const htmlContent = data.contents;
+
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(htmlContent, 'text/html');
+                const tables = doc.querySelectorAll('table');
+
+                if (tables.length === 0) {
+                    return { error: 'Không tìm thấy bảng dữ liệu' };
+                }
+
+                const week = parseInt(document.getElementById('week').value) || 1;
+                const weekStr = String(week);
+                
+                // Xử lý đặc biệt cho Lớp Trưởng (LT) từ HTML
+                if (reportId === 'LT') {
+                    return parseLTReportFromHTML(doc, week);
+                }
+
+                // Xử lý đặc biệt cho Lớp Phó Học Tập (LPHT) từ HTML
+                if (reportId === 'LPHT') {
+                    return parseLPHTReportFromHTML(doc, week);
+                }
+
+                // Xử lý đặc biệt cho Lớp Phó Trật Tự (LPTT) từ HTML
+                if (reportId === 'LPTT') {
+                    return parseLPTTReportFromHTML(doc, week);
+                }
+
+                // Xử lý đặc biệt cho Lớp Phó Phong Trào (LPPT) từ HTML
+                if (reportId === 'LPPT') {
+                    return parseLPPTReportFromHTML(doc, week);
+                }
+
+                // Xử lý đặc biệt cho Lớp Phó Lao Động (LPLD) từ HTML
+                if (reportId === 'LPLD') {
+                    return parseLPLDReportFromHTML(doc, week);
+                }
+
+                // Xử lý đặc biệt cho Thủ Quỹ (ThuQuy) từ HTML
+                if (reportId === 'ThuQuy') {
+                    return parseThuQuyReportFromHTML(doc, week);
+                }
+
+                // Xử lý đặc biệt cho Tổ Trưởng (TT1, TT2, TT3, TT4) từ HTML - dùng chung hàm parse
+                if (reportId === 'TT1' || reportId === 'TT2' || reportId === 'TT3' || reportId === 'TT4') {
+                    return parseTTReportFromHTML(doc, week);
+                }
+                
+                let reportText = '';
+
+                for (let table of tables) {
+                    const rows = table.querySelectorAll('tr');
+                    
+                    for (let row of rows) {
+                        const cells = row.querySelectorAll('td, th');
+                        if (cells.length === 0) continue;
+
+                        const firstCell = cells[0].textContent.trim();
+                        if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                            for (let i = 1; i < cells.length; i++) {
+                                const cellText = cells[i].textContent.trim();
+                                if (cellText && cellText !== '-' && cellText !== '') {
+                                    if (reportText) reportText += '\n';
+                                    reportText += cellText;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+
+                if (!reportText) {
+                    return { empty: true, message: 'Không có báo cáo cho tuần này' };
+                }
+
+                return { success: true, content: reportText.trim() };
+            } catch (error) {
+                console.error(`Error loading report ${reportId} from HTML:`, error);
+                return { error: error.message || 'Lỗi khi tải dữ liệu từ HTML' };
+            }
+        }
+
+        // Load báo cáo cho một chức vụ cụ thể
+        async function loadReport(reportId, configKey) {
+            const reportElement = document.getElementById(`report-${reportId.toLowerCase()}`);
+            if (!reportElement) return;
+
+            reportElement.textContent = 'Đang tải...';
+            reportElement.classList.remove('empty');
+            reportElement.classList.remove('html-content');
+
+            try {
+                // Lấy GID từ config.js
+                let gid = null;
+                
+                // Map configKey sang GID từ config.js
+                const gidMap = {
+                    'LT': typeof LT_SHEET_GID !== 'undefined' ? LT_SHEET_GID : null,
+                    'LPHT': typeof LPHT_SHEET_GID !== 'undefined' ? LPHT_SHEET_GID : null,
+                    'LPTT': typeof LPTT_SHEET_GID !== 'undefined' ? LPTT_SHEET_GID : null,
+                    'LPPT': typeof LPPT_SHEET_GID !== 'undefined' ? LPPT_SHEET_GID : null,
+                    'LPLD': typeof LPLD_SHEET_GID !== 'undefined' ? LPLD_SHEET_GID : null,
+                    'TT1': typeof TT1_SHEET_GID !== 'undefined' ? TT1_SHEET_GID : null,
+                    'TT2': typeof TT2_SHEET_GID !== 'undefined' ? TT2_SHEET_GID : null,
+                    'TT3': typeof TT3_SHEET_GID !== 'undefined' ? TT3_SHEET_GID : null,
+                    'TT4': typeof TT4_SHEET_GID !== 'undefined' ? TT4_SHEET_GID : null,
+                    'ThuQuy': typeof THUQUY_SHEET_GID !== 'undefined' ? THUQUY_SHEET_GID : null
+                };
+
+                gid = gidMap[configKey];
+
+                if (!gid) {
+                    reportElement.textContent = `GID cho ${configKey} chưa được cấu hình trong config.js`;
+                    reportElement.classList.add('empty');
+                    return;
+                }
+
+                const result = await fetchReportFromSheet(reportId, gid);
+
+                if (result.error) {
+                    reportElement.textContent = `Lỗi: ${result.error}`;
+                    reportElement.classList.add('empty');
+                    reportElement.classList.remove('html-content');
+                } else if (result.empty) {
+                    reportElement.textContent = result.message || 'Chưa có báo cáo cho tuần này';
+                    reportElement.classList.add('empty');
+                    reportElement.classList.remove('html-content');
+                } else if (result.success) {
+                    // Nếu có isHTML flag, sử dụng innerHTML để render HTML, ngược lại dùng textContent
+                    if (result.isHTML) {
+                        reportElement.innerHTML = result.content;
+                        reportElement.classList.add('html-content');
+                    } else {
+                        reportElement.textContent = result.content;
+                        reportElement.classList.remove('html-content');
+                    }
+                    reportElement.classList.remove('empty');
+                }
+            } catch (error) {
+                reportElement.textContent = `Lỗi: ${error.message}`;
+                reportElement.classList.add('empty');
+                reportElement.classList.remove('html-content');
+            }
+        }
+
+        // Load tất cả các báo cáo
+        async function loadAllReports() {
+            const week = document.getElementById('week').value;
+            if (!week || week < 1 || week > 35) {
+                return;
+            }
+
+            // Load tất cả báo cáo song song
+            await Promise.all([
+                loadReport('LT', 'LT'),
+                loadReport('LPHT', 'LPHT'),
+                loadReport('LPTT', 'LPTT'),
+                loadReport('LPPT', 'LPPT'),
+                loadReport('LPLD', 'LPLD'),
+                loadReport('TT1', 'TT1'),
+                loadReport('TT2', 'TT2'),
+                loadReport('TT3', 'TT3'),
+                loadReport('TT4', 'TT4'),
+                loadReport('ThuQuy', 'ThuQuy')
+            ]);
+        }
+
+        // Khởi tạo khi trang được load
+        window.addEventListener('DOMContentLoaded', function() {
+            const weekInput = document.getElementById('week');
+            if (!weekInput) {
+                console.error('week input not found');
+                return;
+            }
+            
+            setTimeout(function() {
+                const currentWeek = getCurrentWeek();
+                console.log('Current week calculated on page load:', currentWeek);
+                
+                weekInput.value = currentWeek || 1;
+                updateWeekDateRange();
+                loadAllReports();
+            }, 100);
+        });
+
+        // Load lại báo cáo khi thay đổi tuần
+        const weekInput = document.getElementById('week');
+        if (weekInput) {
+            weekInput.addEventListener('change', function() {
+                updateWeekDateRange();
+                loadAllReports();
+            });
+        }
+    </script>
+</body>
+
+</html>
+

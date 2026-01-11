@@ -6,13 +6,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản Lý Thủ Quỹ</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="data.js"></script>
     <script src="config.js"></script>
+    <script>
+        // Expose các biến từ config.js cho các script khác
+        if (typeof THUQUY_SHEET_URL !== 'undefined') {
+            window.THUQUY_SHEET_URL = THUQUY_SHEET_URL;
+        }
+        if (typeof THUQUY_SHEET_EXPORT_URL !== 'undefined') {
+            window.THUQUY_SHEET_EXPORT_URL = THUQUY_SHEET_EXPORT_URL;
+        }
+        if (typeof THUQUY_SHEET_HTML_URL !== 'undefined') {
+            window.THUQUY_SHEET_HTML_URL = THUQUY_SHEET_HTML_URL;
+        }
+    </script>
+    <script src="js/thuquy-data.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -20,29 +34,33 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 800px;
             width: 100%;
             background: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            border: 1px solid #e0e0e0;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border: none;
         }
 
         h1 {
-            font-size: 2em;
+            font-size: 2.2em;
             text-align: center;
-            color: #c62828;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-weight: 700;
             margin: 0 0 20px 0;
             letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         h2 {
             font-size: 1.5em;
             text-align: center;
-            color: #1a237e;
-            font-weight: 500;
+            color: #667eea;
+            font-weight: 600;
             margin: 0 0 25px 0;
         }
 
@@ -82,9 +100,9 @@
 
         input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #cfd8dc;
-            border-radius: 8px;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             box-sizing: border-box;
             font-size: 1em;
             background: #fafafa;
@@ -93,35 +111,94 @@
 
         input:focus {
             outline: none;
-            border-color: #0288d1;
+            border-color: #667eea;
             background: #ffffff;
-            box-shadow: 0 0 8px rgba(2, 136, 209, 0.2);
+            box-shadow: 0 0 12px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Màu sắc cho các ô thu (xanh lá) */
+        .income-group input {
+            border-color: #4caf50;
+            background: linear-gradient(to right, #f1f8f4, #ffffff);
+        }
+
+        .income-group input:focus {
+            border-color: #2e7d32;
+            box-shadow: 0 0 12px rgba(76, 175, 80, 0.4);
+            background: #ffffff;
+        }
+
+        .income-group label {
+            color: #2e7d32;
+            font-weight: 600;
+        }
+
+        /* Màu sắc cho các ô chi (đỏ/cam) */
+        .expense-group input {
+            border-color: #ff7043;
+            background: linear-gradient(to right, #fff5f2, #ffffff);
+        }
+
+        .expense-group input:focus {
+            border-color: #e64a19;
+            box-shadow: 0 0 12px rgba(255, 112, 67, 0.4);
+            background: #ffffff;
+        }
+
+        .expense-group label {
+            color: #e64a19;
+            font-weight: 600;
+        }
+
+        /* Màu sắc cho các ô thông tin khác (xanh dương) */
+        .info-group input {
+            border-color: #42a5f5;
+            background: linear-gradient(to right, #f0f8ff, #ffffff);
+        }
+
+        .info-group input:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 12px rgba(66, 165, 245, 0.4);
+            background: #ffffff;
+        }
+
+        .info-group label {
+            color: #1976d2;
+            font-weight: 600;
         }
 
         button[type="submit"] {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(45deg, #0288d1, #0277bd);
-            color: #ffffff;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 1.1em;
-            font-weight: 500;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(2, 136, 209, 0.3);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         button[type="submit"]:hover:not(:disabled) {
-            background: linear-gradient(45deg, #0277bd, #01579b);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(2, 136, 209, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(-1px);
         }
 
         button[type="submit"]:disabled {
             background: #b0bec5;
             cursor: not-allowed;
             box-shadow: none;
+            transform: none;
         }
 
         #week_date_range {
@@ -294,6 +371,47 @@
                 font-size: 0.9em;
             }
 
+            /* Mobile: Ẩn text trên nút tuần, chỉ hiện icon */
+            #prevWeekBtn {
+                padding: 12px 15px !important;
+                min-width: 50px;
+                font-size: 0 !important;
+                position: relative;
+            }
+
+            #prevWeekBtn::before {
+                content: '◀';
+                font-size: 20px !important;
+                display: inline-block;
+                line-height: 1;
+            }
+
+            #nextWeekBtn {
+                padding: 12px 15px !important;
+                min-width: 50px;
+                font-size: 0 !important;
+                position: relative;
+            }
+
+            #nextWeekBtn::after {
+                content: '▶';
+                font-size: 20px !important;
+                display: inline-block;
+                line-height: 1;
+            }
+
+            /* Đảm bảo ô input tuần có đủ không gian trên mobile */
+            #week {
+                min-width: 80px !important;
+                font-size: 1em !important;
+                flex: 1 1 auto;
+            }
+
+            /* Đảm bảo container tuần không bị wrap */
+            .form-group > div[style*="display: flex"] {
+                flex-wrap: nowrap !important;
+            }
+
             .paired-group {
                 flex-direction: column;
                 gap: 20px;
@@ -318,104 +436,153 @@
                 <label><input type="radio" name="action" value="append"> Bổ sung (Đóng bổ sung, chi bổ sung)</label>
                 <label><input type="radio" name="action" value="edit"> Chỉnh sửa (Chỉ sử dụng khi nhập sai)</label>
             </div>
-            <div class="form-group">
-                <label for="week">TUẦN THỨ (PHẢI NHẬP CHÍNH XÁC)</label>
-                <input type="number" id="week" name="week" min="1" max="35" required oninput="updateWeekDateRange()">
-                <span id="week_date_range"></span>
+            <div class="form-group" style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 2px solid #9c27b0;">
+                <label for="week" style="color: #7b1fa2; font-size: 1.1em; font-weight: 700;">📅 TUẦN THỨ (PHẢI NHẬP CHÍNH XÁC)</label>
+                <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: nowrap;">
+                    <button type="button" id="prevWeekBtn" onclick="viewPreviousWeek()" style="padding: 12px 20px; background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3); transition: all 0.3s; white-space: nowrap; flex-shrink: 0;">◀ Tuần trước</button>
+                    <input type="number" id="week" name="week" min="1" max="35" required oninput="updateWeekDateRange(); loadWeekDataDisplay();" style="flex: 1; min-width: 80px; border: 2px solid #9c27b0; background: white; font-weight: 600; font-size: 1.1em; text-align: center;">
+                    <button type="button" id="nextWeekBtn" onclick="viewNextWeek()" style="padding: 12px 20px; background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3); transition: all 0.3s; white-space: nowrap; flex-shrink: 0;">Tuần sau ▶</button>
+                </div>
+                <div id="week_date_range" style="text-align: center; margin-top: 10px; color: #7b1fa2; font-weight: 600; font-size: 1.05em;"></div>
                 <input type="hidden" id="week_date_range_input" name="week_date_range">
             </div>
-            <div class="form-group paired-group">
-                <div class="form-subgroup">
-                    <label for="fee_per_student">1. Tiền Thu (1 HS/1 Tuần):</label>
-                    <input type="number" id="fee_per_student" name="fee_per_student" placeholder="Ví dụ: 9000" step="1"
-                        min="0">
+            <div id="weekDataDisplay" style="margin-bottom: 20px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); color: white;">
+                <h3 style="margin: 0 0 15px 0; color: white; font-size: 1.3em; text-align: center; border-bottom: 2px solid rgba(255,255,255,0.3); padding-bottom: 10px;">
+                    📊 KẾT QUẢ QUỸ LỚP - TUẦN <span id="displayWeek"></span>
+                </h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 5px;">Tổng thu</div>
+                        <div style="font-size: 1.5em; font-weight: bold;" id="displayTotalIncome">0</div>
+                        <div style="font-size: 0.8em; opacity: 0.8;">VNĐ</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 5px;">Tổng chi</div>
+                        <div style="font-size: 1.5em; font-weight: bold;" id="displayTotalExpense">0</div>
+                        <div style="font-size: 0.8em; opacity: 0.8;">VNĐ</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.3); padding: 15px; border-radius: 8px; text-align: center; grid-column: 1 / -1;">
+                        <div style="font-size: 0.9em; opacity: 0.9; margin-bottom: 5px;">💰 Số tiền còn lại</div>
+                        <div style="font-size: 2em; font-weight: bold;" id="displayTotalRemaining">0</div>
+                        <div style="font-size: 0.8em; opacity: 0.8;">VNĐ</div>
+                    </div>
                 </div>
-                <div class="form-subgroup">
-                    <label for="quantity_paid">2. Số lượng (HS nộp):</label>
-                    <input type="number" id="quantity_paid" name="quantity_paid" placeholder="Ví dụ: 45" min="0">
-                </div>
-            </div>
-            <div class="form-group paired-group">
-                <div class="form-subgroup">
-                    <label for="missing_students">3. Tên HS thiếu:</label>
-                    <input type="text" id="missing_students" name="missing_students" placeholder="Ví dụ: Phong, Ngân">
-                </div>
-                <div class="form-subgroup">
-                    <label for="quantity_missing">4. Số lượng (HS thiếu):</label>
-                    <input type="number" id="quantity_missing" name="quantity_missing" placeholder="Ví dụ: 2" min="0">
-                </div>
-            </div>
-            <div class="form-group paired-group">
-                <div class="form-subgroup">
-                    <label for="expense_name_1">5. Tên Tiền chi 1:</label>
-                    <input type="text" id="expense_name_1" name="expense_name_1" placeholder="Ví dụ: Mua hoa">
-                </div>
-                <div class="form-subgroup">
-                    <label for="expense_amount_1">Số Tiền (chi 1):</label>
-                    <input type="number" id="expense_amount_1" name="expense_amount_1" placeholder="Ví dụ: 50000"
-                        step="1" min="0">
+                <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid rgba(255,255,255,0.3);">
+                    <div style="font-size: 1em;"><strong>👥 Học sinh thiếu:</strong> <span id="displayMissingStudents" style="font-weight: normal;">-</span></div>
                 </div>
             </div>
-            <div class="form-group paired-group">
-                <div class="form-subgroup">
-                    <label for="expense_name_2">6. Tên Tiền chi 2:</label>
-                    <input type="text" id="expense_name_2" name="expense_name_2" placeholder="Ví dụ: In tài liệu">
-                </div>
-                <div class="form-subgroup">
-                    <label for="expense_amount_2">Số Tiền (chi 2):</label>
-                    <input type="number" id="expense_amount_2" name="expense_amount_2" placeholder="Ví dụ: 20000"
-                        step="1" min="0">
-                </div>
-            </div>
-            <div class="form-group paired-group">
-                <div class="form-subgroup">
-                    <label for="expense_name_3">7. Tên Tiền chi 3:</label>
-                    <input type="text" id="expense_name_3" name="expense_name_3" placeholder="Ví dụ: Mua dụng cụ">
-                </div>
-                <div class="form-subgroup">
-                    <label for="expense_amount_3">Số Tiền (chi 3):</label>
-                    <input type="number" id="expense_amount_3" name="expense_amount_3" placeholder="Ví dụ: 30000"
-                        step="1" min="0">
+            <!-- Phần THU - Màu xanh lá -->
+            <div style="background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 2px solid #4caf50;">
+                <h3 style="margin: 0 0 15px 0; color: #2e7d32; font-size: 1.3em; text-align: center; font-weight: 700;">
+                    💰 PHẦN THU
+                </h3>
+                <div class="form-group paired-group income-group">
+                    <div class="form-subgroup">
+                        <label for="fee_per_student">1. Tiền Thu (1 HS/1 Tuần):</label>
+                        <input type="number" id="fee_per_student" name="fee_per_student" placeholder="Ví dụ: 9000" step="1"
+                            min="0">
+                    </div>
+                    <div class="form-subgroup">
+                        <label for="quantity_paid">2. Số lượng (HS nộp):</label>
+                        <input type="number" id="quantity_paid" name="quantity_paid" placeholder="Ví dụ: 45" min="0">
+                    </div>
                 </div>
             </div>
-            <div class="form-group paired-group">
-                <div class="form-subgroup">
-                    <label for="expense_name_4">8. Tên Tiền chi 4:</label>
-                    <input type="text" id="expense_name_4" name="expense_name_4" placeholder="Ví dụ: Mua quà">
-                </div>
-                <div class="form-subgroup">
-                    <label for="expense_amount_4">Số Tiền (chi 4):</label>
-                    <input type="number" id="expense_amount_4" name="expense_amount_4" placeholder="Ví dụ: 40000"
-                        step="1" min="0">
-                </div>
-            </div>
-            <div class="form-group paired-group">
-                <div class="form-subgroup">
-                    <label for="expense_name_5">9. Tên Tiền chi 5:</label>
-                    <input type="text" id="expense_name_5" name="expense_name_5" placeholder="Ví dụ: Photo thêm">
-                </div>
-                <div class="form-subgroup">
-                    <label for="expense_amount_5">Số Tiền (chi 5):</label>
-                    <input type="number" id="expense_amount_5" name="expense_amount_5" placeholder="Ví dụ: 50000"
-                        step="1" min="0">
+
+            <!-- Phần THÔNG TIN - Màu xanh dương -->
+            <div style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 2px solid #42a5f5;">
+                <h3 style="margin: 0 0 15px 0; color: #1976d2; font-size: 1.3em; text-align: center; font-weight: 700;">
+                    📋 THÔNG TIN HỌC SINH
+                </h3>
+                <div class="form-group paired-group info-group">
+                    <div class="form-subgroup">
+                        <label for="missing_students">3. Tên HS thiếu:</label>
+                        <input type="text" id="missing_students" name="missing_students" placeholder="Ví dụ: Phong, Ngân">
+                    </div>
+                    <div class="form-subgroup">
+                        <label for="quantity_missing">4. Số lượng (HS thiếu):</label>
+                        <input type="number" id="quantity_missing" name="quantity_missing" placeholder="Ví dụ: 2" min="0">
+                    </div>
                 </div>
             </div>
-            <div class="form-group paired-group">
-                <div class="form-subgroup">
-                    <label for="expense_name_6">10. Tên Tiền chi 6:</label>
-                    <input type="text" id="expense_name_6" name="expense_name_6" placeholder="Ví dụ: Khác">
+
+            <!-- Phần CHI - Màu đỏ/cam -->
+            <div style="background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 2px solid #ff7043;">
+                <h3 style="margin: 0 0 15px 0; color: #e64a19; font-size: 1.3em; text-align: center; font-weight: 700;">
+                    💸 PHẦN CHI
+                </h3>
+                <div class="form-group paired-group expense-group">
+                    <div class="form-subgroup">
+                        <label for="expense_name_1">5. Tên Tiền chi 1:</label>
+                        <input type="text" id="expense_name_1" name="expense_name_1" placeholder="Ví dụ: Mua hoa">
+                    </div>
+                    <div class="form-subgroup">
+                        <label for="expense_amount_1">Số Tiền (chi 1):</label>
+                        <input type="number" id="expense_amount_1" name="expense_amount_1" placeholder="Ví dụ: 50000"
+                            step="1" min="0">
+                    </div>
                 </div>
-                <div class="form-subgroup">
-                    <label for="expense_amount_6">Số Tiền (chi 6):</label>
-                    <input type="number" id="expense_amount_6" name="expense_amount_6" placeholder="Ví dụ: 60000"
-                        step="1" min="0">
+                <div class="form-group paired-group expense-group">
+                    <div class="form-subgroup">
+                        <label for="expense_name_2">6. Tên Tiền chi 2:</label>
+                        <input type="text" id="expense_name_2" name="expense_name_2" placeholder="Ví dụ: In tài liệu">
+                    </div>
+                    <div class="form-subgroup">
+                        <label for="expense_amount_2">Số Tiền (chi 2):</label>
+                        <input type="number" id="expense_amount_2" name="expense_amount_2" placeholder="Ví dụ: 20000"
+                            step="1" min="0">
+                    </div>
+                </div>
+                <div class="form-group paired-group expense-group">
+                    <div class="form-subgroup">
+                        <label for="expense_name_3">7. Tên Tiền chi 3:</label>
+                        <input type="text" id="expense_name_3" name="expense_name_3" placeholder="Ví dụ: Mua dụng cụ">
+                    </div>
+                    <div class="form-subgroup">
+                        <label for="expense_amount_3">Số Tiền (chi 3):</label>
+                        <input type="number" id="expense_amount_3" name="expense_amount_3" placeholder="Ví dụ: 30000"
+                            step="1" min="0">
+                    </div>
+                </div>
+                <div class="form-group paired-group expense-group">
+                    <div class="form-subgroup">
+                        <label for="expense_name_4">8. Tên Tiền chi 4:</label>
+                        <input type="text" id="expense_name_4" name="expense_name_4" placeholder="Ví dụ: Mua quà">
+                    </div>
+                    <div class="form-subgroup">
+                        <label for="expense_amount_4">Số Tiền (chi 4):</label>
+                        <input type="number" id="expense_amount_4" name="expense_amount_4" placeholder="Ví dụ: 40000"
+                            step="1" min="0">
+                    </div>
+                </div>
+                <div class="form-group paired-group expense-group">
+                    <div class="form-subgroup">
+                        <label for="expense_name_5">9. Tên Tiền chi 5:</label>
+                        <input type="text" id="expense_name_5" name="expense_name_5" placeholder="Ví dụ: Photo thêm">
+                    </div>
+                    <div class="form-subgroup">
+                        <label for="expense_amount_5">Số Tiền (chi 5):</label>
+                        <input type="number" id="expense_amount_5" name="expense_amount_5" placeholder="Ví dụ: 50000"
+                            step="1" min="0">
+                    </div>
+                </div>
+                <div class="form-group paired-group expense-group">
+                    <div class="form-subgroup">
+                        <label for="expense_name_6">10. Tên Tiền chi 6:</label>
+                        <input type="text" id="expense_name_6" name="expense_name_6" placeholder="Ví dụ: Khác">
+                    </div>
+                    <div class="form-subgroup">
+                        <label for="expense_amount_6">Số Tiền (chi 6):</label>
+                        <input type="number" id="expense_amount_6" name="expense_amount_6" placeholder="Ví dụ: 60000"
+                            step="1" min="0">
+                    </div>
                 </div>
             </div>
-            <div class="form-group">
-                <label for="password">***Mật khẩu*** (Thầy cấp riêng cho Thủ quỹ):</label>
-                <input type="password" id="password" name="password" required>
+            <div class="form-group" style="background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 2px solid #fbc02d;">
+                <label for="password" style="color: #f57f17; font-size: 1.1em; font-weight: 700;">🔒 MẬT KHẨU (Thầy cấp riêng cho Thủ quỹ)</label>
+                <input type="password" id="password" name="password" required style="border: 2px solid #fbc02d; background: white; font-weight: 600; margin-top: 10px;">
             </div>
-            <button type="submit" id="submitButton">Gửi Dữ Liệu</button>
+            <button type="submit" id="submitButton" style="margin-top: 10px;">📤 GỬI DỮ LIỆU</button>
         </form>
     </div>
     <div class="modal" id="summaryModal">
@@ -429,55 +596,447 @@
         </div>
     </div>
     <script>
-        const weekRanges = [
-            "từ ngày 8/9/2025 đến 13/9/2025",
-            "từ ngày 15/9/2025 đến 20/9/2025",
-            "từ ngày 22/9/2025 đến 27/9/2025",
-            "từ ngày 29/9/2025 đến 4/10/2025",
-            "từ ngày 6/10/2025 đến 11/10/2025",
-            "từ ngày 13/10/2025 đến 18/10/2025",
-            "từ ngày 20/10/2025 đến 25/10/2025",
-            "từ ngày 27/10/2025 đến 1/11/2025",
-            "từ ngày 3/11/2025 đến 8/11/2025",
-            "từ ngày 10/11/2025 đến 15/11/2025",
-            "từ ngày 17/11/2025 đến 22/11/2025",
-            "từ ngày 24/11/2025 đến 29/11/2025",
-            "từ ngày 1/12/2025 đến 6/12/2025",
-            "từ ngày 8/12/2025 đến 13/12/2025",
-            "từ ngày 15/12/2025 đến 20/12/2025",
-            "từ ngày 22/12/2025 đến 27/12/2025",
-            "từ ngày 29/12/2025 đến 3/1/2026",
-            "từ ngày 5/1/2026 đến 10/1/2026",
-            "từ ngày 12/1/2026 đến 17/1/2026",
-            "từ ngày 19/1/2026 đến 24/1/2026",
-            "từ ngày 26/1/2026 đến 31/1/2026",
-            "từ ngày 2/2/2026 đến 7/2/2026",
-            "từ ngày 9/2/2026 đến 14/2/2026",
-            "từ ngày 16/2/2026 đến 21/2/2026",
-            "từ ngày 23/2/2026 đến 28/2/2026",
-            "từ ngày 2/3/2026 đến 7/3/2026",
-            "từ ngày 9/3/2026 đến 14/3/2026",
-            "từ ngày 16/3/2026 đến 21/3/2026",
-            "từ ngày 23/3/2026 đến 28/3/2026",
-            "từ ngày 30/3/2026 đến 4/4/2026",
-            "từ ngày 6/4/2026 đến 11/4/2026",
-            "từ ngày 13/4/2026 đến 18/4/2026",
-            "từ ngày 20/4/2026 đến 25/4/2026",
-            "từ ngày 27/4/2026 đến 2/5/2026",
-            "từ ngày 18/5/2026 đến 23/5/2026"
-        ];
+        // Sử dụng SCHOOL_WEEKS_CONFIG từ data.js (đã load trước đó)
+        // Helper function để lấy week range string
+        function getWeekRangeString(weekNumber) {
+            if (typeof SCHOOL_WEEKS_CONFIG === 'undefined' || !SCHOOL_WEEKS_CONFIG) {
+                return '';
+            }
+            if (weekNumber < 1 || weekNumber > SCHOOL_WEEKS_CONFIG.length) {
+                return '';
+            }
+            const weekConfig = SCHOOL_WEEKS_CONFIG[weekNumber - 1];
+            if (!weekConfig) return '';
+            return `từ ngày ${weekConfig.from} đến ${weekConfig.to}`;
+        }
+
+        // Tính tuần hiện tại dựa trên ngày tháng (sử dụng SCHOOL_WEEKS_CONFIG từ data.js)
+        function getCurrentWeek() {
+            // Sử dụng hàm từ data.js nếu có
+            if (typeof getCurrentWeekNumber === 'function' && typeof SCHOOL_WEEKS_CONFIG !== 'undefined') {
+                const week = getCurrentWeekNumber();
+                console.log('getCurrentWeekNumber() returned:', week);
+                return week;
+            }
+            
+            // Fallback: tự tính từ SCHOOL_WEEKS_CONFIG
+            if (typeof SCHOOL_WEEKS_CONFIG === 'undefined' || !SCHOOL_WEEKS_CONFIG || SCHOOL_WEEKS_CONFIG.length === 0) {
+                console.warn('SCHOOL_WEEKS_CONFIG chưa được load từ data.js, trả về tuần 1');
+                return 1;
+            }
+            
+            const today = new Date();
+            // Normalize to midnight local time để tránh lỗi timezone
+            const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            currentDate.setHours(0, 0, 0, 0);
+            console.log('Current date:', currentDate);
+            
+            // Tìm tuần chứa ngày hiện tại
+            for (let i = 0; i < SCHOOL_WEEKS_CONFIG.length; i++) {
+                const weekConfig = SCHOOL_WEEKS_CONFIG[i];
+                if (!weekConfig || !weekConfig.from || !weekConfig.to) continue;
+                
+                const [fromDay, fromMonth, fromYear] = weekConfig.from.split('/').map(Number);
+                const [toDay, toMonth, toYear] = weekConfig.to.split('/').map(Number);
+                
+                // Kiểm tra dữ liệu hợp lệ
+                if (isNaN(fromDay) || isNaN(fromMonth) || isNaN(fromYear) || 
+                    isNaN(toDay) || isNaN(toMonth) || isNaN(toYear)) {
+                    continue;
+                }
+                
+                const startDate = new Date(fromYear, fromMonth - 1, fromDay);
+                startDate.setHours(0, 0, 0, 0);
+                const endDate = new Date(toYear, toMonth - 1, toDay);
+                endDate.setHours(23, 59, 59, 999); // Bao gồm cả ngày cuối
+                
+                if (currentDate >= startDate && currentDate <= endDate) {
+                    console.log('Found current week:', weekConfig.week, 'from', weekConfig.from, 'to', weekConfig.to);
+                    return weekConfig.week;
+                }
+            }
+            
+            // Nếu không tìm thấy tuần chứa ngày hiện tại, tìm tuần gần nhất trong quá khứ
+            // (Vì Chủ nhật không được liệt kê trong tuần học, nên nếu hôm nay là Chủ nhật
+            // hoặc nằm giữa các tuần, ta sẽ trả về tuần vừa qua)
+            for (let i = SCHOOL_WEEKS_CONFIG.length - 1; i >= 0; i--) {
+                const weekConfig = SCHOOL_WEEKS_CONFIG[i];
+                if (!weekConfig || !weekConfig.from) continue;
+                
+                const [fromDay, fromMonth, fromYear] = weekConfig.from.split('/').map(Number);
+                if (isNaN(fromDay) || isNaN(fromMonth) || isNaN(fromYear)) continue;
+                
+                const startDate = new Date(fromYear, fromMonth - 1, fromDay);
+                startDate.setHours(0, 0, 0, 0);
+                
+                // Nếu tuần này bắt đầu trước hoặc bằng ngày hiện tại, đây là tuần gần nhất trong quá khứ
+                if (startDate <= currentDate) {
+                    console.log('Found nearest past week:', weekConfig.week, 'from', weekConfig.from);
+                    return weekConfig.week;
+                }
+            }
+            
+            console.log('No week found, returning week 1');
+            return 1; // Mặc định tuần 1
+        }
 
         function updateWeekDateRange() {
-            const weekInput = document.getElementById('week').value;
+            const weekInput = document.getElementById('week');
+            if (!weekInput) {
+                console.warn('week input not found');
+                return;
+            }
+            
+            const weekValue = parseInt(weekInput.value) || 0;
             const weekDateRange = document.getElementById('week_date_range');
             const weekDateRangeInput = document.getElementById('week_date_range_input');
-            if (weekInput >= 1 && weekInput <= 35) {
-                weekDateRange.textContent = weekRanges[weekInput - 1];
-                weekDateRangeInput.value = weekRanges[weekInput - 1];
+            
+            if (!weekDateRange || !weekDateRangeInput) {
+                console.warn('week_date_range elements not found');
+                return;
+            }
+            
+            if (weekValue >= 1 && weekValue <= 35) {
+                const rangeString = getWeekRangeString(weekValue);
+                if (rangeString) {
+                    weekDateRange.textContent = rangeString;
+                    weekDateRangeInput.value = rangeString;
+                    console.log('Updated week date range for week', weekValue, ':', rangeString);
+                } else {
+                    // Nếu chưa load được SCHOOL_WEEKS_CONFIG, thử lại sau
+                    if (typeof SCHOOL_WEEKS_CONFIG === 'undefined') {
+                        console.warn('SCHOOL_WEEKS_CONFIG chưa được load, sẽ thử lại sau 200ms');
+                        setTimeout(updateWeekDateRange, 200);
+                    } else {
+                        weekDateRange.textContent = 'Không tìm thấy thông tin tuần ' + weekValue;
+                        weekDateRangeInput.value = '';
+                    }
+                }
             } else {
                 weekDateRange.textContent = '';
                 weekDateRangeInput.value = '';
             }
+        }
+
+        // Đọc dữ liệu từ Google Sheet CSV
+        async function loadDataFromSheetCSV() {
+            try {
+                // ⚠️ PHẢI LẤY TỪ config.js - KHÔNG DÙNG HARDCODE
+                // Lấy từ config.js - tự động tính từ các giá trị cơ bản
+                const sheetId = typeof SPREADSHEET_ID !== 'undefined' ? SPREADSHEET_ID : '';
+                const gid = typeof THUQUY_SHEET_GID !== 'undefined' ? THUQUY_SHEET_GID : '';
+                
+                // Sử dụng THUQUY_SHEET_URL và THUQUY_SHEET_EXPORT_URL từ config.js
+                const primaryCsvUrl = typeof THUQUY_SHEET_URL !== 'undefined' ? THUQUY_SHEET_URL : '';
+                const exportCsvUrl = typeof THUQUY_SHEET_EXPORT_URL !== 'undefined' ? THUQUY_SHEET_EXPORT_URL : '';
+                
+                // Thử các URL CSV export khác nhau (tất cả đều lấy từ config.js)
+                const csvUrls = [];
+                
+                // Ưu tiên 1: THUQUY_SHEET_URL (published CSV URL)
+                if (primaryCsvUrl) {
+                    csvUrls.push(primaryCsvUrl);
+                }
+                
+                // Ưu tiên 2: THUQUY_SHEET_EXPORT_URL (export CSV URL)
+                if (exportCsvUrl) {
+                    csvUrls.push(exportCsvUrl);
+                }
+                
+                // Fallback: Tính từ SPREADSHEET_ID và THUQUY_SHEET_GID (nếu có)
+                if (sheetId && gid) {
+                    csvUrls.push(`https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`);
+                    csvUrls.push(`https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&gid=${gid}`);
+                }
+                
+                if (csvUrls.length === 0) {
+                    throw new Error('Không tìm thấy URL CSV từ config.js. Vui lòng kiểm tra THUQUY_SHEET_URL, THUQUY_SHEET_EXPORT_URL, SPREADSHEET_ID và THUQUY_SHEET_GID trong config.js');
+                }
+                
+                for (let csvUrl of csvUrls) {
+                    try {
+                        console.log('Trying CSV URL:', csvUrl);
+                        
+                        // Thử với cors mode
+                        const response = await fetch(csvUrl, {
+                            method: 'GET',
+                            mode: 'cors',
+                            cache: 'no-cache',
+                            headers: {
+                                'Accept': 'text/csv'
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            const csvText = await response.text();
+                            console.log('CSV loaded successfully, length:', csvText.length);
+                            
+                            if (csvText && csvText.length > 0) {
+                                console.log('CSV first 500 chars:', csvText.substring(0, 500));
+                                const parsedData = parseCSV(csvText);
+                                console.log('Parsed CSV rows:', parsedData.length);
+                                
+                                if (parsedData.length > 0) {
+                                    console.log('First row:', parsedData[0]);
+                                    console.log('First row columns:', parsedData[0] ? parsedData[0].length : 0);
+                                    if (parsedData.length > 1) {
+                                        console.log('Second row:', parsedData[1]);
+                                    }
+                                    return parsedData;
+                                }
+                            }
+                        } else {
+                            console.log('Response not OK:', response.status, response.statusText);
+                        }
+                    } catch (urlError) {
+                        console.log('Failed with URL:', csvUrl, urlError.message);
+                        continue; // Thử URL tiếp theo
+                    }
+                }
+                
+                // Nếu tất cả đều fail, thử dùng proxy service
+                console.log('All direct URLs failed, trying proxy...');
+                const proxyUrls = [
+                    `https://api.allorigins.win/get?url=${encodeURIComponent(csvUrls[0])}`,
+                    `https://corsproxy.io/?${encodeURIComponent(csvUrls[0])}`
+                ];
+                
+                for (let proxyUrl of proxyUrls) {
+                    try {
+                        const proxyResponse = await fetch(proxyUrl);
+                        if (proxyResponse.ok) {
+                            const proxyData = await proxyResponse.json();
+                            if (proxyData.contents) {
+                                const parsedData = parseCSV(proxyData.contents);
+                                console.log('CSV loaded via proxy, rows:', parsedData.length);
+                                if (parsedData.length > 0) {
+                                    return parsedData;
+                                }
+                            }
+                        }
+                    } catch (proxyError) {
+                        console.log('Proxy failed:', proxyUrl, proxyError.message);
+                        continue;
+                    }
+                }
+                
+                // Thử đọc từ HTML table nếu sheet được publish
+                console.log('Trying to read from published HTML...');
+                try {
+                    // ⚠️ PHẢI LẤY TỪ config.js
+                    const htmlUrl = typeof THUQUY_SHEET_HTML_URL !== 'undefined' 
+                        ? THUQUY_SHEET_HTML_URL 
+                        : (typeof PUBLISHED_SPREADSHEET_URL !== 'undefined' && gid
+                            ? `${PUBLISHED_SPREADSHEET_URL}/pubhtml?gid=${gid}&single=true`
+                            : '');
+                    
+                    if (htmlUrl) {
+                        const htmlResponse = await fetch(htmlUrl, { mode: 'no-cors' });
+                        // Với no-cors, không thể đọc response, cần cách khác
+                    } else {
+                        console.warn('THUQUY_SHEET_HTML_URL không được tìm thấy trong config.js');
+                    }
+                } catch (htmlError) {
+                    console.log('HTML read failed:', htmlError);
+                }
+                
+                return null;
+            } catch (error) {
+                console.error('Error loading CSV:', error);
+                console.error('Error details:', error.message);
+                return null;
+            }
+        }
+
+        // Parse CSV text thành mảng dữ liệu
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            const data = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                // Parse CSV line (xử lý các trường hợp có dấu phẩy trong giá trị)
+                const values = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        values.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim());
+                
+                data.push(values);
+            }
+            
+            return data;
+        }
+
+        // Tìm dữ liệu theo tuần từ CSV data
+        function findWeekDataFromCSV(csvData, week) {
+            if (!csvData || csvData.length < 2) {
+                console.log('CSV data is empty or invalid');
+                return null;
+            }
+            
+            const weekStr = String(week);
+            console.log('Looking for week:', weekStr);
+            console.log('Total CSV rows:', csvData.length);
+            
+            // Tìm dòng có tuần khớp (cột A là index 0)
+            for (let i = 1; i < csvData.length; i++) {
+                const row = csvData[i];
+                if (!row || row.length === 0) continue;
+                
+                const weekValue = row[0] ? String(row[0]).trim() : '';
+                console.log(`Row ${i}, week value:`, weekValue, 'columns:', row.length);
+                
+                if (weekValue === weekStr) {
+                    console.log('Found matching week at row:', i);
+                    console.log('Row data:', row);
+                    
+                    // Cột mapping: A=0, E=4, S=18, T=19, U=20
+                    // Cột E (index 4): Tên HS thiếu
+                    // Cột S (index 18): Tổng thu
+                    // Cột T (index 19): Tổng chi
+                    // Cột U (index 20): Còn lại
+                    const missingStudents = row[4] ? String(row[4]).trim() : '';
+                    const totalIncomeRaw = row[18] ? String(row[18]).trim() : '';
+                    const totalExpenseRaw = row[19] ? String(row[19]).trim() : '';
+                    const totalRemainingRaw = row[20] ? String(row[20]).trim() : '';
+                    
+                    // Parse số, loại bỏ các ký tự không phải số (trừ dấu - và .)
+                    const totalIncome = totalIncomeRaw ? parseFloat(totalIncomeRaw.replace(/[^\d.-]/g, '')) || 0 : 0;
+                    const totalExpense = totalExpenseRaw ? parseFloat(totalExpenseRaw.replace(/[^\d.-]/g, '')) || 0 : 0;
+                    const totalRemaining = totalRemainingRaw ? parseFloat(totalRemainingRaw.replace(/[^\d.-]/g, '')) || 0 : 0;
+                    
+                    console.log('Parsed values:', {
+                        missingStudents,
+                        totalIncomeRaw,
+                        totalIncome,
+                        totalExpenseRaw,
+                        totalExpense,
+                        totalRemainingRaw,
+                        totalRemaining
+                    });
+                    
+                    return {
+                        week: weekValue || week,
+                        missing_students: missingStudents,
+                        total_income: totalIncome,
+                        total_expense: totalExpense,
+                        total_remaining: totalRemaining
+                    };
+                }
+            }
+            
+            console.log('Week not found in CSV data');
+            return null;
+        }
+
+        async function loadWeekDataDisplay() {
+            const week = document.getElementById('week').value;
+            if (!week || week < 1 || week > 35) {
+                document.getElementById('weekDataDisplay').style.display = 'none';
+                return;
+            }
+
+            // Hiển thị loading
+            const displayDiv = document.getElementById('weekDataDisplay');
+            displayDiv.style.display = 'block';
+            document.getElementById('displayWeek').textContent = week;
+            document.getElementById('displayTotalIncome').textContent = 'Đang tải...';
+            document.getElementById('displayTotalExpense').textContent = 'Đang tải...';
+            document.getElementById('displayTotalRemaining').textContent = 'Đang tải...';
+            document.getElementById('displayMissingStudents').textContent = 'Đang tải...';
+
+            try {
+                // Sử dụng hàm từ js/thuquy-data.js để đọc dữ liệu
+                console.log('Loading week data for week:', week);
+                
+                // Kiểm tra hàm từ file JS có tồn tại không
+                // Đợi một chút nếu hàm chưa load
+                let loadDataFunc = window.loadWeekData || (typeof loadWeekData !== 'undefined' ? loadWeekData : null);
+                
+                if (!loadDataFunc) {
+                    // Thử đợi thêm một chút để script load xong
+                    await new Promise(resolve => setTimeout(resolve, 200));
+                    loadDataFunc = window.loadWeekData || (typeof loadWeekData !== 'undefined' ? loadWeekData : null);
+                }
+                
+                if (!loadDataFunc) {
+                    throw new Error('Hàm loadWeekData không tồn tại. Vui lòng kiểm tra file js/thuquy-data.js đã được load chưa. Đảm bảo thứ tự: data.js -> config.js -> js/thuquy-data.js');
+                }
+                
+                // Sử dụng hàm từ file js/thuquy-data.js
+                const weekData = await loadDataFunc(week);
+                
+                if (!weekData) {
+                    throw new Error('Không tìm thấy dữ liệu cho tuần ' + week);
+                }
+                
+                console.log('✓ Week data found:', weekData);
+                document.getElementById('displayWeek').textContent = weekData.week;
+                document.getElementById('displayTotalIncome').textContent = formatNumber(weekData.total_income || 0);
+                document.getElementById('displayTotalExpense').textContent = formatNumber(weekData.total_expense || 0);
+                document.getElementById('displayTotalRemaining').textContent = formatNumber(weekData.total_remaining || 0);
+                document.getElementById('displayMissingStudents').textContent = weekData.missing_students || 'Không có';
+                
+                // Đảm bảo màu nền đúng (không phải lỗi)
+                const displayDiv = document.getElementById('weekDataDisplay');
+                if (displayDiv) {
+                    displayDiv.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+                }
+            } catch (error) {
+                console.error('Error loading week data:', error);
+                document.getElementById('displayWeek').textContent = week;
+                document.getElementById('displayTotalIncome').textContent = 'Lỗi: ' + error.message;
+                document.getElementById('displayTotalExpense').textContent = 'Lỗi: ' + error.message;
+                document.getElementById('displayTotalRemaining').textContent = 'Lỗi: ' + error.message;
+                document.getElementById('displayMissingStudents').textContent = 'Không thể tải dữ liệu';
+                
+                // Đổi màu để báo lỗi
+                const displayDiv = document.getElementById('weekDataDisplay');
+                if (displayDiv) {
+                    displayDiv.style.background = 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';
+                }
+            }
+        }
+
+        function viewPreviousWeek() {
+            const currentWeek = parseInt(document.getElementById('week').value) || 1;
+            if (currentWeek > 1) {
+                document.getElementById('week').value = currentWeek - 1;
+                updateWeekDateRange();
+                loadWeekDataDisplay();
+            } else {
+                alert('Đây là tuần đầu tiên!');
+            }
+        }
+
+        function viewNextWeek() {
+            const currentWeek = parseInt(document.getElementById('week').value) || 1;
+            const maxWeek = 35; // Số tuần tối đa trong năm học
+            if (currentWeek < maxWeek) {
+                document.getElementById('week').value = currentWeek + 1;
+                updateWeekDateRange();
+                loadWeekDataDisplay();
+            } else {
+                alert('Đây là tuần cuối cùng!');
+            }
+        }
+
+        function formatNumber(num) {
+            return new Intl.NumberFormat('vi-VN').format(num);
         }
 
         function validateForm() {
@@ -504,17 +1063,11 @@
         function showModal(summary, week) {
             const modal = document.getElementById('summaryModal');
             const content = document.getElementById('summaryContent');
-            let htmlContent = `<p><strong>Tổng thu tuần ${week}: ${summary.this_week_income} VNĐ</strong></p>`;
-            htmlContent += `<p><strong>Tổng chi tuần ${week}: ${summary.this_week_expense} VNĐ</strong></p>`;
-            htmlContent += `<p><strong>Lý do chi:</strong></p>`;
-            if (summary.expenses && summary.expenses.length > 0) {
-                summary.expenses.forEach(expense => {
-                    htmlContent += `<p>- ${expense.name}: ${expense.amount} VNĐ</p>`;
-                });
-            } else {
-                htmlContent += `<p>- Không có chi.</p>`;
-            }
-            htmlContent += `<p><strong>Số tiền còn lại hiện có: ${summary.total_remaining} VNĐ</strong></p>`;
+            let htmlContent = `<p><strong>Tuần ${summary.week || week}:</strong></p>`;
+            htmlContent += `<p><strong>Tổng thu:</strong> ${formatNumber(summary.total_income || 0)} VNĐ</p>`;
+            htmlContent += `<p><strong>Tổng chi:</strong> ${formatNumber(summary.total_expense || 0)} VNĐ</p>`;
+            htmlContent += `<p><strong>Số tiền còn lại:</strong> ${formatNumber(summary.total_remaining || 0)} VNĐ</p>`;
+            htmlContent += `<p><strong>Học sinh thiếu:</strong> ${summary.missing_students || 'Không có'}</p>`;
             content.innerHTML = htmlContent;
             modal.style.display = 'flex';
         }
@@ -609,6 +1162,10 @@
                 .then(data => {
                     if (data.result === 'success') {
                         showModal(data.summary, document.getElementById('week').value);
+                        // Reload week data after submission
+                        setTimeout(() => {
+                            loadWeekDataDisplay();
+                        }, 500);
                     } else {
                         alert('Có lỗi xảy ra khi gửi dữ liệu: ' + data.message);
                         submitButton.disabled = false;
@@ -621,6 +1178,45 @@
                     submitButton.textContent = 'Gửi Dữ Liệu';
                 });
         });
+
+        // Tự động set tuần và load dữ liệu khi trang được load
+        window.addEventListener('DOMContentLoaded', function() {
+            const weekInput = document.getElementById('week');
+            if (!weekInput) {
+                console.error('week input not found');
+                return;
+            }
+            
+            // Đợi một chút để đảm bảo data.js đã load xong SCHOOL_WEEKS_CONFIG
+            setTimeout(function() {
+                // Tính tuần hiện tại theo thời gian thực
+                const currentWeek = getCurrentWeek();
+                console.log('Current week calculated on page load:', currentWeek);
+                
+                // Set giá trị tuần hiện tại
+                weekInput.value = currentWeek || 1;
+                
+                // Update week date range ngay lập tức để hiển thị khoảng ngày
+                updateWeekDateRange();
+                
+                // Load dữ liệu tuần hiện tại
+                loadWeekDataDisplay();
+            }, 100);
+        });
+
+        // Load dữ liệu khi thay đổi tuần
+        const weekInput = document.getElementById('week');
+        if (weekInput) {
+            weekInput.addEventListener('change', function() {
+                updateWeekDateRange();
+                loadWeekDataDisplay();
+            });
+            
+            weekInput.addEventListener('input', function() {
+                // Cập nhật khoảng ngày ngay khi người dùng gõ
+                updateWeekDateRange();
+            });
+        }
     </script>
 </body>
 

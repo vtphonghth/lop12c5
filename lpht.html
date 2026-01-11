@@ -6,13 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thi Đua Lớp Phó Học Tập (LPHT)</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="data.js"></script>
     <script src="config.js"></script>
     <style>
         body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 20px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -20,30 +21,56 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 800px;
             width: 100%;
             background: #ffffff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            border: 1px solid #e0e0e0;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border: none;
         }
 
         h1 {
-            font-size: 2em;
+            font-size: 2.2em;
             text-align: center;
-            color: #c62828;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 50%, #43e97b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-weight: 700;
             margin: 0 0 20px 0;
             letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
         h2 {
             font-size: 1.5em;
             text-align: center;
-            color: #1a237e;
-            font-weight: 500;
+            color: #4facfe;
+            font-weight: 600;
             margin: 0 0 25px 0;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .back-home a {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .back-home a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
         }
 
         .form-group {
@@ -62,9 +89,9 @@
 
         input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #cfd8dc;
-            border-radius: 8px;
+            padding: 14px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
             box-sizing: border-box;
             font-size: 1em;
             background: #fafafa;
@@ -73,35 +100,77 @@
 
         input:focus {
             outline: none;
-            border-color: #0288d1;
+            border-color: #4facfe;
             background: #ffffff;
-            box-shadow: 0 0 8px rgba(2, 136, 209, 0.2);
+            box-shadow: 0 0 12px rgba(79, 172, 254, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Màu sắc cho các ô thông tin (xanh dương) */
+        .info-group input {
+            border-color: #42a5f5;
+            background: linear-gradient(to right, #f0f8ff, #ffffff);
+        }
+
+        .info-group input:focus {
+            border-color: #1976d2;
+            box-shadow: 0 0 12px rgba(66, 165, 245, 0.4);
+            background: #ffffff;
+        }
+
+        .info-group label {
+            color: #1976d2;
+            font-weight: 600;
+        }
+
+        /* Màu sắc cho ô mật khẩu (vàng) */
+        .password-group input {
+            border-color: #ffc107;
+            background: linear-gradient(to right, #fffef5, #ffffff);
+        }
+
+        .password-group input:focus {
+            border-color: #f57c00;
+            box-shadow: 0 0 12px rgba(255, 193, 7, 0.4);
+            background: #ffffff;
+        }
+
+        .password-group label {
+            color: #f57c00;
+            font-weight: 600;
         }
 
         button[type="submit"] {
             width: 100%;
-            padding: 14px;
-            background: linear-gradient(45deg, #0288d1, #0277bd);
-            color: #ffffff;
+            padding: 18px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 1.1em;
-            font-weight: 500;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(2, 136, 209, 0.3);
+            box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         button[type="submit"]:hover:not(:disabled) {
-            background: linear-gradient(45deg, #0277bd, #01579b);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(2, 136, 209, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(79, 172, 254, 0.6);
+            background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(-1px);
         }
 
         button[type="submit"]:disabled {
             background: #b0bec5;
             cursor: not-allowed;
             box-shadow: none;
+            transform: none;
         }
 
         #week_date_range {
@@ -118,6 +187,7 @@
             justify-content: center;
             gap: 25px;
             margin-bottom: 20px;
+            flex-wrap: wrap;
         }
 
         .action-group label {
@@ -127,6 +197,16 @@
             color: #2e7d32;
             font-weight: 500;
             cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background: linear-gradient(to right, #f1f8f4, #ffffff);
+        }
+
+        .action-group label:hover {
+            background: linear-gradient(to right, #e8f5e9, #f1f8f4);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(46, 125, 50, 0.2);
         }
 
         .action-group input {
@@ -139,6 +219,10 @@
             text-align: center;
             margin-top: 10px;
             font-size: 1em;
+            padding: 10px;
+            background: linear-gradient(to right, #ffebee, #ffffff);
+            border-radius: 8px;
+            border-left: 4px solid #d32f2f;
         }
 
         @media (max-width: 600px) {
@@ -147,11 +231,12 @@
             }
 
             .container {
-                padding: 20px;
+                padding: 25px;
+                border-radius: 15px;
             }
 
             h1 {
-                font-size: 1.6em;
+                font-size: 1.8em;
             }
 
             h2 {
@@ -161,36 +246,63 @@
             input,
             button[type="submit"] {
                 font-size: 0.95em;
-                padding: 10px;
+                padding: 12px;
             }
 
             .action-group {
                 gap: 15px;
+                flex-direction: column;
+            }
+
+            .action-group label {
+                width: 100%;
+                justify-content: center;
             }
 
             label {
                 font-size: 0.95em;
             }
-        }
 
-        .back-home {
-            text-align: center;
-            margin-bottom: 15px;
-        }
+            /* Mobile: Ẩn text trên nút tuần, chỉ hiện icon */
+            #prevWeekBtn {
+                padding: 12px 15px !important;
+                min-width: 50px;
+                font-size: 0 !important;
+                position: relative;
+            }
 
-        .back-home a {
-            display: inline-block;
-            padding: 10px 16px;
-            border-radius: 8px;
-            background: linear-gradient(45deg, #4a90e2, #357abd);
-            color: #fff;
-            text-decoration: none;
-            font-weight: 600;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
+            #prevWeekBtn::before {
+                content: '◀';
+                font-size: 20px !important;
+                display: inline-block;
+                line-height: 1;
+            }
 
-        .back-home a:hover {
-            transform: translateY(-1px);
+            #nextWeekBtn {
+                padding: 12px 15px !important;
+                min-width: 50px;
+                font-size: 0 !important;
+                position: relative;
+            }
+
+            #nextWeekBtn::after {
+                content: '▶';
+                font-size: 20px !important;
+                display: inline-block;
+                line-height: 1;
+            }
+
+            /* Đảm bảo ô input tuần có đủ không gian trên mobile */
+            #week {
+                min-width: 80px !important;
+                font-size: 1em !important;
+                flex: 1 1 auto;
+            }
+
+            /* Đảm bảo container tuần không bị wrap */
+            .form-group > div[style*="display: flex"] {
+                flex-wrap: nowrap !important;
+            }
         }
     </style>
 </head>
@@ -211,92 +323,178 @@
                 <label><input type="radio" name="action" value="append"> Bổ sung (Thông tin thiếu)</label>
                 <label><input type="radio" name="action" value="edit"> Chỉnh sửa (Tuần cũ)</label>
             </div>
-            <div class="form-group">
-                <label for="week">TUẦN THỨ (PHẢI NHẬP CHÍNH XÁC)</label>
-                <input type="number" id="week" name="week" min="1" max="35" required oninput="updateWeekDateRange()">
-                <span id="week_date_range"></span>
+            <div class="form-group" style="background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%); padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 2px solid #9c27b0;">
+                <label for="week" style="color: #7b1fa2; font-size: 1.1em; font-weight: 700;">📅 TUẦN THỨ (PHẢI NHẬP CHÍNH XÁC)</label>
+                <div style="display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: nowrap;">
+                    <button type="button" id="prevWeekBtn" onclick="viewPreviousWeek()" style="padding: 12px 20px; background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3); transition: all 0.3s; white-space: nowrap; flex-shrink: 0;">◀ Tuần trước</button>
+                    <input type="number" id="week" name="week" min="1" max="35" required oninput="updateWeekDateRange()" style="flex: 1; min-width: 80px; border: 2px solid #9c27b0; background: white; font-weight: 600; font-size: 1.1em; text-align: center;">
+                    <button type="button" id="nextWeekBtn" onclick="viewNextWeek()" style="padding: 12px 20px; background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%); color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 600; box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3); transition: all 0.3s; white-space: nowrap; flex-shrink: 0;">Tuần sau ▶</button>
+                </div>
+                <div id="week_date_range" style="text-align: center; margin-top: 10px; color: #7b1fa2; font-weight: 600; font-size: 1.05em;"></div>
                 <input type="hidden" id="week_date_range_input" name="week_date_range">
             </div>
-            <div class="form-group">
-                <label for="good_points">1. Điểm tốt (Tổng lớp):</label>
-                <input type="text" id="good_points" name="good_points" placeholder="Ví dụ: 25 điểm tốt (Toán, Lý)">
+            <!-- Phần NHẬP LIỆU - Màu xanh dương -->
+            <div style="background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 2px solid #42a5f5;">
+                <h3 style="margin: 0 0 15px 0; color: #1976d2; font-size: 1.3em; text-align: center; font-weight: 700;">
+                    📝 THÔNG TIN NHẬP LIỆU
+                </h3>
+                <div class="form-group info-group">
+                    <label for="good_points">1. Điểm tốt (Tổng lớp):</label>
+                    <input type="text" id="good_points" name="good_points" placeholder="Ví dụ: 25 điểm tốt (Toán, Lý)">
+                </div>
+                <div class="form-group info-group">
+                    <label for="speaking">2. Phát biểu (Tổng lớp):</label>
+                    <input type="text" id="speaking" name="speaking" placeholder="Ví dụ: 45 lượt (nhiều nhất môn Hóa)">
+                </div>
+                <div class="form-group info-group">
+                    <label for="teacher_reminded">3. Môn học bị giáo viên nhắc (Lý do):</label>
+                    <input type="text" id="teacher_reminded" name="teacher_reminded"
+                        placeholder="Ví dụ: Sinh(28/8) không làm bài">
+                </div>
+                <div class="form-group info-group">
+                    <label for="future_plan">4. Phương hướng tuần sau:</label>
+                    <input type="text" id="future_plan" name="future_plan"
+                        placeholder="Ví dụ: Kiểm tra 15 môn Toán, Hóa, kiểm tra giữa kỳ môn Sinh">
+                </div>
+                <div class="form-group info-group">
+                    <label for="suggestions">5. Ý kiến đề xuất:</label>
+                    <input type="text" id="suggestions" name="suggestions"
+                        placeholder="Ví dụ: Bạn A nói chuyện nhiều, Thầy cần sinh hoạt thái độ học tập của bạn B">
+                </div>
             </div>
-            <div class="form-group">
-                <label for="speaking">2. Phát biểu (Tổng lớp):</label>
-                <input type="text" id="speaking" name="speaking" placeholder="Ví dụ: 45 lượt (nhiều nhất môn Hóa)">
+            <div class="form-group" style="background: linear-gradient(135deg, #fff9c4 0%, #fff59d 100%); padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 2px solid #fbc02d;">
+                <label for="password" style="color: #f57f17; font-size: 1.1em; font-weight: 700;">🔒 MẬT KHẨU (Thầy cấp riêng cho LPHT)</label>
+                <input type="password" id="password" name="password" required style="border: 2px solid #fbc02d; background: white; font-weight: 600; margin-top: 10px;">
             </div>
-            <div class="form-group">
-                <label for="teacher_reminded">3. Môn học bị giáo viên nhắc (Lý do):</label>
-                <input type="text" id="teacher_reminded" name="teacher_reminded"
-                    placeholder="Ví dụ: Sinh(28/8) không làm bài">
-            </div>
-            <div class="form-group">
-                <label for="future_plan">4. Phương hướng tuần sau:</label>
-                <input type="text" id="future_plan" name="future_plan"
-                    placeholder="Ví dụ: Kiểm tra 15 môn Toán, Hóa, kiểm tra giữa kỳ môn Sinh">
-            </div>
-            <div class="form-group">
-                <label for="suggestions">5. Ý kiến đề xuất:</label>
-                <input type="text" id="suggestions" name="suggestions"
-                    placeholder="Ví dụ: Bạn A nói chuyện nhiều, Thầy cần sinh hoạt thái độ học tập của bạn B">
-            </div>
-            <div class="form-group">
-                <label for="password">***Mật khẩu*** (Thầy cấp riêng cho LPHT):</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit" id="submitButton">Gửi Dữ Liệu</button>
+            <button type="submit" id="submitButton" style="margin-top: 10px;">📤 GỬI DỮ LIỆU</button>
         </form>
     </div>
     <script>
-        const weekRanges = [
-            "từ ngày 8/9/2025 đến 13/9/2025",
-            "từ ngày 15/9/2025 đến 20/9/2025",
-            "từ ngày 22/9/2025 đến 27/9/2025",
-            "từ ngày 29/9/2025 đến 4/10/2025",
-            "từ ngày 6/10/2025 đến 11/10/2025",
-            "từ ngày 13/10/2025 đến 18/10/2025",
-            "từ ngày 20/10/2025 đến 25/10/2025",
-            "từ ngày 27/10/2025 đến 1/11/2025",
-            "từ ngày 3/11/2025 đến 8/11/2025",
-            "từ ngày 10/11/2025 đến 15/11/2025",
-            "từ ngày 17/11/2025 đến 22/11/2025",
-            "từ ngày 24/11/2025 đến 29/11/2025",
-            "từ ngày 1/12/2025 đến 6/12/2025",
-            "từ ngày 8/12/2025 đến 13/12/2025",
-            "từ ngày 15/12/2025 đến 20/12/2025",
-            "từ ngày 22/12/2025 đến 27/12/2025",
-            "từ ngày 29/12/2025 đến 3/1/2026",
-            "từ ngày 5/1/2026 đến 10/1/2026",
-            "từ ngày 12/1/2026 đến 17/1/2026",
-            "từ ngày 19/1/2026 đến 24/1/2026",
-            "từ ngày 26/1/2026 đến 31/1/2026",
-            "từ ngày 2/2/2026 đến 7/2/2026",
-            "từ ngày 9/2/2026 đến 14/2/2026",
-            "từ ngày 16/2/2026 đến 21/2/2026",
-            "từ ngày 23/2/2026 đến 28/2/2026",
-            "từ ngày 2/3/2026 đến 7/3/2026",
-            "từ ngày 9/3/2026 đến 14/3/2026",
-            "từ ngày 16/3/2026 đến 21/3/2026",
-            "từ ngày 23/3/2026 đến 28/3/2026",
-            "từ ngày 30/3/2026 đến 4/4/2026",
-            "từ ngày 6/4/2026 đến 11/4/2026",
-            "từ ngày 13/4/2026 đến 18/4/2026",
-            "từ ngày 20/4/2026 đến 25/4/2026",
-            "từ ngày 27/4/2026 đến 2/5/2026",
-            "từ ngày 18/5/2026 đến 23/5/2026"
-        ];
+        // Sử dụng SCHOOL_WEEKS_CONFIG từ data.js (đã load trước đó)
+        function getWeekRangeString(weekNumber) {
+            if (typeof SCHOOL_WEEKS_CONFIG === 'undefined' || !SCHOOL_WEEKS_CONFIG) {
+                return '';
+            }
+            if (weekNumber < 1 || weekNumber > SCHOOL_WEEKS_CONFIG.length) {
+                return '';
+            }
+            const weekConfig = SCHOOL_WEEKS_CONFIG[weekNumber - 1];
+            if (!weekConfig) return '';
+            return `từ ngày ${weekConfig.from} đến ${weekConfig.to}`;
+        }
 
         function updateWeekDateRange() {
-            const weekInput = document.getElementById('week').value;
+            const weekInput = document.getElementById('week');
+            if (!weekInput) return;
+            
+            const weekValue = parseInt(weekInput.value) || 0;
             const weekDateRange = document.getElementById('week_date_range');
             const weekDateRangeInput = document.getElementById('week_date_range_input');
-            if (weekInput >= 1 && weekInput <= 35) {
-                weekDateRange.textContent = weekRanges[weekInput - 1];
-                weekDateRangeInput.value = weekRanges[weekInput - 1];
+            
+            if (!weekDateRange || !weekDateRangeInput) return;
+            
+            if (weekValue >= 1 && weekValue <= 35) {
+                const rangeString = getWeekRangeString(weekValue);
+                if (rangeString) {
+                    weekDateRange.textContent = rangeString;
+                    weekDateRangeInput.value = rangeString;
+                } else {
+                    // Nếu chưa load được SCHOOL_WEEKS_CONFIG, thử lại sau
+                    if (typeof SCHOOL_WEEKS_CONFIG === 'undefined') {
+                        setTimeout(updateWeekDateRange, 200);
+                    } else {
+                        weekDateRange.textContent = 'Không tìm thấy thông tin tuần ' + weekValue;
+                        weekDateRangeInput.value = '';
+                    }
+                }
             } else {
                 weekDateRange.textContent = '';
                 weekDateRangeInput.value = '';
             }
+        }
+
+        function viewPreviousWeek() {
+            const currentWeek = parseInt(document.getElementById('week').value) || 1;
+            if (currentWeek > 1) {
+                document.getElementById('week').value = currentWeek - 1;
+                updateWeekDateRange();
+            } else {
+                alert('Đây là tuần đầu tiên!');
+            }
+        }
+
+        function viewNextWeek() {
+            const currentWeek = parseInt(document.getElementById('week').value) || 1;
+            const maxWeek = typeof SCHOOL_WEEKS_CONFIG !== 'undefined' && SCHOOL_WEEKS_CONFIG ? SCHOOL_WEEKS_CONFIG.length : 35;
+            if (currentWeek < maxWeek) {
+                document.getElementById('week').value = currentWeek + 1;
+                updateWeekDateRange();
+            } else {
+                alert('Đây là tuần cuối cùng!');
+            }
+        }
+
+        // Tính tuần hiện tại dựa trên ngày tháng (sử dụng SCHOOL_WEEKS_CONFIG từ data.js)
+        function getCurrentWeek() {
+            // Sử dụng hàm từ data.js nếu có
+            if (typeof getCurrentWeekNumber === 'function' && typeof SCHOOL_WEEKS_CONFIG !== 'undefined') {
+                return getCurrentWeekNumber();
+            }
+            
+            // Fallback: tự tính từ SCHOOL_WEEKS_CONFIG
+            if (typeof SCHOOL_WEEKS_CONFIG === 'undefined' || !SCHOOL_WEEKS_CONFIG || SCHOOL_WEEKS_CONFIG.length === 0) {
+                return 1;
+            }
+            
+            const today = new Date();
+            // Normalize to midnight local time để tránh lỗi timezone
+            const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            currentDate.setHours(0, 0, 0, 0);
+            
+            // Tìm tuần chứa ngày hiện tại
+            for (let i = 0; i < SCHOOL_WEEKS_CONFIG.length; i++) {
+                const weekConfig = SCHOOL_WEEKS_CONFIG[i];
+                if (!weekConfig || !weekConfig.from || !weekConfig.to) continue;
+                
+                const [fromDay, fromMonth, fromYear] = weekConfig.from.split('/').map(Number);
+                const [toDay, toMonth, toYear] = weekConfig.to.split('/').map(Number);
+                
+                // Kiểm tra dữ liệu hợp lệ
+                if (isNaN(fromDay) || isNaN(fromMonth) || isNaN(fromYear) || 
+                    isNaN(toDay) || isNaN(toMonth) || isNaN(toYear)) {
+                    continue;
+                }
+                
+                const startDate = new Date(fromYear, fromMonth - 1, fromDay);
+                startDate.setHours(0, 0, 0, 0);
+                const endDate = new Date(toYear, toMonth - 1, toDay);
+                endDate.setHours(23, 59, 59, 999); // Bao gồm cả ngày cuối
+                
+                if (currentDate >= startDate && currentDate <= endDate) {
+                    return weekConfig.week;
+                }
+            }
+            
+            // Nếu không tìm thấy tuần chứa ngày hiện tại, tìm tuần gần nhất trong quá khứ
+            // (Vì Chủ nhật không được liệt kê trong tuần học, nên nếu hôm nay là Chủ nhật
+            // hoặc nằm giữa các tuần, ta sẽ trả về tuần vừa qua)
+            for (let i = SCHOOL_WEEKS_CONFIG.length - 1; i >= 0; i--) {
+                const weekConfig = SCHOOL_WEEKS_CONFIG[i];
+                if (!weekConfig || !weekConfig.from) continue;
+                
+                const [fromDay, fromMonth, fromYear] = weekConfig.from.split('/').map(Number);
+                if (isNaN(fromDay) || isNaN(fromMonth) || isNaN(fromYear)) continue;
+                
+                const startDate = new Date(fromYear, fromMonth - 1, fromDay);
+                startDate.setHours(0, 0, 0, 0);
+                
+                // Nếu tuần này bắt đầu trước hoặc bằng ngày hiện tại, đây là tuần gần nhất trong quá khứ
+                if (startDate <= currentDate) {
+                    return weekConfig.week;
+                }
+            }
+            
+            return 1; // Mặc định tuần 1
         }
 
         async function verifyPassword(input) {
@@ -382,6 +580,41 @@
                     submitButton.textContent = 'Gửi Dữ Liệu';
                 });
         });
+
+        // Tự động set tuần và load dữ liệu khi trang được load
+        window.addEventListener('DOMContentLoaded', function() {
+            const weekInput = document.getElementById('week');
+            if (!weekInput) {
+                console.error('week input not found');
+                return;
+            }
+            
+            // Đợi một chút để đảm bảo data.js đã load xong SCHOOL_WEEKS_CONFIG
+            setTimeout(function() {
+                // Tính tuần hiện tại theo thời gian thực
+                const currentWeek = getCurrentWeek();
+                console.log('Current week calculated on page load:', currentWeek);
+                
+                // Set giá trị tuần hiện tại
+                weekInput.value = currentWeek || 1;
+                
+                // Update week date range ngay lập tức để hiển thị khoảng ngày
+                updateWeekDateRange();
+            }, 100);
+        });
+
+        // Load dữ liệu khi thay đổi tuần
+        const weekInput = document.getElementById('week');
+        if (weekInput) {
+            weekInput.addEventListener('change', function() {
+                updateWeekDateRange();
+            });
+            
+            weekInput.addEventListener('input', function() {
+                // Cập nhật khoảng ngày ngay khi người dùng gõ
+                updateWeekDateRange();
+            });
+        }
     </script>
 </body>
 

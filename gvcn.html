@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tổng kết Tuần - GVCN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="data.js"></script>
+    <script src="config.js"></script>
+    <style>
+        :root {
+            --primary-color: #4a90e2;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --bg-color: #f4f7f6;
+            --text-color: #333;
+            --white: #ffffff;
+            --success-color: #2ecc71;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        @keyframes gradientShift {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            margin: 0 0 10px 0;
+            letter-spacing: 0.5px;
+        }
+
+        .week-selector {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 2px solid #9c27b0;
+        }
+
+        .week-selector label {
+            display: block;
+            color: #7b1fa2;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .week-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: nowrap;
+        }
+
+        .week-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            white-space: nowrap;
+            flex-shrink: 0;
+            color: white;
+        }
+
+        .week-btn.prev {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+        }
+
+        .week-btn.next {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+        }
+
+        .week-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .week-btn:active {
+            transform: translateY(0);
+        }
+
+        .week-input {
+            flex: 1;
+            min-width: 80px;
+            padding: 12px;
+            border: 2px solid #9c27b0;
+            border-radius: 10px;
+            background: white;
+            font-weight: 600;
+            font-size: 1.1em;
+            text-align: center;
+        }
+
+        .week-input:focus {
+            outline: none;
+            border-color: #7b1fa2;
+            box-shadow: 0 0 12px rgba(156, 39, 176, 0.3);
+        }
+
+        .week-date-range {
+            text-align: center;
+            margin-top: 10px;
+            color: #7b1fa2;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+
+        .week-info {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 12px;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .back-home a {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: transform 0.2s;
+        }
+
+        .back-home a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-box {
+            background: #f8f9fa;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            position: relative;
+            min-height: 200px;
+        }
+
+        .content-box.loading {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+        }
+
+        .content-box.error {
+            background: #fff3cd;
+            border-color: #ffc107;
+            color: #856404;
+        }
+
+        .content-box.empty {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            text-align: center;
+        }
+
+        .empty-message {
+            font-size: 1.2em;
+            color: #6c757d;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .sheet-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .sheet-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .sheet-link i {
+            margin-right: 8px;
+        }
+
+        .content-text {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            line-height: 1.8;
+            font-size: 1.05em;
+            color: #333;
+        }
+
+        .copy-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95em;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .copy-button:active {
+            transform: translateY(0);
+        }
+
+        .copy-button.copied {
+            background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            display: none;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+                animation: none;
+                background-position: 0% 50%;
+            }
+
+            .container {
+                padding: 20px;
+                margin-top: 10px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .week-selector {
+                padding: 15px;
+            }
+
+            .week-selector label {
+                font-size: 1em;
+            }
+
+            .week-btn {
+                padding: 12px 15px !important;
+                min-width: 50px;
+                font-size: 0 !important;
+                position: relative;
+            }
+
+            .week-btn.prev::before {
+                content: '◀';
+                font-size: 20px !important;
+                display: inline-block;
+                line-height: 1;
+            }
+
+            .week-btn.next::after {
+                content: '▶';
+                font-size: 20px !important;
+                display: inline-block;
+                line-height: 1;
+            }
+
+            .week-input {
+                min-width: 80px !important;
+                font-size: 1em !important;
+                flex: 1 1 auto;
+            }
+
+            .week-info {
+                font-size: 1em;
+                padding: 12px;
+            }
+
+            .content-box {
+                padding: 15px;
+                padding-top: 50px;
+            }
+
+            .copy-button {
+                top: 10px;
+                right: 10px;
+                padding: 8px 16px;
+                font-size: 0.85em;
+            }
+
+            .content-text {
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="back-home">
+            <a href="index.html"><i class="fas fa-arrow-left"></i> Về Trang Chủ</a>
+        </div>
+
+        <h1><i class="fas fa-calendar-week"></i> Tổng Kết Tuần</h1>
+        
+        <div class="week-selector">
+            <label for="week">📅 CHỌN TUẦN</label>
+            <div class="week-controls">
+                <button type="button" class="week-btn prev" id="prevWeekBtn" onclick="viewPreviousWeek()">◀ Tuần trước</button>
+                <input type="number" id="week" class="week-input" min="1" max="35" value="1" oninput="updateWeekDateRange(); loadContent();">
+                <button type="button" class="week-btn next" id="nextWeekBtn" onclick="viewNextWeek()">Tuần sau ▶</button>
+            </div>
+            <div class="week-date-range" id="weekDateRange"></div>
+        </div>
+
+        <div class="week-info" id="weekInfo">
+            <i class="fas fa-spinner fa-spin"></i> Đang tải...
+        </div>
+
+        <div class="content-box loading" id="contentBox">
+            <div class="content-text" id="contentText">Đang tải nội dung...</div>
+            <button class="copy-button" id="copyButton" onclick="copyContent()" style="display: none;">
+                <i class="fas fa-copy"></i> Copy
+            </button>
+        </div>
+
+        <div class="status-message" id="statusMessage"></div>
+    </div>
+
+    <script>
+        // Lấy URL từ config.js
+        const TONGKET_TUAN_CSV_URL = typeof TONGKET_TUAN_SHEET_URL !== 'undefined' ? TONGKET_TUAN_SHEET_URL : 
+            (typeof PUBLISHED_SPREADSHEET_URL !== 'undefined' && typeof TONGKET_TUAN_SHEET_GID !== 'undefined' ?
+                `${PUBLISHED_SPREADSHEET_URL}/pub?gid=${TONGKET_TUAN_SHEET_GID}&single=true&output=csv` : '');
+
+        // Helper function để tính tuần hiện tại
+        function getCurrentWeekNumber() {
+            // Kiểm tra SCHOOL_WEEKS_CONFIG đã load chưa
+            if (typeof SCHOOL_WEEKS_CONFIG === 'undefined' || !SCHOOL_WEEKS_CONFIG || !Array.isArray(SCHOOL_WEEKS_CONFIG)) {
+                console.warn('SCHOOL_WEEKS_CONFIG chưa được load, trả về tuần 1');
+                return 1;
+            }
+            
+            const today = new Date();
+            // Normalize to midnight local time để tránh lỗi timezone
+            const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            currentDate.setHours(0, 0, 0, 0);
+            console.log('Tính tuần hiện tại cho ngày:', currentDate);
+            
+            // Tìm tuần chứa ngày hiện tại
+            for (let i = 0; i < SCHOOL_WEEKS_CONFIG.length; i++) {
+                const weekConfig = SCHOOL_WEEKS_CONFIG[i];
+                if (!weekConfig || !weekConfig.from || !weekConfig.to) continue;
+                
+                try {
+                    const [fromDay, fromMonth, fromYear] = weekConfig.from.split('/').map(Number);
+                    const [toDay, toMonth, toYear] = weekConfig.to.split('/').map(Number);
+                    
+                    if (isNaN(fromDay) || isNaN(fromMonth) || isNaN(fromYear) || 
+                        isNaN(toDay) || isNaN(toMonth) || isNaN(toYear)) {
+                        continue;
+                    }
+                    
+                    const startDate = new Date(fromYear, fromMonth - 1, fromDay);
+                    startDate.setHours(0, 0, 0, 0);
+                    const endDate = new Date(toYear, toMonth - 1, toDay);
+                    endDate.setHours(23, 59, 59, 999); // Bao gồm cả ngày cuối
+                    
+                    console.log(`Kiểm tra tuần ${weekConfig.week}: ${startDate} đến ${endDate}`);
+                    
+                    if (currentDate >= startDate && currentDate <= endDate) {
+                        console.log(`Tìm thấy tuần hiện tại: ${weekConfig.week}`);
+                        return weekConfig.week;
+                    }
+                } catch (e) {
+                    console.warn('Lỗi khi parse ngày tuần', weekConfig, e);
+                    continue;
+                }
+            }
+            
+            // Nếu không tìm thấy tuần chứa ngày hiện tại, tìm tuần gần nhất trong quá khứ
+            // (Vì Chủ nhật không được liệt kê trong tuần học, nên nếu hôm nay là Chủ nhật
+            // hoặc nằm giữa các tuần, ta sẽ trả về tuần vừa qua)
+            console.log('Không tìm thấy tuần chứa ngày hiện tại, tìm tuần gần nhất trong quá khứ...');
+            
+            for (let i = SCHOOL_WEEKS_CONFIG.length - 1; i >= 0; i--) {
+                const weekConfig = SCHOOL_WEEKS_CONFIG[i];
+                if (!weekConfig || !weekConfig.from) continue;
+                
+                try {
+                    const [fromDay, fromMonth, fromYear] = weekConfig.from.split('/').map(Number);
+                    if (isNaN(fromDay) || isNaN(fromMonth) || isNaN(fromYear)) continue;
+                    
+                    const startDate = new Date(fromYear, fromMonth - 1, fromDay);
+                    startDate.setHours(0, 0, 0, 0);
+                    
+                    // Nếu tuần này bắt đầu trước hoặc bằng ngày hiện tại, đây là tuần gần nhất trong quá khứ
+                    if (startDate <= currentDate) {
+                        console.log(`Tìm thấy tuần gần nhất trong quá khứ: ${weekConfig.week}`);
+                        return weekConfig.week;
+                    }
+                } catch (e) {
+                    continue;
+                }
+            }
+            
+            console.log('Không tìm thấy tuần nào, trả về tuần 1');
+            return 1;
+        }
+
+        // Parse CSV
+        function parseCsv(text) {
+            const rows = [];
+            let current = '';
+            let inQuotes = false;
+            let row = [];
+
+            for (let i = 0; i < text.length; i++) {
+                const c = text[i];
+                const next = text[i + 1];
+                if (c === '"' && inQuotes && next === '"') {
+                    current += '"';
+                    i++;
+                } else if (c === '"') {
+                    inQuotes = !inQuotes;
+                } else if (c === ',' && !inQuotes) {
+                    row.push(current);
+                    current = '';
+                } else if ((c === '\n' || c === '\r') && !inQuotes) {
+                    if (current !== '' || row.length) {
+                        row.push(current);
+                        rows.push(row);
+                        row = [];
+                        current = '';
+                    }
+                } else {
+                    current += c;
+                }
+            }
+            if (current !== '' || row.length) {
+                row.push(current);
+                rows.push(row);
+            }
+            return rows;
+        }
+
+        // Helper function để lấy week range string
+        function getWeekRangeString(weekNumber) {
+            if (typeof SCHOOL_WEEKS_CONFIG === 'undefined' || !SCHOOL_WEEKS_CONFIG) {
+                return '';
+            }
+            if (weekNumber < 1 || weekNumber > SCHOOL_WEEKS_CONFIG.length) {
+                return '';
+            }
+            const weekConfig = SCHOOL_WEEKS_CONFIG[weekNumber - 1];
+            if (!weekConfig) return '';
+            return `từ ngày ${weekConfig.from} đến ${weekConfig.to}`;
+        }
+
+        // Cập nhật hiển thị khoảng ngày của tuần
+        function updateWeekDateRange() {
+            const weekInput = document.getElementById('week');
+            const weekDateRange = document.getElementById('weekDateRange');
+            
+            if (!weekInput || !weekDateRange) return;
+            
+            const weekValue = parseInt(weekInput.value) || 0;
+            
+            if (weekValue >= 1 && weekValue <= 35) {
+                const rangeString = getWeekRangeString(weekValue);
+                if (rangeString) {
+                    weekDateRange.textContent = rangeString;
+                } else {
+                    weekDateRange.textContent = '';
+                }
+            } else {
+                weekDateRange.textContent = '';
+            }
+        }
+
+        // Xem tuần trước
+        function viewPreviousWeek() {
+            const weekInput = document.getElementById('week');
+            if (!weekInput) return;
+            
+            const currentWeek = parseInt(weekInput.value) || 1;
+            if (currentWeek > 1) {
+                weekInput.value = currentWeek - 1;
+                updateWeekDateRange();
+                loadContent();
+            } else {
+                alert('Đây là tuần đầu tiên!');
+            }
+        }
+
+        // Xem tuần sau
+        function viewNextWeek() {
+            const weekInput = document.getElementById('week');
+            if (!weekInput) return;
+            
+            const currentWeek = parseInt(weekInput.value) || 1;
+            const maxWeek = 35;
+            if (currentWeek < maxWeek) {
+                weekInput.value = currentWeek + 1;
+                updateWeekDateRange();
+                loadContent();
+            } else {
+                alert('Đây là tuần cuối cùng!');
+            }
+        }
+
+        // Load và hiển thị nội dung
+        async function loadContent() {
+            const weekInput = document.getElementById('week');
+            const weekInfoEl = document.getElementById('weekInfo');
+            const contentBox = document.getElementById('contentBox');
+            const contentText = document.getElementById('contentText');
+            
+            // Lấy tuần từ input
+            const selectedWeek = weekInput ? parseInt(weekInput.value) || getCurrentWeekNumber() : getCurrentWeekNumber();
+            
+            try {
+                // Hiển thị thông tin tuần
+                const weekConfig = typeof SCHOOL_WEEKS_CONFIG !== 'undefined' && SCHOOL_WEEKS_CONFIG 
+                    ? SCHOOL_WEEKS_CONFIG.find(w => w.week === selectedWeek)
+                    : null;
+                
+                if (weekConfig) {
+                    weekInfoEl.innerHTML = `<i class="fas fa-calendar-alt"></i> Tuần ${selectedWeek} - ${weekConfig.from} đến ${weekConfig.to}`;
+                } else {
+                    weekInfoEl.innerHTML = `<i class="fas fa-calendar-alt"></i> Tuần ${selectedWeek}`;
+                }
+
+                if (!TONGKET_TUAN_CSV_URL) {
+                    throw new Error('URL bảng tổng kết tuần chưa được cấu hình');
+                }
+
+                contentBox.classList.add('loading');
+                contentText.textContent = 'Đang tải nội dung...';
+
+                const resp = await fetch(TONGKET_TUAN_CSV_URL, { cache: 'no-store' });
+                if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                
+                const text = await resp.text();
+                const data = parseCsv(text).filter(r => r.length > 0);
+                
+                if (!data.length) {
+                    throw new Error('Không có dữ liệu');
+                }
+
+                // Lấy nội dung từ cột B (index 1)
+                // B2 là tuần 1, B3 là tuần 2, ...
+                // Cột A (index 0) có thể chứa số tuần hoặc để trống
+                let weekContent = '';
+                
+                // Tìm nội dung của tuần được chọn
+                // Cách 1: Tìm theo cột A nếu có số tuần
+                let found = false;
+                for (let i = 1; i < data.length; i++) {
+                    const row = data[i];
+                    if (row.length > 1) {
+                        const weekNum = parseInt(row[0], 10);
+                        if (!isNaN(weekNum) && weekNum === selectedWeek && row[1] && row[1].trim() !== '') {
+                            weekContent = row[1].trim();
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+                
+                // Cách 2: Nếu không tìm thấy theo cột A, lấy theo vị trí row
+                // B2 (row[1]) = tuần 1, B3 (row[2]) = tuần 2, ...
+                if (!found) {
+                    const targetRowIndex = selectedWeek; // B2 = row[1] = tuần 1
+                    if (targetRowIndex < data.length && data[targetRowIndex].length > 1) {
+                        const cellContent = (data[targetRowIndex][1] || '').trim();
+                        // Chỉ lấy nếu có nội dung thực sự (không rỗng)
+                        if (cellContent !== '') {
+                            weekContent = cellContent;
+                            found = true;
+                        }
+                    }
+                }
+
+                // Kiểm tra nếu tuần chưa có dữ liệu (ô trắng)
+                // KHÔNG fallback sang tuần khác - chỉ hiển thị "chưa tổng kết"
+                if (!found || !weekContent || weekContent.trim() === '') {
+                    // Hiển thị thông báo "chưa tổng kết" và link
+                    contentBox.classList.remove('loading');
+                    contentBox.classList.remove('error');
+                    contentBox.classList.add('empty');
+                    
+                    const sheetEditUrl = typeof SPREADSHEET_ID !== 'undefined' 
+                        ? `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit?usp=sharing`
+                        : 'https://docs.google.com/spreadsheets/d/1GS3QKu5Bbeoef0rQhkitX_dawnwqlRPdeUaCNKV8cJk/edit?usp=sharing';
+                    
+                    contentText.innerHTML = `
+                        <div class="empty-message">
+                            <i class="fas fa-exclamation-circle"></i> Tuần ${selectedWeek} chưa tổng kết
+                        </div>
+                        <p style="color: #6c757d; margin-bottom: 15px;">
+                            Vui lòng truy cập link bên dưới để tổng kết tuần này.
+                        </p>
+                        <a href="${sheetEditUrl}" 
+                           target="_blank" 
+                           rel="noopener noreferrer"
+                           class="sheet-link"
+                           onclick="window.open(this.href, '_blank', 'noopener,noreferrer'); return false;">
+                            <i class="fas fa-external-link-alt"></i> Mở Google Sheets để tổng kết
+                        </a>
+                    `;
+                    
+                    // Ẩn nút copy khi chưa có dữ liệu
+                    const copyButton = document.getElementById('copyButton');
+                    if (copyButton) {
+                        copyButton.style.display = 'none';
+                    }
+                    return;
+                }
+
+                // Hiển thị nội dung
+                contentText.textContent = weekContent.trim();
+                contentBox.classList.remove('loading');
+                contentBox.classList.remove('error');
+                contentBox.classList.remove('empty');
+                
+                // Hiển thị nút copy khi có dữ liệu
+                const copyButton = document.getElementById('copyButton');
+                if (copyButton) {
+                    copyButton.style.display = 'flex';
+                }
+
+            } catch (err) {
+                console.error('Load content error', err);
+                contentBox.classList.remove('loading');
+                contentBox.classList.add('error');
+                
+                const sheetEditUrl = typeof SPREADSHEET_ID !== 'undefined' 
+                    ? `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/edit?usp=sharing`
+                    : 'https://docs.google.com/spreadsheets/d/1GS3QKu5Bbeoef0rQhkitX_dawnwqlRPdeUaCNKV8cJk/edit?usp=sharing';
+                
+                contentText.innerHTML = `
+                    <div style="margin-bottom: 15px;">
+                        Không tải được nội dung: ${err.message || 'Lỗi không xác định'}
+                    </div>
+                    <a href="${sheetEditUrl}" 
+                       target="_blank" 
+                       rel="noopener noreferrer"
+                       class="sheet-link"
+                       onclick="window.open(this.href, '_blank', 'noopener,noreferrer'); return false;">
+                        <i class="fas fa-external-link-alt"></i> Mở Google Sheets
+                    </a>
+                `;
+                
+                // Ẩn nút copy khi có lỗi
+                const copyButton = document.getElementById('copyButton');
+                if (copyButton) {
+                    copyButton.style.display = 'none';
+                }
+            }
+        }
+
+        // Copy nội dung
+        function copyContent() {
+            const contentText = document.getElementById('contentText');
+            const copyButton = document.getElementById('copyButton');
+            const statusMessage = document.getElementById('statusMessage');
+
+            const text = contentText.textContent;
+            
+            if (!text || text === 'Đang tải nội dung...' || text.includes('Không tải được')) {
+                return;
+            }
+
+            navigator.clipboard.writeText(text).then(() => {
+                copyButton.classList.add('copied');
+                copyButton.innerHTML = '<i class="fas fa-check"></i> Đã Copy!';
+                
+                statusMessage.textContent = 'Đã sao chép nội dung vào clipboard!';
+                statusMessage.classList.add('success');
+                
+                setTimeout(() => {
+                    copyButton.classList.remove('copied');
+                    copyButton.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    statusMessage.classList.remove('success');
+                }, 2000);
+            }).catch(err => {
+                console.error('Copy failed', err);
+                // Fallback: select text
+                const range = document.createRange();
+                range.selectNode(contentText);
+                window.getSelection().removeAllRanges();
+                window.getSelection().addRange(range);
+                
+                try {
+                    document.execCommand('copy');
+                    copyButton.innerHTML = '<i class="fas fa-check"></i> Đã Copy!';
+                    setTimeout(() => {
+                        copyButton.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    }, 2000);
+                } catch (e) {
+                    alert('Không thể sao chép. Vui lòng chọn và copy thủ công.');
+                }
+            });
+        }
+
+        // Load khi trang được tải
+        window.addEventListener('DOMContentLoaded', function() {
+            // Đợi data.js load xong SCHOOL_WEEKS_CONFIG
+            function initPage() {
+                // Kiểm tra SCHOOL_WEEKS_CONFIG đã load chưa
+                if (typeof SCHOOL_WEEKS_CONFIG === 'undefined' || !SCHOOL_WEEKS_CONFIG) {
+                    console.log('Đợi SCHOOL_WEEKS_CONFIG load...');
+                    setTimeout(initPage, 100);
+                    return;
+                }
+                
+                console.log('SCHOOL_WEEKS_CONFIG đã load:', SCHOOL_WEEKS_CONFIG.length, 'tuần');
+                
+                // Tính tuần hiện tại theo thời gian thực
+                const currentWeek = getCurrentWeekNumber();
+                console.log('Tuần hiện tại tính được:', currentWeek);
+                
+                // Set giá trị tuần hiện tại
+                const weekInput = document.getElementById('week');
+                if (weekInput) {
+                    weekInput.value = currentWeek || 1;
+                    console.log('Đã set tuần vào input:', weekInput.value);
+                }
+                
+                // Cập nhật khoảng ngày
+                updateWeekDateRange();
+                
+                // Load nội dung
+                loadContent();
+            }
+            
+            // Bắt đầu init sau 200ms để đảm bảo scripts đã load
+            setTimeout(initPage, 200);
+        });
+    </script>
+</body>
+
+</html>
+

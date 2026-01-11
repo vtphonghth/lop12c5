@@ -1,0 +1,1425 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <title>Tổng Kết Lớp - Báo Cáo Sinh Hoạt Tuần</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="data.js"></script>
+    <script src="config.js"></script>
+    <style>
+        html {
+            width: 100%;
+            max-width: 100vw;
+            overflow-x: hidden;
+            box-sizing: border-box;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+                animation: none !important;
+                background-position: 0% 50%;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                padding-bottom: env(safe-area-inset-bottom);
+                padding-left: max(5px, env(safe-area-inset-left));
+                padding-right: max(5px, env(safe-area-inset-right));
+                overflow-x: hidden;
+                width: 100%;
+                max-width: 100vw;
+            }
+
+            .container {
+                margin-bottom: env(safe-area-inset-bottom);
+                margin-left: 0;
+                margin-right: 0;
+                padding-left: max(10px, env(safe-area-inset-left));
+                padding-right: max(10px, env(safe-area-inset-right));
+                border-radius: 0;
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            box-sizing: border-box;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .back-home {
+            text-align: center;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .back-home a {
+            display: inline-block;
+            padding: 10px 16px;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #4a90e2, #357abd);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+            max-width: 100%;
+            box-sizing: border-box;
+            word-wrap: break-word;
+        }
+
+        .back-home a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(74, 144, 226, 0.4);
+        }
+
+        h1 {
+            font-size: 2.2em;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+            margin: 0 0 20px 0;
+            letter-spacing: 0.5px;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .week-selector {
+            background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 2px solid #9c27b0;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+            overflow-x: hidden;
+        }
+
+        .week-selector label {
+            display: block;
+            color: #7b1fa2;
+            font-size: 1.1em;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .week-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: nowrap;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        .week-controls button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            white-space: nowrap;
+            flex-shrink: 0;
+            min-height: 44px;
+            min-width: 44px;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+            touch-action: manipulation;
+        }
+
+        #prevWeekBtn {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(46, 125, 50, 0.3);
+        }
+
+        #prevWeekBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(46, 125, 50, 0.4);
+        }
+
+        #nextWeekBtn {
+            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
+            color: white;
+            box-shadow: 0 4px 10px rgba(25, 118, 210, 0.3);
+        }
+
+        #nextWeekBtn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(25, 118, 210, 0.4);
+        }
+
+        #week {
+            flex: 1;
+            min-width: 80px;
+            min-height: 44px;
+            padding: 12px;
+            border: 2px solid #9c27b0;
+            border-radius: 10px;
+            background: white;
+            font-weight: 600;
+            font-size: 1.1em;
+            text-align: center;
+            box-sizing: border-box;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: textfield;
+            touch-action: manipulation;
+        }
+
+        #week::-webkit-inner-spin-button,
+        #week::-webkit-outer-spin-button {
+            appearance: none;
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        #week_date_range {
+            text-align: center;
+            margin-top: 10px;
+            color: #7b1fa2;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+
+        .report-container {
+            background: #ffffff;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            width: 100%;
+            box-sizing: border-box;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        .report-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .report-header h2 {
+            font-size: 1.8em;
+            color: #667eea;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        .report-header .week-info {
+            font-size: 1.1em;
+            color: #666;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+
+        .report-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.4em;
+            color: #667eea;
+            font-weight: 700;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 2px;
+        }
+
+        .report-item {
+            margin-bottom: 15px;
+            padding-left: 20px;
+            line-height: 1.8;
+            color: #333;
+        }
+
+        .report-item strong {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .report-item ul {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+
+        .report-item li {
+            margin-bottom: 8px;
+            line-height: 1.8;
+        }
+
+        .report-item ul ul {
+            margin-top: 6px;
+            margin-bottom: 6px;
+            padding-left: 25px;
+            list-style-type: circle;
+        }
+
+        .report-item ul ul li {
+            margin-bottom: 6px;
+            line-height: 1.7;
+            font-size: 0.95em;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            font-style: italic;
+            font-size: 1.1em;
+        }
+
+        .empty-data {
+            color: #999;
+            font-style: italic;
+        }
+
+        .highlight-positive {
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .highlight-negative {
+            color: #f5576c;
+            font-weight: 600;
+        }
+
+        .highlight-warning {
+            color: #ff9800;
+            font-weight: 600;
+        }
+
+        .copy-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .copy-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .copy-button:active {
+            transform: translateY(-1px);
+        }
+
+        .copy-button.copied {
+            background: linear-gradient(135deg, #4caf50 0%, #2e7d32 100%);
+        }
+
+        @media (max-width: 768px) {
+            .copy-button {
+                bottom: 20px;
+                right: 20px;
+                padding: 12px 20px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                border-radius: 10px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .report-container {
+                padding: 15px;
+            }
+
+            .report-header h2 {
+                font-size: 1.4em;
+            }
+
+            .section-title {
+                font-size: 1.2em;
+            }
+
+            .report-item {
+                font-size: 0.95em;
+                padding-left: 15px;
+            }
+
+            .week-controls {
+                flex-wrap: nowrap !important;
+                gap: 6px;
+            }
+
+            #prevWeekBtn {
+                padding: 10px 12px !important;
+                min-width: 45px;
+                font-size: 0 !important;
+            }
+
+            #prevWeekBtn::before {
+                content: '◀';
+                font-size: 18px !important;
+                display: inline-block;
+                line-height: 1;
+            }
+
+            #nextWeekBtn {
+                padding: 10px 12px !important;
+                min-width: 45px;
+                font-size: 0 !important;
+            }
+
+            #nextWeekBtn::after {
+                content: '▶';
+                font-size: 18px !important;
+                display: inline-block;
+                line-height: 1;
+            }
+
+            #week {
+                min-width: 70px !important;
+                font-size: 0.95em !important;
+                flex: 1 1 auto;
+                padding: 10px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="back-home">
+            <a href="index.html">← Trở về trang chủ</a>
+        </div>
+        <h1>📊 TỔNG KẾT LỚP</h1>
+
+        <div class="week-selector">
+            <label for="week">📅 TUẦN THỨ</label>
+            <div class="week-controls">
+                <button type="button" id="prevWeekBtn" onclick="viewPreviousWeek()">◀ Tuần trước</button>
+                <input type="number" id="week" name="week" min="1" max="35" required oninput="updateWeekDateRange(); loadReport();">
+                <button type="button" id="nextWeekBtn" onclick="viewNextWeek()">Tuần sau ▶</button>
+            </div>
+            <div id="week_date_range"></div>
+        </div>
+
+        <div id="reportContainer" class="report-container">
+            <div class="loading">Đang tải báo cáo...</div>
+        </div>
+        
+        <button id="copyButton" class="copy-button" onclick="copyReport()" style="display: none;">
+            <span>📋</span>
+            <span id="copyButtonText">Copy báo cáo</span>
+        </button>
+    </div>
+
+    <script>
+        // Helper function để lấy week range string
+        function getWeekRangeString(weekNumber) {
+            if (typeof SCHOOL_WEEKS_CONFIG === 'undefined' || !SCHOOL_WEEKS_CONFIG) {
+                return '';
+            }
+            if (weekNumber < 1 || weekNumber > SCHOOL_WEEKS_CONFIG.length) {
+                return '';
+            }
+            const weekConfig = SCHOOL_WEEKS_CONFIG[weekNumber - 1];
+            if (!weekConfig) return '';
+            return `từ ngày ${weekConfig.from} đến ${weekConfig.to}`;
+        }
+
+        function updateWeekDateRange() {
+            const weekInput = document.getElementById('week');
+            if (!weekInput) return;
+            
+            const weekValue = parseInt(weekInput.value) || 0;
+            const weekDateRange = document.getElementById('week_date_range');
+            
+            if (!weekDateRange) return;
+            
+            if (weekValue >= 1 && weekValue <= 35) {
+                const rangeString = getWeekRangeString(weekValue);
+                if (rangeString) {
+                    weekDateRange.textContent = rangeString;
+                } else {
+                    if (typeof SCHOOL_WEEKS_CONFIG === 'undefined') {
+                        setTimeout(updateWeekDateRange, 200);
+                    } else {
+                        weekDateRange.textContent = 'Không tìm thấy thông tin tuần ' + weekValue;
+                    }
+                }
+            } else {
+                weekDateRange.textContent = '';
+            }
+        }
+
+        function viewPreviousWeek() {
+            const currentWeek = parseInt(document.getElementById('week').value) || 1;
+            if (currentWeek > 1) {
+                document.getElementById('week').value = currentWeek - 1;
+                updateWeekDateRange();
+                loadReport();
+            } else {
+                alert('Đây là tuần đầu tiên!');
+            }
+        }
+
+        function viewNextWeek() {
+            const currentWeek = parseInt(document.getElementById('week').value) || 1;
+            const maxWeek = typeof SCHOOL_WEEKS_CONFIG !== 'undefined' && SCHOOL_WEEKS_CONFIG ? SCHOOL_WEEKS_CONFIG.length : 35;
+            if (currentWeek < maxWeek) {
+                document.getElementById('week').value = currentWeek + 1;
+                updateWeekDateRange();
+                loadReport();
+            } else {
+                alert('Đây là tuần cuối cùng!');
+            }
+        }
+
+        // Tính tuần hiện tại dựa trên ngày tháng
+        function getCurrentWeek() {
+            if (typeof getCurrentWeekNumber === 'function' && typeof SCHOOL_WEEKS_CONFIG !== 'undefined') {
+                return getCurrentWeekNumber();
+            }
+            
+            if (typeof SCHOOL_WEEKS_CONFIG === 'undefined' || !SCHOOL_WEEKS_CONFIG || SCHOOL_WEEKS_CONFIG.length === 0) {
+                return 1;
+            }
+            
+            const today = new Date();
+            const currentDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+            currentDate.setHours(0, 0, 0, 0);
+            
+            for (let i = 0; i < SCHOOL_WEEKS_CONFIG.length; i++) {
+                const weekConfig = SCHOOL_WEEKS_CONFIG[i];
+                if (!weekConfig || !weekConfig.from || !weekConfig.to) continue;
+                
+                const [fromDay, fromMonth, fromYear] = weekConfig.from.split('/').map(Number);
+                const [toDay, toMonth, toYear] = weekConfig.to.split('/').map(Number);
+                
+                if (isNaN(fromDay) || isNaN(fromMonth) || isNaN(fromYear) || 
+                    isNaN(toDay) || isNaN(toMonth) || isNaN(toYear)) {
+                    continue;
+                }
+                
+                const startDate = new Date(fromYear, fromMonth - 1, fromDay);
+                startDate.setHours(0, 0, 0, 0);
+                const endDate = new Date(toYear, toMonth - 1, toDay);
+                endDate.setHours(23, 59, 59, 999);
+                
+                if (currentDate >= startDate && currentDate <= endDate) {
+                    return weekConfig.week;
+                }
+            }
+            
+            for (let i = SCHOOL_WEEKS_CONFIG.length - 1; i >= 0; i--) {
+                const weekConfig = SCHOOL_WEEKS_CONFIG[i];
+                if (!weekConfig || !weekConfig.from) continue;
+                
+                const [fromDay, fromMonth, fromYear] = weekConfig.from.split('/').map(Number);
+                if (isNaN(fromDay) || isNaN(fromMonth) || isNaN(fromYear)) continue;
+                
+                const startDate = new Date(fromYear, fromMonth - 1, fromDay);
+                startDate.setHours(0, 0, 0, 0);
+                
+                if (startDate <= currentDate) {
+                    return weekConfig.week;
+                }
+            }
+            
+            return 1;
+        }
+
+        // Parse CSV text thành mảng dữ liệu
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n');
+            const data = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                const values = [];
+                let current = '';
+                let inQuotes = false;
+                
+                for (let j = 0; j < line.length; j++) {
+                    const char = line[j];
+                    if (char === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (char === ',' && !inQuotes) {
+                        values.push(current.trim());
+                        current = '';
+                    } else {
+                        current += char;
+                    }
+                }
+                values.push(current.trim());
+                
+                data.push(values);
+            }
+            
+            return data;
+        }
+
+        // Lấy dữ liệu từ sheet CSV
+        async function fetchSheetData(gid) {
+            try {
+                if (!gid || !PUBLISHED_SPREADSHEET_URL) {
+                    return null;
+                }
+
+                const csvUrl = `${PUBLISHED_SPREADSHEET_URL}/pub?gid=${gid}&single=true&output=csv`;
+                
+                let csvText = null;
+                try {
+                    const response = await fetch(csvUrl, {
+                        method: 'GET',
+                        mode: 'cors',
+                        cache: 'no-cache'
+                    });
+                    
+                    if (response.ok) {
+                        csvText = await response.text();
+                    }
+                } catch (directError) {
+                    console.log(`Direct fetch failed, trying proxy...`);
+                }
+
+                if (!csvText) {
+                    try {
+                        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(csvUrl)}`;
+                        const proxyResponse = await fetch(proxyUrl);
+                        
+                        if (proxyResponse.ok) {
+                            const proxyData = await proxyResponse.json();
+                            if (proxyData.contents) {
+                                csvText = proxyData.contents;
+                            }
+                        }
+                    } catch (proxyError) {
+                        console.error(`Proxy fetch failed:`, proxyError);
+                    }
+                }
+
+                if (!csvText) {
+                    return null;
+                }
+
+                return parseCSV(csvText);
+            } catch (error) {
+                console.error(`Error fetching sheet data:`, error);
+                return null;
+            }
+        }
+
+        // Lấy giá trị từ một cột cụ thể trong sheet
+        function getColumnValue(csvData, week, columnIndex) {
+            if (!csvData || csvData.length < 2) return '';
+            
+            const weekStr = String(week);
+            
+            for (let i = 1; i < csvData.length; i++) {
+                const row = csvData[i];
+                if (!row || row.length === 0) continue;
+                
+                const firstCell = row[0] ? String(row[0]).trim() : '';
+                if (firstCell === weekStr || firstCell === `Tuần ${week}`) {
+                    return row[columnIndex] ? String(row[columnIndex]).trim() : '';
+                }
+            }
+            
+            return '';
+        }
+
+        // Lấy dữ liệu từ nhiều sheet và tổng hợp
+        async function gatherAllData(week) {
+            const data = {
+                ranking: null,      // Cột F từ Ranking sheet
+                lt: null,            // Sheet LT
+                lpht: null,          // Sheet LPHT
+                lptt: null,          // Sheet LPTT
+                lppt: null,          // Sheet LPPT
+                lpld: null,          // Sheet LPLD
+                tt1: null,           // Sheet TT1
+                tt2: null,           // Sheet TT2
+                tt3: null,           // Sheet TT3
+                tt4: null,           // Sheet TT4
+                thuquy: null         // Sheet ThuQuy
+            };
+
+            // Lấy GID từ config
+            const gidMap = {
+                ranking: typeof RANKING_SHEET_GID !== 'undefined' ? RANKING_SHEET_GID : null,
+                lt: typeof LT_SHEET_GID !== 'undefined' ? LT_SHEET_GID : null,
+                lpht: typeof LPHT_SHEET_GID !== 'undefined' ? LPHT_SHEET_GID : null,
+                lptt: typeof LPTT_SHEET_GID !== 'undefined' ? LPTT_SHEET_GID : null,
+                lppt: typeof LPPT_SHEET_GID !== 'undefined' ? LPPT_SHEET_GID : null,
+                lpld: typeof LPLD_SHEET_GID !== 'undefined' ? LPLD_SHEET_GID : null,
+                tt1: typeof TT1_SHEET_GID !== 'undefined' ? TT1_SHEET_GID : null,
+                tt2: typeof TT2_SHEET_GID !== 'undefined' ? TT2_SHEET_GID : null,
+                tt3: typeof TT3_SHEET_GID !== 'undefined' ? TT3_SHEET_GID : null,
+                tt4: typeof TT4_SHEET_GID !== 'undefined' ? TT4_SHEET_GID : null,
+                thuquy: typeof THUQUY_SHEET_GID !== 'undefined' ? THUQUY_SHEET_GID : null
+            };
+
+            // Fetch tất cả song song
+            const promises = [];
+            for (const [key, gid] of Object.entries(gidMap)) {
+                if (gid) {
+                    promises.push(fetchSheetData(gid).then(result => {
+                        data[key] = result;
+                    }));
+                }
+            }
+
+            await Promise.all(promises);
+            return data;
+        }
+
+        // Format số tiền
+        function formatCurrency(value) {
+            if (!value || value === '') return '0';
+            const num = parseFloat(value.toString().replace(/[^\d.-]/g, ''));
+            if (isNaN(num)) return value;
+            return new Intl.NumberFormat('vi-VN').format(num) + ' đ';
+        }
+
+        // Tạo HTML báo cáo
+        function generateReportHTML(week, weekRange, allData) {
+            const weekStr = String(week);
+            
+            // Lấy các giá trị từ các sheet
+            // Ranking: Cột F (index 5) chứa kết quả hạng
+            let rankingResult = getColumnValue(allData.ranking, week, 5); // Cột F (index 5)
+            // Nếu không có từ cột F, thử tính từ điểm số các tổ
+            if (!rankingResult || rankingResult.trim() === '') {
+                const t1Score = parseFloat(getColumnValue(allData.ranking, week, 1)) || 0; // Cột B
+                const t2Score = parseFloat(getColumnValue(allData.ranking, week, 2)) || 0; // Cột C
+                const t3Score = parseFloat(getColumnValue(allData.ranking, week, 3)) || 0; // Cột D
+                const t4Score = parseFloat(getColumnValue(allData.ranking, week, 4)) || 0; // Cột E
+                
+                const scores = [
+                    { name: 'Tổ 1', score: t1Score },
+                    { name: 'Tổ 2', score: t2Score },
+                    { name: 'Tổ 3', score: t3Score },
+                    { name: 'Tổ 4', score: t4Score }
+                ];
+                
+                scores.sort((a, b) => b.score - a.score);
+                const maxScore = scores[0].score;
+                const winners = scores.filter(s => s.score === maxScore && maxScore > 0);
+                
+                if (winners.length > 0) {
+                    rankingResult = winners.map(w => w.name).join(', ') + ' đạt hạng nhất, được khen thưởng và tuyên dương';
+                }
+            } else {
+                // Format lại nếu có dữ liệu
+                rankingResult = rankingResult + ', được khen thưởng và tuyên dương';
+            }
+            
+            // LT data - đầy đủ các cột
+            const ltNoticeGuild = getColumnValue(allData.lt, week, 2); // Cột C: Thông báo bên đoàn
+            const ltAbsent = getColumnValue(allData.lt, week, 3); // Cột D: Học sinh vắng
+            const ltLate = getColumnValue(allData.lt, week, 4); // Cột E: Học sinh trễ
+            const ltViolation = getColumnValue(allData.lt, week, 5); // Cột F: Vi phạm bên đoàn
+            const ltFuturePlan = getColumnValue(allData.lt, week, 6); // Cột G: Phương hướng tuần sau
+            
+            // LPHT data - đầy đủ các cột
+            const lphtGoodPoints = getColumnValue(allData.lpht, week, 2); // Cột C: Số điểm tốt
+            const lphtParticipation = getColumnValue(allData.lpht, week, 3); // Cột D: Số lượt phát biểu
+            const lphtWarnedSubject = getColumnValue(allData.lpht, week, 4); // Cột E: Môn học bị nhắc nhở
+            const lphtFuturePlan = getColumnValue(allData.lpht, week, 5); // Cột F: Phương hướng tuần sau
+            const lphtSuggestion = getColumnValue(allData.lpht, week, 6); // Cột G: Ý kiến đề xuất
+            
+            // LPTT data - đầy đủ các cột
+            const lpttDisorderStudents = getColumnValue(allData.lptt, week, 2); // Cột C: Học sinh MTT
+            const lpttDisorderCount = getColumnValue(allData.lptt, week, 3); // Cột D: Số lượt MTT
+            const lpttDisorderSDB = getColumnValue(allData.lptt, week, 4); // Cột E: MTT(SDB)
+            const lpttDisorderSDBCount = getColumnValue(allData.lptt, week, 5); // Cột F: Số lượt MTT(SDB)
+            const lpttTeacherWarning = getColumnValue(allData.lptt, week, 6); // Cột G: Theo dõi giáo viên nhắc
+            
+            // LPLD data - đầy đủ các cột
+            const lpldCleaningTeam = getColumnValue(allData.lpld, week, 2); // Cột C: Tổ trực
+            const lpldChairTeam = getColumnValue(allData.lpld, week, 3); // Cột D: Mang ghế ra sân
+            const lpldMonday = getColumnValue(allData.lpld, week, 4); // Cột E: Thứ 2
+            const lpldTuesday = getColumnValue(allData.lpld, week, 5); // Cột F: Thứ 3
+            const lpldWednesday = getColumnValue(allData.lpld, week, 6); // Cột G: Thứ 4
+            const lpldThursday = getColumnValue(allData.lpld, week, 7); // Cột H: Thứ 5
+            const lpldFriday = getColumnValue(allData.lpld, week, 8); // Cột I: Thứ 6
+            const lpldSaturday = getColumnValue(allData.lpld, week, 9); // Cột J: Thứ 7
+            const lpldLateDuty = getColumnValue(allData.lpld, week, 10); // Cột K: Trực trễ
+            const lpldFeedback = getColumnValue(allData.lpld, week, 11); // Cột L: Ý kiến
+            
+            // TT data - tổng hợp chi tiết từ 4 tổ
+            const ttData = {
+                notMemorized: [],
+                notMemorizedCount: [],
+                noHomework: [],
+                noHomeworkCount: [],
+                disorder: [],
+                disorderCount: [],
+                late: [],
+                lateCount: [],
+                violation: [],
+                violationCount: [],
+                absent: [],
+                absentCount: [],
+                goodPoints: [],
+                goodPointsCount: [],
+                participation: [],
+                participationCount: [],
+                totalPoints: []
+            };
+            
+            ['tt1', 'tt2', 'tt3', 'tt4'].forEach((ttKey, index) => {
+                if (allData[ttKey]) {
+                    const notMemorized = getColumnValue(allData[ttKey], week, 2); // Cột C
+                    const notMemorizedCount = getColumnValue(allData[ttKey], week, 3); // Cột D
+                    const noHomework = getColumnValue(allData[ttKey], week, 4); // Cột E
+                    const noHomeworkCount = getColumnValue(allData[ttKey], week, 5); // Cột F
+                    const disorder = getColumnValue(allData[ttKey], week, 6); // Cột G
+                    const disorderCount = getColumnValue(allData[ttKey], week, 7); // Cột H
+                    const late = getColumnValue(allData[ttKey], week, 8); // Cột I
+                    const lateCount = getColumnValue(allData[ttKey], week, 9); // Cột J
+                    const violation = getColumnValue(allData[ttKey], week, 10); // Cột K
+                    const violationCount = getColumnValue(allData[ttKey], week, 11); // Cột L
+                    const absent = getColumnValue(allData[ttKey], week, 12); // Cột M
+                    const absentCount = getColumnValue(allData[ttKey], week, 13); // Cột N
+                    const goodPoints = getColumnValue(allData[ttKey], week, 14); // Cột O
+                    const goodPointsCount = getColumnValue(allData[ttKey], week, 15); // Cột P
+                    const participation = getColumnValue(allData[ttKey], week, 16); // Cột Q
+                    const participationCount = getColumnValue(allData[ttKey], week, 17); // Cột R
+                    const totalPoints = getColumnValue(allData[ttKey], week, 18); // Cột S
+                    
+                    if (notMemorized) ttData.notMemorized.push({name: notMemorized, count: parseInt(notMemorizedCount) || 0, team: `Tổ ${index + 1}`});
+                    if (noHomework) ttData.noHomework.push({name: noHomework, count: parseInt(noHomeworkCount) || 0, team: `Tổ ${index + 1}`});
+                    if (disorder) ttData.disorder.push({name: disorder, count: parseInt(disorderCount) || 0, team: `Tổ ${index + 1}`});
+                    if (late) ttData.late.push({name: late, count: parseInt(lateCount) || 0, team: `Tổ ${index + 1}`});
+                    if (violation) ttData.violation.push({name: violation, count: parseInt(violationCount) || 0, team: `Tổ ${index + 1}`});
+                    if (absent) ttData.absent.push({name: absent, count: parseInt(absentCount) || 0, team: `Tổ ${index + 1}`});
+                    if (goodPoints) ttData.goodPoints.push({name: goodPoints, count: parseInt(goodPointsCount) || 0, team: `Tổ ${index + 1}`});
+                    if (participation) ttData.participation.push({name: participation, count: parseInt(participationCount) || 0, team: `Tổ ${index + 1}`});
+                    if (totalPoints) ttData.totalPoints.push({team: `Tổ ${index + 1}`, points: totalPoints});
+                }
+            });
+            
+            // Tính tổng điểm tốt và phát biểu
+            const totalGoodPoints = ttData.goodPoints.reduce((a, b) => a + (b.count || 0), 0);
+            const totalParticipation = ttData.participation.reduce((a, b) => a + (b.count || 0), 0);
+            const totalNotMemorizedCount = ttData.notMemorized.reduce((a, b) => a + (b.count || 0), 0);
+            const totalNoHomeworkCount = ttData.noHomework.reduce((a, b) => a + (b.count || 0), 0);
+            const totalDisorderCount = ttData.disorder.reduce((a, b) => a + (b.count || 0), 0);
+            const totalLateCount = ttData.late.reduce((a, b) => a + (b.count || 0), 0);
+            const totalViolationCount = ttData.violation.reduce((a, b) => a + (b.count || 0), 0);
+            const totalAbsentCount = ttData.absent.reduce((a, b) => a + (b.count || 0), 0);
+            
+            // LPPT data - lấy toàn bộ
+            const lpptCampaignName = getColumnValue(allData.lppt, week, 2); // Cột C
+            const lpptTime = getColumnValue(allData.lppt, week, 3); // Cột D
+            const lpptProgress = getColumnValue(allData.lppt, week, 4); // Cột E
+            const lpptAssigned = getColumnValue(allData.lppt, week, 5); // Cột F
+            const lpptCompetitionDate = getColumnValue(allData.lppt, week, 6); // Cột G
+            const lpptCost = getColumnValue(allData.lppt, week, 7); // Cột H
+            
+            // ThuQuy data - đầy đủ các cột
+            const thuquyFeePerStudent = getColumnValue(allData.thuquy, week, 2); // Cột C: Tiền Thu /1HS
+            const thuquyQuantityPaid = getColumnValue(allData.thuquy, week, 3); // Cột D: Số lượng đã nộp
+            const thuquyMissingStudents = getColumnValue(allData.thuquy, week, 4); // Cột E: Học sinh thiếu
+            const thuquyQuantityMissing = getColumnValue(allData.thuquy, week, 5); // Cột F: Số lượng thiếu
+            const thuquyExpenseName1 = getColumnValue(allData.thuquy, week, 6); // Cột G: Chi 1
+            const thuquyExpenseAmount1 = getColumnValue(allData.thuquy, week, 7); // Cột H: Số tiền Chi 1
+            const thuquyExpenseName2 = getColumnValue(allData.thuquy, week, 8); // Cột I: Chi 2
+            const thuquyExpenseAmount2 = getColumnValue(allData.thuquy, week, 9); // Cột J: Số tiền Chi 2
+            const thuquyExpenseName3 = getColumnValue(allData.thuquy, week, 10); // Cột K: Chi 3
+            const thuquyExpenseAmount3 = getColumnValue(allData.thuquy, week, 11); // Cột L: Số tiền Chi 3
+            const thuquyExpenseName4 = getColumnValue(allData.thuquy, week, 12); // Cột M: Chi 4
+            const thuquyExpenseAmount4 = getColumnValue(allData.thuquy, week, 13); // Cột N: Số tiền Chi 4
+            const thuquyTotalIncome = getColumnValue(allData.thuquy, week, 18); // Cột S: Tổng thu
+            const thuquyTotalExpense = getColumnValue(allData.thuquy, week, 19); // Cột T: Tổng chi
+            const thuquyRemaining = getColumnValue(allData.thuquy, week, 20); // Cột U: Số tiền còn lại
+            
+            // Kiểm tra điều kiện hiển thị
+            const hasNotMemorized = ttData.notMemorized.length > 0;
+            const hasNoHomework = ttData.noHomework.length > 0;
+            const hasDisorder = (lpttDisorderStudents && lpttDisorderStudents.trim() !== '') || ttData.disorder.length > 0;
+            const hasLateDuty = lpldLateDuty && lpldLateDuty.trim() !== '';
+            const hasViolation = (ltViolation && ltViolation.trim() !== '') || ttData.violation.length > 0;
+            const hasAbsent = (ltAbsent && ltAbsent.trim() !== '') || ttData.absent.length > 0;
+            const hasLate = (ltLate && ltLate.trim() !== '') || ttData.late.length > 0;
+            
+            // Tạo danh sách chi tiết các khoản chi
+            const expenses = [];
+            if (thuquyExpenseName1 || thuquyExpenseAmount1) {
+                expenses.push({name: thuquyExpenseName1 || 'Không có tên', amount: thuquyExpenseAmount1 || '0'});
+            }
+            if (thuquyExpenseName2 || thuquyExpenseAmount2) {
+                expenses.push({name: thuquyExpenseName2 || 'Không có tên', amount: thuquyExpenseAmount2 || '0'});
+            }
+            if (thuquyExpenseName3 || thuquyExpenseAmount3) {
+                expenses.push({name: thuquyExpenseName3 || 'Không có tên', amount: thuquyExpenseAmount3 || '0'});
+            }
+            if (thuquyExpenseName4 || thuquyExpenseAmount4) {
+                expenses.push({name: thuquyExpenseName4 || 'Không có tên', amount: thuquyExpenseAmount4 || '0'});
+            }
+            
+            // Tạo HTML
+            let html = `
+                <div class="report-header">
+                    <h2>📋 BÁO CÁO SINH HOẠT TUẦN ${week}</h2>
+                    <div class="week-info">${weekRange}</div>
+                </div>
+                
+                <div class="report-section">
+                    <div class="section-title">I. TÌNH HÌNH HỌC SINH</div>
+                    
+                    <div class="report-item">
+                        <strong>1. Thi đua</strong>
+                        <ul>
+                            <li>Các tổ báo cáo kết quả thi đua trong tuần.</li>
+                            <li>Kết quả: ${rankingResult ? `<span class="highlight-positive">${rankingResult}</span>` : '<span class="empty-data">Chưa có dữ liệu thi đua</span>'}</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="report-item">
+                        <strong>2. Học tập</strong>
+                        <ul>
+                            ${ttData.goodPoints.length > 0 ? `
+                                <li>Biểu dương học sinh điểm tốt: 
+                                    <ul style="margin-top: 8px; margin-bottom: 8px;">
+                                        ${ttData.goodPoints.map(gp => `<li>${gp.name} (${gp.team}) - <span class="highlight-positive">${gp.count} điểm tốt</span></li>`).join('')}
+                                    </ul>
+                                    <strong>Tổng số điểm tốt:</strong> <span class="highlight-positive">${totalGoodPoints || 0}</span>
+                                </li>
+                            ` : '<li>Biểu dương học sinh điểm tốt: <span class="empty-data">không có</span></li>'}
+                            
+                            ${ttData.participation.length > 0 ? `
+                                <li>Biểu dương học sinh phát biểu: 
+                                    <ul style="margin-top: 8px; margin-bottom: 8px;">
+                                        ${ttData.participation.map(p => `<li>${p.name} (${p.team}) - <span class="highlight-positive">${p.count} lượt phát biểu</span></li>`).join('')}
+                                    </ul>
+                                    <strong>Tổng số lượt phát biểu:</strong> <span class="highlight-positive">${totalParticipation || 0}</span>
+                                </li>
+                            ` : '<li>Biểu dương học sinh phát biểu: <span class="empty-data">không có</span></li>'}
+                            
+                            ${lphtWarnedSubject || lpttTeacherWarning || lpldFeedback ? `
+                                <li>Môn học bị giáo viên nhắc nhở: 
+                                    ${lphtWarnedSubject ? `<span class="highlight-warning">${lphtWarnedSubject}</span>` : ''}
+                                    ${lpttTeacherWarning ? `<span class="highlight-warning">${lpttTeacherWarning}</span>` : ''}
+                                    ${lpldFeedback ? `<span class="highlight-warning">${lpldFeedback}</span>` : ''}
+                                </li>
+                            ` : '<li>Môn học bị giáo viên nhắc nhở: <span class="highlight-positive">Không có</span></li>'}
+                            
+                            ${hasNotMemorized || hasNoHomework ? `
+                                <li><span class="highlight-warning">Các trường hợp vi phạm:</span>
+                                    <ul style="margin-top: 8px;">
+                                        ${hasNotMemorized ? `<li>Không thuộc bài: ${ttData.notMemorized.map(nm => `${nm.name} (${nm.team}, ${nm.count} lượt)`).join(', ')} - <strong>Tổng:</strong> ${totalNotMemorizedCount} lượt</li>` : ''}
+                                        ${hasNoHomework ? `<li>Không làm bài tập: ${ttData.noHomework.map(nh => `${nh.name} (${nh.team}, ${nh.count} lượt)`).join(', ')} - <strong>Tổng:</strong> ${totalNoHomeworkCount} lượt</li>` : ''}
+                                    </ul>
+                                </li>
+                            ` : '<li><span class="highlight-positive">Đa số học sinh học bài và làm bài tập đầy đủ, chuẩn bị bài theo yêu cầu của giáo viên.</span></li>'}
+                            
+                            ${hasDisorder ? `<li><span class="highlight-warning">Một số học sinh cần tập trung hơn trong giờ học.</span></li>` : ''}
+                        </ul>
+                    </div>
+                    
+                    <div class="report-item">
+                        <strong>3. Trật tự</strong>
+                        <ul>
+                            ${lpttDisorderStudents || ttData.disorder.length > 0 ? `
+                                <li>Các trường hợp mất trật tự:
+                                    <ul style="margin-top: 8px;">
+                                        ${lpttDisorderStudents ? `<li>${lpttDisorderStudents} - Số lượt: ${lpttDisorderCount || '0'}</li>` : ''}
+                                        ${lpttDisorderSDB ? `<li>MTT(SDB): ${lpttDisorderSDB} - Số lượt: ${lpttDisorderSDBCount || '0'}</li>` : ''}
+                                        ${ttData.disorder.map(d => `<li>${d.name} (${d.team}) - Số lượt: ${d.count}</li>`).join('')}
+                                    </ul>
+                                    <strong>Tổng số lượt:</strong> ${totalDisorderCount + (parseInt(lpttDisorderCount) || 0) + (parseInt(lpttDisorderSDBCount) || 0)}
+                                </li>
+                            ` : '<li><span class="highlight-positive">Không có vi phạm về trật tự.</span></li>'}
+                        </ul>
+                    </div>
+                    
+                    <div class="report-item">
+                        <strong>4. Lao động</strong>
+                        <ul>
+                            <li><strong>Tổ trực vệ sinh:</strong> ${lpldCleaningTeam || '<span class="empty-data">Chưa có dữ liệu</span>'}</li>
+                            ${lpldChairTeam ? `<li><strong>Mang ghế ra sân:</strong> ${lpldChairTeam}</li>` : ''}
+                            ${lpldMonday || lpldTuesday || lpldWednesday || lpldThursday || lpldFriday || lpldSaturday ? `
+                                <li><strong>Lịch trực trong tuần:</strong>
+                                    <ul style="margin-top: 8px;">
+                                        ${lpldMonday ? `<li>Thứ 2: ${lpldMonday}</li>` : ''}
+                                        ${lpldTuesday ? `<li>Thứ 3: ${lpldTuesday}</li>` : ''}
+                                        ${lpldWednesday ? `<li>Thứ 4: ${lpldWednesday}</li>` : ''}
+                                        ${lpldThursday ? `<li>Thứ 5: ${lpldThursday}</li>` : ''}
+                                        ${lpldFriday ? `<li>Thứ 6: ${lpldFriday}</li>` : ''}
+                                        ${lpldSaturday ? `<li>Thứ 7: ${lpldSaturday}</li>` : ''}
+                                    </ul>
+                                </li>
+                            ` : ''}
+                            ${hasLateDuty ? `
+                                <li><span class="highlight-warning">Trực trễ: ${lpldLateDuty}</span></li>
+                            ` : '<li><span class="highlight-positive">Thực hiện vệ sinh đúng giờ, không bị nhắc nhở.</span></li>'}
+                            ${lpldFeedback ? `<li><strong>Ý kiến:</strong> ${lpldFeedback}</li>` : ''}
+                        </ul>
+                    </div>
+                    
+                    <div class="report-item">
+                        <strong>5. Đi học đúng giờ</strong>
+                        <ul>
+                            ${hasAbsent ? `
+                                <li><strong>Vắng:</strong>
+                                    <ul style="margin-top: 8px;">
+                                        ${ltAbsent ? `<li>${ltAbsent}</li>` : ''}
+                                        ${ttData.absent.map(a => `<li>${a.name} (${a.team}) - ${a.count} lượt</li>`).join('')}
+                                    </ul>
+                                </li>
+                            ` : '<li><strong>Vắng:</strong> <span class="highlight-positive">Không có</span></li>'}
+                            
+                            ${hasLate ? `
+                                <li><strong>Đi trễ:</strong>
+                                    <ul style="margin-top: 8px;">
+                                        ${ltLate ? `<li>${ltLate}</li>` : ''}
+                                        ${ttData.late.map(l => `<li>${l.name} (${l.team}) - ${l.count} lượt</li>`).join('')}
+                                    </ul>
+                                    <strong>Tổng số lượt đi trễ:</strong> ${totalLateCount}
+                                </li>
+                            ` : '<li><strong>Đi trễ:</strong> <span class="highlight-positive">Không có</span></li>'}
+                        </ul>
+                    </div>
+                    
+                    <div class="report-item">
+                        <strong>6. Vi phạm bên đoàn</strong>
+                        <ul>
+                            ${hasViolation ? `
+                                <li>Các trường hợp vi phạm:
+                                    <ul style="margin-top: 8px;">
+                                        ${ltViolation ? `<li>${ltViolation}</li>` : ''}
+                                        ${ttData.violation.map(v => `<li>${v.name} (${v.team}) - ${v.count} lượt</li>`).join('')}
+                                    </ul>
+                                    <strong>Tổng số lượt vi phạm:</strong> ${totalViolationCount}
+                                </li>
+                            ` : '<li><span class="highlight-positive">Không có vi phạm bên đoàn.</span></li>'}
+                        </ul>
+                    </div>
+                    
+                    <div class="report-item">
+                        <strong>7. Phong trào</strong>
+                        <ul>
+                            ${lpptCampaignName || lpptTime || lpptProgress ? `
+                                ${lpptCampaignName ? `<li><strong>Tên phong trào:</strong> ${lpptCampaignName}</li>` : ''}
+                                ${lpptTime ? `<li><strong>Thời gian thực hiện:</strong> ${lpptTime}</li>` : ''}
+                                ${lpptProgress ? `<li><strong>Tiến độ thực hiện:</strong> ${lpptProgress}</li>` : ''}
+                                ${lpptAssigned ? `<li><strong>Phân công học sinh phụ trách:</strong> ${lpptAssigned}</li>` : ''}
+                                ${lpptCompetitionDate ? `<li><strong>Ngày thi:</strong> ${lpptCompetitionDate}</li>` : ''}
+                                ${lpptCost ? `<li><strong>Dự kiến kinh phí:</strong> ${formatCurrency(lpptCost)}</li>` : ''}
+                            ` : '<li><span class="empty-data">Chưa có thông tin phong trào trong tuần này</span></li>'}
+                        </ul>
+                    </div>
+                    
+                    <div class="report-item">
+                        <strong>8. Quỹ lớp</strong>
+                        <ul>
+                            ${thuquyFeePerStudent ? `
+                                <li><strong>Tiền thu /1HS:</strong> ${formatCurrency(thuquyFeePerStudent)} - <strong>Số lượng đã nộp:</strong> ${thuquyQuantityPaid || '0'} học sinh</li>
+                            ` : ''}
+                            ${thuquyMissingStudents ? `
+                                <li><strong>Học sinh thiếu:</strong> ${thuquyMissingStudents} - <strong>Số lượng:</strong> ${thuquyQuantityMissing || '0'} học sinh</li>
+                            ` : ''}
+                            ${expenses.length > 0 ? `
+                                <li><strong>Các khoản chi:</strong>
+                                    <ul style="margin-top: 8px;">
+                                        ${expenses.map((exp, idx) => `<li>Chi ${idx + 1}: ${exp.name} - <strong>Số tiền:</strong> ${formatCurrency(exp.amount)}</li>`).join('')}
+                                    </ul>
+                                </li>
+                            ` : ''}
+                            <li><strong>Tổng thu:</strong> ${thuquyTotalIncome ? formatCurrency(thuquyTotalIncome) : '<span class="empty-data">0</span>'}</li>
+                            <li><strong>Tổng chi:</strong> ${thuquyTotalExpense && thuquyTotalExpense !== '0' ? formatCurrency(thuquyTotalExpense) : '0'} ${!thuquyTotalExpense || thuquyTotalExpense === '0' ? '(Không có chi)' : ''}</li>
+                            <li><strong>Còn lại:</strong> <span class="highlight-positive">${thuquyRemaining ? thuquyRemaining : '<span class="empty-data">0</span>'}</span></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="report-section">
+                    <div class="section-title">II. CÔNG TÁC GIÁO VIÊN CHỦ NHIỆM</div>
+                    
+                    <div class="report-item">
+                        <strong>1. Nhắc nhở và định hướng</strong>
+                        <ul>
+                            ${ltNoticeGuild ? `<li><strong>Thông báo bên đoàn:</strong> ${ltNoticeGuild}</li>` : ''}
+                            ${hasDisorder ? '<li>Yêu cầu học sinh tập trung hơn trong học tập, giữ trật tự trong giờ học.</li>' : ''}
+                            ${hasNotMemorized || hasNoHomework ? '<li>Nhắc lại nội quy học tập tại trường, yêu cầu học sinh chuẩn bị bài đầy đủ trước khi đến lớp.</li>' : ''}
+                            ${hasLate || hasAbsent ? '<li>Nhắc nhở học sinh đi học đúng giờ, không vắng mặt không lý do.</li>' : ''}
+                            <li>Tuyên truyền an toàn giao thông, chấp hành luật lệ khi tham gia giao thông.</li>
+                            ${lpptCampaignName ? `<li>Thông báo và triển khai phong trào: <strong>${lpptCampaignName}</strong>${lpptTime ? ` (${lpptTime})` : ''}</li>` : ''}
+                            ${ltFuturePlan ? `<li><strong>Phương hướng tuần sau (LT):</strong> ${ltFuturePlan}</li>` : ''}
+                            ${lphtFuturePlan ? `<li><strong>Phương hướng tuần sau (LPHT):</strong> ${lphtFuturePlan}</li>` : ''}
+                            ${lphtSuggestion ? `<li><strong>Ý kiến đề xuất (LPHT):</strong> ${lphtSuggestion}</li>` : ''}
+                        </ul>
+                    </div>
+                    
+                    <div class="report-item">
+                        <strong>2. Xử lý vi phạm</strong>
+                        <ul>
+                            ${hasViolation ? `
+                                <li><strong>Kiểm điểm học sinh vi phạm đoàn:</strong>
+                                    <ul style="margin-top: 8px;">
+                                        ${ltViolation ? `<li>${ltViolation}</li>` : ''}
+                                        ${ttData.violation.map(v => `<li>${v.name} (${v.team}) - ${v.count} lượt vi phạm</li>`).join('')}
+                                    </ul>
+                                </li>
+                            ` : '<li><strong>Kiểm điểm học sinh vi phạm đoàn:</strong> <span class="highlight-positive">Không có.</span></li>'}
+                            
+                            ${hasNotMemorized || hasNoHomework ? `
+                                <li><strong>Kiểm điểm học sinh không thuộc bài hoặc không làm bài:</strong>
+                                    <ul style="margin-top: 8px;">
+                                        ${hasNotMemorized ? `<li>Không thuộc bài: ${ttData.notMemorized.map(nm => `${nm.name} (${nm.team})`).join(', ')} - Tổng ${totalNotMemorizedCount} lượt</li>` : ''}
+                                        ${hasNoHomework ? `<li>Không làm bài tập: ${ttData.noHomework.map(nh => `${nh.name} (${nh.team})`).join(', ')} - Tổng ${totalNoHomeworkCount} lượt</li>` : ''}
+                                    </ul>
+                                </li>
+                            ` : '<li><strong>Kiểm điểm học sinh không thuộc bài hoặc không làm bài:</strong> <span class="highlight-positive">Không có.</span></li>'}
+                            
+                            ${hasDisorder ? `
+                                <li><strong>Nhắc nhở các trường hợp vi phạm nội quy:</strong>
+                                    <ul style="margin-top: 8px;">
+                                        ${lpttDisorderStudents ? `<li>Mất trật tự: ${lpttDisorderStudents} - ${lpttDisorderCount || '0'} lượt</li>` : ''}
+                                        ${lpttDisorderSDB ? `<li>MTT(SDB): ${lpttDisorderSDB} - ${lpttDisorderSDBCount || '0'} lượt</li>` : ''}
+                                        ${ttData.disorder.map(d => `<li>${d.name} (${d.team}) - ${d.count} lượt</li>`).join('')}
+                                    </ul>
+                                </li>
+                            ` : ''}
+                            
+                            ${hasLateDuty ? `<li><strong>Xử lý trường hợp trực trễ:</strong> ${lpldLateDuty}</li>` : ''}
+                            
+                            <li>Kiểm điểm việc thực hiện nội quy và nề nếp lớp học.</li>
+                            <li>Tổ chức tổng vệ sinh phòng học sau tiết sinh hoạt lớp.</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="report-item">
+                        <strong>3. Biện pháp khắc phục</strong>
+                        <ul>
+                            ${hasNotMemorized || hasNoHomework || hasViolation ? `
+                                <li><strong>Xử lý vi phạm:</strong>
+                                    <ul style="margin-top: 8px;">
+                                        <li>Cho các học sinh vi phạm viết tự kiểm và cam kết không tái phạm.</li>
+                                        <li>Thông báo cho phụ huynh các trường hợp vi phạm nghiêm trọng.</li>
+                                        <li>Theo dõi sát sao các học sinh thường xuyên vi phạm.</li>
+                                    </ul>
+                                </li>
+                            ` : ''}
+                            
+                            ${hasDisorder ? `
+                                <li><strong>Cải thiện trật tự lớp học:</strong>
+                                    <ul style="margin-top: 8px;">
+                                        <li>Tăng cường giám sát, nhắc nhở học sinh nói chuyện riêng trong giờ học.</li>
+                                        <li>Phân công lại vị trí ngồi cho các học sinh hay mất trật tự.</li>
+                                        <li>Phối hợp với giáo viên bộ môn để quản lý tốt hơn.</li>
+                                    </ul>
+                                </li>
+                            ` : ''}
+                            
+                            ${hasLate || hasAbsent ? `
+                                <li><strong>Giảm thiểu vắng mặt và đi trễ:</strong>
+                                    <ul style="margin-top: 8px;">
+                                        <li>Nhắc nhở học sinh đi học đúng giờ, không vắng mặt không lý do.</li>
+                                        <li>Liên hệ với phụ huynh các học sinh thường xuyên vắng hoặc đi trễ.</li>
+                                        <li>Ghi nhận và khen thưởng các học sinh đi học đầy đủ, đúng giờ.</li>
+                                    </ul>
+                                </li>
+                            ` : ''}
+                            
+                            ${hasLateDuty ? `
+                                <li><strong>Cải thiện công tác lao động:</strong>
+                                    <ul style="margin-top: 8px;">
+                                        <li>Nhắc nhở tổ trực thực hiện đúng giờ, không trễ.</li>
+                                        <li>Kiểm tra và đánh giá chất lượng vệ sinh hàng ngày.</li>
+                                        <li>Khen thưởng các tổ thực hiện tốt công tác lao động.</li>
+                                    </ul>
+                                </li>
+                            ` : ''}
+                            
+                            <li><strong>Biện pháp chung:</strong>
+                                <ul style="margin-top: 8px;">
+                                    <li>Đẩy mạnh tuyên truyền ý thức học tập và chấp hành nội quy.</li>
+                                    <li>Tăng cường các hoạt động giáo dục kỹ năng sống và giá trị sống.</li>
+                                    <li>Khuyến khích học sinh tích cực tham gia các hoạt động phong trào.</li>
+                                    <li>Duy trì và phát huy những điểm tích cực đã đạt được.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="report-section">
+                    <div class="report-item" style="margin-top: 20px; padding-top: 15px; border-top: 2px solid #e0e0e0; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+                        <strong style="color: #667eea;">📝 Ghi chú:</strong>
+                        <ul style="margin-top: 10px; margin-bottom: 0;">
+                            <li>Tiếp tục theo dõi và cải thiện nề nếp lớp học trong tuần tới.</li>
+                            <li>Phối hợp chặt chẽ với Ban Cán Sự Lớp để quản lý tốt hơn.</li>
+                            <li>Động viên, khích lệ học sinh phát huy những điểm tích cực.</li>
+                            ${ttData.totalPoints.length > 0 ? `<li><strong>Điểm thi đua các tổ:</strong> ${ttData.totalPoints.map(tp => `${tp.team}: ${tp.points} điểm`).join(', ')}</li>` : ''}
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            return html;
+        }
+
+        // Copy toàn bộ báo cáo
+        function copyReport() {
+            const container = document.getElementById('reportContainer');
+            if (!container) return;
+
+            let text = '';
+            
+            // Lấy header
+            const header = container.querySelector('.report-header h2');
+            if (header) {
+                text += header.textContent.trim() + '\n';
+            }
+            const weekInfo = container.querySelector('.report-header .week-info');
+            if (weekInfo) {
+                text += weekInfo.textContent.trim() + '\n\n';
+            }
+            
+            // Lấy các section
+            const sections = container.querySelectorAll('.report-section');
+            sections.forEach(section => {
+                const sectionTitle = section.querySelector('.section-title');
+                if (sectionTitle) {
+                    text += sectionTitle.textContent.trim() + '\n';
+                    text += '='.repeat(50) + '\n';
+                }
+                
+                const items = section.querySelectorAll('.report-item');
+                items.forEach(item => {
+                    const strong = item.querySelector('strong');
+                    if (strong) {
+                        text += '\n' + strong.textContent.trim() + '\n';
+                    }
+                    
+                    // Xử lý các list - chỉ lấy list trực tiếp trong item
+                    const directLists = Array.from(item.children).filter(child => child.tagName && child.tagName.toLowerCase() === 'ul');
+                    
+                    directLists.forEach(ul => {
+                        // Chỉ lấy các li trực tiếp (không lấy li trong ul con)
+                        const directListItems = Array.from(ul.children).filter(child => child.tagName && child.tagName.toLowerCase() === 'li');
+                        
+                        directListItems.forEach(li => {
+                            // Tạo clone để xử lý
+                            const liClone = li.cloneNode(true);
+                            
+                            // Loại bỏ tất cả ul con trước khi lấy text
+                            liClone.querySelectorAll('ul').forEach(ul => ul.remove());
+                            
+                            // Loại bỏ các thẻ HTML nhưng giữ text
+                            liClone.querySelectorAll('span, strong').forEach(el => {
+                                const textNode = document.createTextNode(el.textContent);
+                                el.replaceWith(textNode);
+                            });
+                            
+                            let liText = liClone.textContent.trim();
+                            if (liText) {
+                                text += '  • ' + liText + '\n';
+                            }
+                            
+                            // Xử lý ul con nếu có (sau khi đã xử lý text chính)
+                            const nestedUl = li.querySelector(':scope > ul');
+                            if (nestedUl) {
+                                const nestedItems = nestedUl.querySelectorAll(':scope > li');
+                                nestedItems.forEach(nestedLi => {
+                                    const nestedClone = nestedLi.cloneNode(true);
+                                    // Loại bỏ ul con trong nested li
+                                    nestedClone.querySelectorAll('ul').forEach(ul => ul.remove());
+                                    nestedClone.querySelectorAll('span, strong').forEach(el => {
+                                        el.replaceWith(document.createTextNode(el.textContent));
+                                    });
+                                    const nestedText = nestedClone.textContent.trim();
+                                    if (nestedText) {
+                                        text += '    - ' + nestedText + '\n';
+                                    }
+                                });
+                            }
+                        });
+                    });
+                });
+                text += '\n';
+            });
+            
+            // Copy vào clipboard
+            const textToCopy = text.trim();
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const copyBtn = document.getElementById('copyButton');
+                const copyBtnText = document.getElementById('copyButtonText');
+                if (copyBtn && copyBtnText) {
+                    copyBtn.classList.add('copied');
+                    copyBtnText.textContent = 'Đã copy!';
+                    setTimeout(() => {
+                        copyBtn.classList.remove('copied');
+                        copyBtnText.textContent = 'Copy báo cáo';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Lỗi khi copy:', err);
+                // Fallback: dùng cách cũ
+                const textArea = document.createElement('textarea');
+                textArea.value = textToCopy;
+                textArea.style.position = 'fixed';
+                textArea.style.opacity = '0';
+                document.body.appendChild(textArea);
+                textArea.select();
+                try {
+                    document.execCommand('copy');
+                    const copyBtn = document.getElementById('copyButton');
+                    const copyBtnText = document.getElementById('copyButtonText');
+                    if (copyBtn && copyBtnText) {
+                        copyBtn.classList.add('copied');
+                        copyBtnText.textContent = 'Đã copy!';
+                        setTimeout(() => {
+                            copyBtn.classList.remove('copied');
+                            copyBtnText.textContent = 'Copy báo cáo';
+                        }, 2000);
+                    }
+                } catch (e) {
+                    alert('Không thể copy báo cáo. Vui lòng thử lại.');
+                }
+                document.body.removeChild(textArea);
+            });
+        }
+
+        // Load báo cáo
+        async function loadReport() {
+            const container = document.getElementById('reportContainer');
+            const copyButton = document.getElementById('copyButton');
+            if (!container) return;
+
+            container.innerHTML = '<div class="loading">Đang tải báo cáo...</div>';
+            if (copyButton) copyButton.style.display = 'none';
+
+            try {
+                const week = parseInt(document.getElementById('week').value) || 1;
+                const weekRange = getWeekRangeString(week);
+                
+                // Lấy tất cả dữ liệu
+                const allData = await gatherAllData(week);
+                
+                // Tạo HTML báo cáo
+                const reportHTML = generateReportHTML(week, weekRange, allData);
+                container.innerHTML = reportHTML;
+                
+                // Hiển thị nút copy
+                if (copyButton) copyButton.style.display = 'flex';
+            } catch (error) {
+                console.error('Error loading report:', error);
+                container.innerHTML = `<div class="loading" style="color: #f5576c;">Lỗi khi tải báo cáo: ${error.message}</div>`;
+                if (copyButton) copyButton.style.display = 'none';
+            }
+        }
+
+        // Khởi tạo khi trang được load
+        window.addEventListener('DOMContentLoaded', function() {
+            const weekInput = document.getElementById('week');
+            if (!weekInput) {
+                console.error('week input not found');
+                return;
+            }
+            
+            setTimeout(function() {
+                const currentWeek = getCurrentWeek();
+                console.log('Current week calculated on page load:', currentWeek);
+                
+                weekInput.value = currentWeek || 1;
+                updateWeekDateRange();
+                loadReport();
+            }, 100);
+        });
+
+        // Load lại báo cáo khi thay đổi tuần
+        const weekInput = document.getElementById('week');
+        if (weekInput) {
+            weekInput.addEventListener('change', function() {
+                updateWeekDateRange();
+                loadReport();
+            });
+        }
+    </script>
+</body>
+
+</html>
+

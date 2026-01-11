@@ -1,11 +1,15 @@
 // ============================================
 // UNIFIED GOOGLE APPS SCRIPT
 // Gộp tất cả các chức năng: LT, LPHT, LPLD, LPTT, LPPT, TT, ThuQuy
-// Spreadsheet ID: 1YKNvKQoaYR2-OV1k6JvZlmPF63GdMPacuw602LKPtx8
+// ============================================
+//
+// ⚠️ QUAN TRỌNG: Cập nhật SPREADSHEET_ID ở đây khi thay đổi trong config.js
+// Google Apps Script không thể đọc từ config.js, nên phải cập nhật thủ công
+// 
+// Lấy giá trị từ config.js: const SPREADSHEET_ID = '...'
 // ============================================
 
-// Spreadsheet ID mới
-var SPREADSHEET_ID = '1YKNvKQoaYR2-OV1k6JvZlmPF63GdMPacuw602LKPtx8';
+var SPREADSHEET_ID = '1GS3QKu5Bbeoef0rQhkitX_dawnwqlRPdeUaCNKV8cJk';
 
 // Mật khẩu cho từng form
 var PASSWORDS = {
@@ -18,7 +22,8 @@ var PASSWORDS = {
   'TT2': 'totruong2',
   'TT3': 'totruong3',
   'TT4': 'totruong4',
-  'ThuQuy': 'thuquy123'
+  'ThuQuy': 'thuquy123',
+  'DL': '123456'
 };
 
 // ============================================
@@ -900,36 +905,90 @@ function handleTT(data) {
     // Kiểm tra tuần đã tồn tại
     var dataValues = sheet.getDataRange().getValues();
     var weekStr = String(week);
+    var existingRowIndex = -1;
     for (var i = 1; i < dataValues.length; i++) {
       if (dataValues[i][0] != null && String(dataValues[i][0]) === weekStr) {
+        existingRowIndex = i + 1; // Lưu index của dòng (1-based)
+        break;
+      }
+    }
+    
+    // Nếu tuần đã tồn tại, kiểm tra cột B-R (columns 2-18) có trống không
+    if (existingRowIndex > 0) {
+      // Đọc trực tiếp range từ cột B đến R (columns 2-18, 1-based)
+      // Sử dụng getDisplayValues() để lấy giá trị hiển thị, tránh ảnh hưởng bởi công thức ở cột S
+      var rangeBtoR = sheet.getRange(existingRowIndex, 2, 1, 17); // row, col, numRows, numCols
+      var valuesBtoR = rangeBtoR.getDisplayValues()[0]; // Lấy giá trị hiển thị (không phải giá trị tính toán)
+      
+      var isEmpty = true;
+      // Kiểm tra từ cột B đến R (17 cột: index 0-16 trong mảng valuesBtoR)
+      for (var col = 0; col < 17 && col < valuesBtoR.length; col++) {
+        var cellValue = valuesBtoR[col];
+        // Kiểm tra nếu ô có dữ liệu thực sự
+        // Bỏ qua null, undefined, chuỗi rỗng, và khoảng trắng
+        if (cellValue != null && cellValue !== undefined && cellValue !== '') {
+          var strValue = String(cellValue).trim();
+          // Nếu sau khi trim vẫn còn ký tự (không phải rỗng), thì có dữ liệu
+          if (strValue !== '') {
+            isEmpty = false;
+            break;
+          }
+        }
+      }
+      
+      // Nếu cột B-R đều trống, cho phép ghi mới (ghi đè dòng đó)
+      if (isEmpty) {
+        var updatedData = [
+          week,
+          week_date_range,
+          not_prepared_names || '',
+          not_prepared_count || '0',
+          no_homework_names || '',
+          no_homework_count || '0',
+          disorder_names || '',
+          disorder_count || '0',
+          late_names || '',
+          late_count || '0',
+          violation_names || '',
+          violation_count || '0',
+          absent_names || '',
+          absent_count || '0',
+          good_points_names || '',
+          good_points_count || '0',
+          participation_names || '',
+          participation_count || '0'
+        ];
+        sheet.getRange(existingRowIndex, 1, 1, updatedData.length).setValues([updatedData]);
+      } else {
+        // Nếu có dữ liệu, báo lỗi như cũ
         return ContentService.createTextOutput(JSON.stringify({
           result: 'error',
           message: 'Tuần này đã được ghi. Vui lòng chọn "Chỉnh sửa" hoặc "Bổ sung".'
         })).setMimeType(ContentService.MimeType.JSON);
       }
+    } else {
+      // Nếu tuần chưa tồn tại, ghi dữ liệu mới
+      sheet.appendRow([
+        week,
+        week_date_range,
+        not_prepared_names,
+        not_prepared_count,
+        no_homework_names,
+        no_homework_count,
+        disorder_names,
+        disorder_count,
+        late_names,
+        late_count,
+        violation_names,
+        violation_count,
+        absent_names,
+        absent_count,
+        good_points_names,
+        good_points_count,
+        participation_names,
+        participation_count
+      ]);
     }
-    
-    // Ghi dữ liệu mới
-    sheet.appendRow([
-      week,
-      week_date_range,
-      not_prepared_names,
-      not_prepared_count,
-      no_homework_names,
-      no_homework_count,
-      disorder_names,
-      disorder_count,
-      late_names,
-      late_count,
-      violation_names,
-      violation_count,
-      absent_names,
-      absent_count,
-      good_points_names,
-      good_points_count,
-      participation_names,
-      participation_count
-    ]);
     
   } else if (action === 'append') {
     // Bổ sung dữ liệu
@@ -1020,7 +1079,7 @@ function handleTT(data) {
 }
 
 // ============================================
-// Xử lý form ThuQuy (Thủ Quỹ)
+// Xử lý form ThuQuy (Thủ Quỹ) - Chỉ ghi dữ liệu, không tính toán
 // ============================================
 function handleThuQuy(data) {
   var action = data.action;
@@ -1033,7 +1092,31 @@ function handleThuQuy(data) {
     ).setMimeType(ContentService.MimeType.JSON);
   }
   
-  var sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName('ThuQuy');
+  var spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+  if (!spreadsheet) {
+    Logger.log('Error: Cannot open spreadsheet with ID: ' + SPREADSHEET_ID);
+    return ContentService.createTextOutput(
+      JSON.stringify({ result: 'error', message: 'Không thể mở spreadsheet. Vui lòng kiểm tra SPREADSHEET_ID.' })
+    ).setMimeType(ContentService.MimeType.JSON);
+  }
+  
+  var sheet = spreadsheet.getSheetByName('12c1cn : ThuQuy');
+  if (!sheet) {
+    // Thử tìm sheet với tên khác
+    sheet = spreadsheet.getSheetByName('ThuQuy');
+    if (!sheet) {
+      // Liệt kê tất cả các sheet để debug
+      var allSheets = spreadsheet.getSheets();
+      var sheetNames = [];
+      for (var i = 0; i < allSheets.length; i++) {
+        sheetNames.push(allSheets[i].getName());
+      }
+      Logger.log('Error: Sheet "12c1cn : ThuQuy" not found. Available sheets: ' + sheetNames.join(', '));
+      return ContentService.createTextOutput(
+        JSON.stringify({ result: 'error', message: 'Không tìm thấy sheet "12c1cn : ThuQuy". Các sheet có sẵn: ' + sheetNames.join(', ') })
+      ).setMimeType(ContentService.MimeType.JSON);
+    }
+  }
   
   if (data.password !== PASSWORDS['ThuQuy']) {
     Logger.log('Error: Incorrect password in handleThuQuy');
@@ -1048,221 +1131,135 @@ function handleThuQuy(data) {
   var missing_students = data.missing_students || '';
   var quantity_missing = parseInt(data.quantity_missing || 0);
   
-  // Tính tổng thu tuần này
-  var this_week_income = fee_per_student * quantity_paid;
-  
   // Lấy các khoản chi
   var expenses = [];
-  var total_expense = 0;
   for (var i = 1; i <= 6; i++) {
     var expense_name = data['expense_name_' + i] || '';
     var expense_amount = parseFloat(data['expense_amount_' + i] || 0);
-    if (expense_name && expense_amount > 0) {
-      expenses.push({ name: expense_name, amount: expense_amount });
-      total_expense += expense_amount;
-    }
+    expenses.push({ name: expense_name, amount: expense_amount });
   }
   
-  var this_week_expense = total_expense;
+  // Chỉ ghi vào cột A-R (18 cột), cột S, T, U có công thức tự tính
+  var NUM_COLUMNS_WRITE = 18; // A đến R
   
   // Tìm dòng của tuần hiện tại
-  var dataRange = sheet.getDataRange();
-  var values = dataRange.getValues();
+  var lastRow = sheet.getLastRow();
   var rowIndex = -1;
   var weekStr = String(week);
-  for (var i = 0; i < values.length; i++) {
-    if (values[i][0] != null) {
-      var cellValue = String(values[i][0]);
-      if (cellValue === weekStr) {
-        rowIndex = i + 1;
-        break;
+  if (lastRow > 0) {
+    var weekColumn = sheet.getRange(1, 1, lastRow, 1).getValues();
+    for (var i = 0; i < weekColumn.length; i++) {
+      if (weekColumn[i][0] != null) {
+        var cellValue = String(weekColumn[i][0]);
+        if (cellValue === weekStr) {
+          rowIndex = i + 1;
+          break;
+        }
       }
     }
   }
   
-  // Tính tổng tiền còn lại từ các tuần trước
-  var total_remaining_before = 0;
-  for (var i = 1; i < values.length; i++) {
-    if (i + 1 === rowIndex) continue; // Bỏ qua tuần hiện tại nếu đã tồn tại
-    var prev_income = parseFloat(values[i][3] || 0); // Cột tổng thu
-    var prev_expense = parseFloat(values[i][4] || 0); // Cột tổng chi
-    total_remaining_before += (prev_income - prev_expense);
+  // Cấu trúc cột: A=week, B=week_date_range, C=fee_per_student, D=quantity_paid, E=missing_students, F=quantity_missing
+  // G-H=expense1, I-J=expense2, K-L=expense3, M-N=expense4, O-P=expense5, Q-R=expense6
+  var rowData = [
+    week,                                                      // A
+    data.week_date_range || '',                              // B
+    fee_per_student,                                          // C
+    quantity_paid,                                            // D
+    missing_students,                                         // E
+    quantity_missing,                                         // F
+    expenses[0].name || '',                                  // G
+    expenses[0].amount || 0,                                  // H
+    expenses[1].name || '',                                  // I
+    expenses[1].amount || 0,                                  // J
+    expenses[2].name || '',                                  // K
+    expenses[2].amount || 0,                                  // L
+    expenses[3].name || '',                                  // M
+    expenses[3].amount || 0,                                  // N
+    expenses[4].name || '',                                  // O
+    expenses[4].amount || 0,                                  // P
+    expenses[5].name || '',                                  // Q
+    expenses[5].amount || 0                                   // R
+  ];
+  
+  // Hàm kiểm tra xem từ cột B đến R có dữ liệu không
+  function hasDataInColumnsBtoR(rowIndex) {
+    if (rowIndex === -1) return false;
+    var dataRange = sheet.getRange(rowIndex, 2, 1, 17).getValues()[0]; // Cột B (2) đến R (18) = 17 cột
+    for (var i = 0; i < dataRange.length; i++) {
+      var cellValue = dataRange[i];
+      if (cellValue !== null && cellValue !== '' && cellValue !== 0 && String(cellValue).trim() !== '') {
+        return true; // Có ít nhất một cột có dữ liệu
+      }
+    }
+    return false; // Tất cả các cột đều trống
   }
   
   if (action === 'add') {
     if (rowIndex !== -1) {
-      Logger.log('Error: Data exists for week ' + week);
-      return ContentService.createTextOutput(
-        JSON.stringify({ result: 'error', message: 'Dữ liệu cho tuần ' + week + ' đã tồn tại. Vui lòng chọn "Chỉnh sửa" hoặc "Bổ sung".' })
-      ).setMimeType(ContentService.MimeType.JSON);
+      // Nếu đã có tuần nhưng từ cột B đến R không có dữ liệu, cho phép ghi mới
+      if (!hasDataInColumnsBtoR(rowIndex)) {
+        Logger.log('Week ' + week + ' exists but columns B-R are empty, allowing write');
+        sheet.getRange(rowIndex, 1, 1, NUM_COLUMNS_WRITE).setValues([rowData]);
+        Logger.log('Added new data for week ' + week + ' (overwrote empty row)');
+      } else {
+        Logger.log('Error: Data exists for week ' + week);
+        return ContentService.createTextOutput(
+          JSON.stringify({ result: 'error', message: 'Dữ liệu cho tuần ' + week + ' đã tồn tại. Vui lòng chọn "Chỉnh sửa" hoặc "Bổ sung".' })
+        ).setMimeType(ContentService.MimeType.JSON);
+      }
+    } else {
+      rowIndex = lastRow + 1;
+      sheet.getRange(rowIndex, 1, 1, NUM_COLUMNS_WRITE).setValues([rowData]);
+      Logger.log('Added new data for week ' + week);
     }
-    
-    // Tìm dòng trống tiếp theo
-    rowIndex = values.length + 1;
-    
-    var rowData = [
-      week,
-      data.week_date_range || '',
-      fee_per_student,
-      this_week_income,
-      this_week_expense,
-      quantity_paid,
-      missing_students,
-      quantity_missing,
-      expenses[0] ? expenses[0].name : '',
-      expenses[0] ? expenses[0].amount : 0,
-      expenses[1] ? expenses[1].name : '',
-      expenses[1] ? expenses[1].amount : 0,
-      expenses[2] ? expenses[2].name : '',
-      expenses[2] ? expenses[2].amount : 0,
-      expenses[3] ? expenses[3].name : '',
-      expenses[3] ? expenses[3].amount : 0,
-      expenses[4] ? expenses[4].name : '',
-      expenses[4] ? expenses[4].amount : 0,
-      expenses[5] ? expenses[5].name : '',
-      expenses[5] ? expenses[5].amount : 0,
-      total_remaining_before + this_week_income - this_week_expense
-    ];
-    
-    sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
-    Logger.log('Added new data for week ' + week);
     
   } else if (action === 'edit') {
     if (rowIndex === -1) {
-      Logger.log('Error: No data to edit for week ' + week);
-      return ContentService.createTextOutput(
-        JSON.stringify({ result: 'error', message: 'Không có dữ liệu để chỉnh sửa cho tuần ' + week + '. Vui lòng chọn "Báo cáo mới".' })
-      ).setMimeType(ContentService.MimeType.JSON);
+      // Nếu chưa có tuần, tạo mới
+      rowIndex = lastRow + 1;
+      sheet.getRange(rowIndex, 1, 1, NUM_COLUMNS_WRITE).setValues([rowData]);
+      Logger.log('Created new data for week ' + week + ' (edit action)');
+    } else {
+      sheet.getRange(rowIndex, 1, 1, NUM_COLUMNS_WRITE).setValues([rowData]);
+      Logger.log('Edited data for week ' + week);
     }
-    
-    // Tính lại tổng tiền còn lại từ các tuần trước (không tính tuần hiện tại)
-    total_remaining_before = 0;
-    for (var i = 1; i < values.length; i++) {
-      if (i + 1 === rowIndex) continue;
-      var prev_income = parseFloat(values[i][3] || 0);
-      var prev_expense = parseFloat(values[i][4] || 0);
-      total_remaining_before += (prev_income - prev_expense);
-    }
-    
-    var rowData = [
-      week,
-      data.week_date_range || '',
-      fee_per_student,
-      this_week_income,
-      this_week_expense,
-      quantity_paid,
-      missing_students,
-      quantity_missing,
-      expenses[0] ? expenses[0].name : '',
-      expenses[0] ? expenses[0].amount : 0,
-      expenses[1] ? expenses[1].name : '',
-      expenses[1] ? expenses[1].amount : 0,
-      expenses[2] ? expenses[2].name : '',
-      expenses[2] ? expenses[2].amount : 0,
-      expenses[3] ? expenses[3].name : '',
-      expenses[3] ? expenses[3].amount : 0,
-      expenses[4] ? expenses[4].name : '',
-      expenses[4] ? expenses[4].amount : 0,
-      expenses[5] ? expenses[5].name : '',
-      expenses[5] ? expenses[5].amount : 0,
-      total_remaining_before + this_week_income - this_week_expense
-    ];
-    
-    sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
-    Logger.log('Edited data for week ' + week);
     
   } else if (action === 'append') {
     if (rowIndex === -1) {
-      Logger.log('Error: No data to append for week ' + week);
-      return ContentService.createTextOutput(
-        JSON.stringify({ result: 'error', message: 'Không có dữ liệu để bổ sung cho tuần ' + week + '. Vui lòng chọn "Báo cáo mới".' })
-      ).setMimeType(ContentService.MimeType.JSON);
-    }
-    
-    var currentRow = values[rowIndex - 1];
-    var current_income = parseFloat(currentRow[3] || 0);
-    var current_expense = parseFloat(currentRow[4] || 0);
-    
-    // Cập nhật thu (nếu có bổ sung)
-    if (fee_per_student > 0 && quantity_paid > 0) {
-      var additional_income = fee_per_student * quantity_paid;
-      current_income += additional_income;
-    }
-    
-    // Cập nhật chi (nếu có bổ sung)
-    var additional_expense = 0;
-    for (var i = 0; i < expenses.length; i++) {
-      additional_expense += expenses[i].amount;
-    }
-    current_expense += additional_expense;
-    
-    // Cập nhật danh sách HS thiếu
-    var updated_missing = currentRow[6] || '';
-    if (missing_students) {
-      updated_missing = updated_missing ? updated_missing + ', ' + missing_students : missing_students;
-    }
-    var updated_quantity_missing = parseInt(currentRow[7] || 0) + quantity_missing;
-    
-    // Cập nhật các khoản chi (nối vào các cột tương ứng)
-    var updated_expenses = [];
-    for (var i = 0; i < 6; i++) {
-      var col_name = 8 + i * 2;
-      var col_amount = 9 + i * 2;
-      var existing_name = currentRow[col_name] || '';
-      var existing_amount = parseFloat(currentRow[col_amount] || 0);
+      // Nếu chưa có tuần, tạo mới thay vì báo lỗi
+      rowIndex = lastRow + 1;
+      sheet.getRange(rowIndex, 1, 1, NUM_COLUMNS_WRITE).setValues([rowData]);
+      Logger.log('Created new data for week ' + week + ' (append action)');
+    } else {
+      // Đọc dữ liệu hiện tại
+      var currentRow = sheet.getRange(rowIndex, 1, 1, NUM_COLUMNS_WRITE).getValues()[0];
       
-      if (i < expenses.length && expenses[i].name && expenses[i].amount > 0) {
-        updated_expenses.push({
-          name: existing_name ? existing_name + ', ' + expenses[i].name : expenses[i].name,
-          amount: existing_amount + expenses[i].amount
-        });
-      } else {
-        updated_expenses.push({
-          name: existing_name,
-          amount: existing_amount
-        });
-      }
+      // Cập nhật: nối dữ liệu mới vào dữ liệu cũ
+      var updatedRow = [
+        week,                                                      // A
+        currentRow[1] || data.week_date_range || '',              // B
+        fee_per_student || currentRow[2] || 0,                     // C
+        quantity_paid ? (parseInt(currentRow[3] || 0) + quantity_paid) : currentRow[3] || 0, // D
+        missing_students ? (currentRow[4] ? currentRow[4] + ', ' + missing_students : missing_students) : currentRow[4] || '', // E
+        quantity_missing ? (parseInt(currentRow[5] || 0) + quantity_missing) : currentRow[5] || 0, // F
+        expenses[0].name ? (currentRow[6] ? currentRow[6] + ', ' + expenses[0].name : expenses[0].name) : currentRow[6] || '', // G
+        expenses[0].amount ? (parseFloat(currentRow[7] || 0) + expenses[0].amount) : currentRow[7] || 0, // H
+        expenses[1].name ? (currentRow[8] ? currentRow[8] + ', ' + expenses[1].name : expenses[1].name) : currentRow[8] || '', // I
+        expenses[1].amount ? (parseFloat(currentRow[9] || 0) + expenses[1].amount) : currentRow[9] || 0, // J
+        expenses[2].name ? (currentRow[10] ? currentRow[10] + ', ' + expenses[2].name : expenses[2].name) : currentRow[10] || '', // K
+        expenses[2].amount ? (parseFloat(currentRow[11] || 0) + expenses[2].amount) : currentRow[11] || 0, // L
+        expenses[3].name ? (currentRow[12] ? currentRow[12] + ', ' + expenses[3].name : expenses[3].name) : currentRow[12] || '', // M
+        expenses[3].amount ? (parseFloat(currentRow[13] || 0) + expenses[3].amount) : currentRow[13] || 0, // N
+        expenses[4].name ? (currentRow[14] ? currentRow[14] + ', ' + expenses[4].name : expenses[4].name) : currentRow[14] || '', // O
+        expenses[4].amount ? (parseFloat(currentRow[15] || 0) + expenses[4].amount) : currentRow[15] || 0, // P
+        expenses[5].name ? (currentRow[16] ? currentRow[16] + ', ' + expenses[5].name : expenses[5].name) : currentRow[16] || '', // Q
+        expenses[5].amount ? (parseFloat(currentRow[17] || 0) + expenses[5].amount) : currentRow[17] || 0  // R
+      ];
+      
+      sheet.getRange(rowIndex, 1, 1, NUM_COLUMNS_WRITE).setValues([updatedRow]);
+      Logger.log('Appended data for week ' + week);
     }
-    
-    // Tính lại tổng tiền còn lại
-    total_remaining_before = 0;
-    for (var i = 1; i < values.length; i++) {
-      if (i + 1 === rowIndex) continue;
-      var prev_income = parseFloat(values[i][3] || 0);
-      var prev_expense = parseFloat(values[i][4] || 0);
-      total_remaining_before += (prev_income - prev_expense);
-    }
-    
-    var rowData = [
-      week,
-      currentRow[1] || data.week_date_range || '',
-      fee_per_student || currentRow[2] || 0,
-      current_income,
-      current_expense,
-      quantity_paid || currentRow[5] || 0,
-      updated_missing,
-      updated_quantity_missing,
-      updated_expenses[0].name,
-      updated_expenses[0].amount,
-      updated_expenses[1].name,
-      updated_expenses[1].amount,
-      updated_expenses[2].name,
-      updated_expenses[2].amount,
-      updated_expenses[3].name,
-      updated_expenses[3].amount,
-      updated_expenses[4].name,
-      updated_expenses[4].amount,
-      updated_expenses[5].name,
-      updated_expenses[5].amount,
-      total_remaining_before + current_income - current_expense
-    ];
-    
-    sheet.getRange(rowIndex, 1, 1, rowData.length).setValues([rowData]);
-    Logger.log('Appended data for week ' + week);
-    
-    // Cập nhật lại giá trị cho response
-    this_week_income = current_income;
-    this_week_expense = current_expense;
   } else {
     Logger.log('Error: Invalid action ' + action);
     return ContentService.createTextOutput(
@@ -1270,27 +1267,27 @@ function handleThuQuy(data) {
     ).setMimeType(ContentService.MimeType.JSON);
   }
   
-  // Tính tổng tiền còn lại sau khi cập nhật
-  var final_total_remaining = 0;
-  var allValues = sheet.getDataRange().getValues();
-  for (var i = 1; i < allValues.length; i++) {
-    var prev_income = parseFloat(allValues[i][3] || 0);
-    var prev_expense = parseFloat(allValues[i][4] || 0);
-    final_total_remaining += (prev_income - prev_expense);
-  }
+  // Đọc dữ liệu từ sheet sau khi ghi (cột S, T, U, E) để trả về
+  var resultRow = sheet.getRange(rowIndex, 1, 1, 21).getValues()[0]; // Đọc đến cột U (index 20)
+  var total_income = resultRow[18] || 0;    // Cột S (index 18)
+  var total_expense = resultRow[19] || 0;    // Cột T (index 19)
+  var total_remaining = resultRow[20] || 0;  // Cột U (index 20)
+  var missing_students_result = resultRow[4] || ''; // Cột E (index 4)
   
   return ContentService.createTextOutput(
     JSON.stringify({
       result: 'success',
       summary: {
-        this_week_income: this_week_income,
-        this_week_expense: this_week_expense,
-        expenses: expenses,
-        total_remaining: final_total_remaining
+        week: week,
+        total_income: total_income,
+        total_expense: total_expense,
+        total_remaining: total_remaining,
+        missing_students: missing_students_result
       }
     })
   ).setMimeType(ContentService.MimeType.JSON);
 }
+
 
 // ============================================
 // Hàm helper để nối dữ liệu
@@ -1326,7 +1323,9 @@ function handlePasswordVerify(data) {
       'tt2': 'TT2',
       'tt3': 'TT3',
       'tt4': 'TT4',
-      'thuquy': 'ThuQuy'
+      'thuquy': 'ThuQuy',
+      'dl': 'DL',
+      'dulieulop': 'DL'
     };
     
     var formType = page ? pageToFormType[page] : null;
