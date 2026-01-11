@@ -9,18 +9,18 @@
 
 // URL của Google Apps Script đã deploy
 // Thay đổi URL này khi deploy script mới
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx_EEmhzleWCuAvBqcSCEmKhs0dujuEKaynOp-YN3I9d-qPXRFKVfkp727GHhkRNGa1-A/exec';
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxVMsQXb_zLcj9MaC09PU8udE0MqKZkgl0soDbU6ySm8Mql_9bmhbund8AnHk6GnnTF/exec';
 
 // ============================================
 // ⚙️ CẤU HÌNH CƠ BẢN - CHỈ CẦN THAY ĐỔI 4 GIÁ TRỊ NÀY
 // ============================================
 
 // 1. Spreadsheet ID chính (lấy từ URL: docs.google.com/spreadsheets/d/SPREADSHEET_ID/edit)
-const SPREADSHEET_ID = '1GS3QKu5Bbeoef0rQhkitX_dawnwqlRPdeUaCNKV8cJk';
+const SPREADSHEET_ID = '1oEAUdXjTRT-8jyu2G5SIZZWsJqIY-2Tit-Z_v3DNhN4';
 
 // 2. Published Spreadsheet URL (dạng /e/... - lấy từ URL published sheet)
 // Ví dụ: https://docs.google.com/spreadsheets/d/e/2PACX-1vTaaF4Ifa4ylSmZvqG1K8zKUw7yEJt1oTNsY__nCbQPRo6v__05lNc0oXpt56Yhy4tyTfDu0FOKFZ5U
-const PUBLISHED_SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTaaF4Ifa4ylSmZvqG1K8zKUw7yEJt1oTNsY__nCbQPRo6v__05lNc0oXpt56Yhy4tyTfDu0FOKFZ5U';
+const PUBLISHED_SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR0Azvzlzf6bGmrT4NwJjavDcCV9D0dODeOqct7lrExXnKcjVxJP1aQitvy7kakhXKWafs0V5W1Nj_s';
 
 // 3. Sheet ThuQuy GID (lấy từ URL published sheet: .../pubhtml?gid=985887717)
 const THUQUY_SHEET_GID = '985887717';
@@ -150,4 +150,5 @@ const SHEET_LINKS = {
 // Vui lòng cập nhật SPREADSHEET_ID trong unified.gs dòng 8:
 // var SPREADSHEET_ID = 'YOUR_SPREADSHEET_ID_HERE';
 //
+
 
